@@ -15,7 +15,9 @@
 #define GDT_FLAG_4K      0x800
 #define GDT_FLAG_32_BIT  0x400
 
-#define GDT_ENTRIES 4
+#define GDT_ENTRIES 6
+
+void set_tss(int index, uint32_t val);
 
 void init_gdt();
 

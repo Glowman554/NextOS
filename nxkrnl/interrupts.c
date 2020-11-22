@@ -1,4 +1,6 @@
 #include <interrupts.h>
+#include <task.h>
+#include <gdt.h>
 #define IDT_FLAG_INTERRUPT_GATE 0xe
 #define IDT_FLAG_PRESENT 0x80
 #define IDT_FLAG_RING0 0x00
@@ -111,7 +113,8 @@ void init_intr(){
 	
 }
 
-void handle_interrupt(struct cpu_state* cpu){
+struct cpu_state* handle_interrupt(struct cpu_state* cpu){
+	struct cpu_state* new_cpu = cpu;
 	if(cpu->intr <= 0x1f){
 		print_exception(cpu->intr);
 		
@@ -131,6 +134,11 @@ void handle_interrupt(struct cpu_state* cpu){
 	}
 	if (cpu->intr >= 0x20 && cpu->intr <= 0x2f) {
 		
+		if(cpu->intr == 0x20){
+			new_cpu = schedule(cpu);
+			set_tss(1, (uint32_t) (new_cpu + 1));
+		}
+		
 		do_handle_interrupt(cpu->intr);
 		
 		if (cpu->intr >= 0x28) {
@@ -138,4 +146,5 @@ void handle_interrupt(struct cpu_state* cpu){
 		}
 		outb(0x20, 0x20);
 	}
+	return new_cpu;
 }

@@ -1,6 +1,10 @@
 #include <gdt.h>
 static uint64_t gdt[GDT_ENTRIES];
-//static uint32_t tss[32] = { 0, 0, 0x10 };
+static uint32_t tss[32] = { 0, 0, 0x10 };
+
+void set_tss(int index, uint32_t val){
+	tss[index] = val;
+}
 
 
 static void gdt_set_entry(int i, unsigned int base, unsigned int limit, int flags){
@@ -26,6 +30,7 @@ void init_gdt(){
 	gdt_set_entry(2, 0, 0xfffff, GDT_FLAG_SEGMENT | GDT_FLAG_32_BIT | GDT_FLAG_DATASEG | GDT_FLAG_4K | GDT_FLAG_PRESENT);
 	gdt_set_entry(3, 0, 0xfffff, GDT_FLAG_SEGMENT | GDT_FLAG_32_BIT | GDT_FLAG_CODESEG | GDT_FLAG_4K | GDT_FLAG_PRESENT | GDT_FLAG_RING3);
 	gdt_set_entry(4, 0, 0xfffff, GDT_FLAG_SEGMENT | GDT_FLAG_32_BIT | GDT_FLAG_DATASEG | GDT_FLAG_4K | GDT_FLAG_PRESENT | GDT_FLAG_RING3);
+	gdt_set_entry(5, (uint32_t) tss, sizeof(tss), GDT_FLAG_TSS | GDT_FLAG_PRESENT | GDT_FLAG_RING3);
 	
 	asm volatile("lgdt %0" : : "m" (gdtp));
 	asm volatile(
@@ -36,4 +41,5 @@ void init_gdt(){
 		"ljmp $0x8, $.1;"
 		".1:"
 	);
+	asm volatile("ltr %%ax" : : "a" (5 << 3));
 }

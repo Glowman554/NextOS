@@ -23,7 +23,7 @@ _start:
 	mov $kernel_stack, %esp
 
 	// CPP-Code aufrufen und Multiboot-Infostruktur als Parameter uebergeben
-	//push %ebx
+	push %ebx
 	call init
 	// Falls wir jemals aus init zurueckkommen sollten, gehen wir in eine
 	// Endlosschleife

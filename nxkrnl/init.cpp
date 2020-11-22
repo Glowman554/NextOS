@@ -2,11 +2,14 @@ extern "C"{
 	#include <gdt.h>
 	#include <console.h>
 	#include <interrupts.h>
+	#include <task.h>
+	#include <mem.h>
 }
 
 #include <driver/driver.h>
 #include <driver/keyboard.h>
 #include <config.h>
+#include <multiboot.h>
 
 typedef void (*constructor)();
 
@@ -26,7 +29,9 @@ class PrintfKeyboardEventHandler : public KeyboardEventHandler{
 		}
 };
 
-extern "C" void init(){
+
+
+extern "C" void init(struct multiboot_info *mb_info){
 	
 	
 	clrscr();
@@ -34,6 +39,8 @@ extern "C" void init(){
 	kprintf("Reporting kernel version %d\n", VERSION);
 	kprintf("Reporting kernel vendor %s\n", VENDOR);
 	kprintf("\nStage 1 fundamentals\n");
+	kprintf("Init Memory\n");
+	pmm_init(mb_info);
 	kprintf("Init global descriptor tabel\n");
 	init_gdt();
 	kprintf("Init interupts\n");
@@ -48,6 +55,10 @@ extern "C" void init(){
 	drvManager.AddDriver(&keyboard_driver);
 	kprintf("Activating All Driver\n");
 	drvManager.ActivateAll();
+	
+	kprintf("\nStage 2 advanced\n");
+	kprintf("Init Multitasking\n");
+	init_multitasking();
 	
 	//asm volatile("int $0x1");
 	
