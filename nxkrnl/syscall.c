@@ -26,6 +26,9 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_KVENDOR:
 			cpu->ebx = (uint32_t) &VENDOR;
 			break;
+		case SYSCALL_EXEC:
+			exec_file((char*) cpu->ebx);
+			break;
 	}
 
 	return cpu;

@@ -7,5 +7,7 @@
 
 struct cpu_state* schedule(struct cpu_state* cpu);
 void init_multitasking(struct multiboot_info* mb_info);
+struct task* init_task(void* entry);
+int init_elf(void* image);
 
 #endif

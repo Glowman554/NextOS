@@ -3,6 +3,7 @@ extern "C"{
 	#include <console.h>
 	#include <interrupts.h>
 	#include <task.h>
+	#include <exec.h>
 	#include <mem.h>
 }
 
@@ -38,34 +39,26 @@ extern "C" void init(struct multiboot_info *mb_info){
 	clrscr();
 	kprintf("nxkrnl %d Loading...\n", VERSION);
 	kprintf("Reporting kernel version %d\n", VERSION);
-	kprintf("Reporting kernel vendor %s\n", VENDOR);
-	kprintf("\nStage 1 fundamentals\n");
-	kprintf("Init Memory\n");
-	pmm_init(mb_info);
-	kprintf("Init global descriptor tabel\n");
-	init_gdt();
-	kprintf("Init interupts\n");
-	init_intr();
+	kprintf("Reporting kernel vendor %s\n\n", VENDOR);
 	
-	kprintf("\nStage 2 devices\n");
-	kprintf("Creating DriverManager\n"); 
+	pmb_info = mb_info;
+	pmm_init(mb_info);
+	init_gdt();
+	init_intr();
+	 
 	DriverManager drvManager;
-	kprintf("Building KeyboardDriver\n");
 	PrintfKeyboardEventHandler kbhandler;
 	KeyboardDriver keyboard_driver(&kbhandler);
 	drvManager.AddDriver(&keyboard_driver);
-	kprintf("Building PCIController\n");
 	PeripheralComponentInterconnectController PCIController;
 	//kprintf("Found PCI Devices:\n");
 	//PCIController.PrintDevices();
-	kprintf("Activating All Driver\n");
 	drvManager.ActivateAll();
 	
-	kprintf("\nStage 2 advanced\n");
-	kprintf("Init Multitasking\n");
 	init_multitasking(mb_info);
 	
 	//asm volatile("int $0x1");
-	
+	list_files();
+	exec_file("/init.bin");
 	while(1);
 }

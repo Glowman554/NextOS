@@ -4,6 +4,7 @@
 #include <interrupts.h>
 #include <console.h>
 #include <config.h>
+#include <exec.h>
 
 #define SYSCALL_PUTC		0
 #define SYSCALL_PUTS		1
@@ -12,6 +13,7 @@
 #define SYSCALL_SETCOLOR	4
 #define SYSCALL_KVERSION	5
 #define SYSCALL_KVENDOR		6
+#define SYSCALL_EXEC		7
 
 struct cpu_state* syscall(struct cpu_state* cpu);
 

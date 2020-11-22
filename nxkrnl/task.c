@@ -71,11 +71,11 @@ int init_elf(void* image){
 }
 
 void init_multitasking(struct multiboot_info* mb_info){
-	struct multiboot_module* modules = mb_info->mbs_mods_addr;
-	int ret = init_elf((void*) modules[0].mod_start);
-	if(ret == 1){
+	//struct multiboot_module* modules = mb_info->mbs_mods_addr;
+	//int ret = init_elf((void*) modules[0].mod_start);
+	//if(ret == 1){
 		init_task(do_nothing);
-	}
+	//}
 }
 
 struct cpu_state* schedule(struct cpu_state* cpu){
