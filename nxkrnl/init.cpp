@@ -49,7 +49,7 @@ extern "C" void init(struct multiboot_info *mb_info){
 	kprintf("\nStage 2 devices\n");
 	kprintf("Creating DriverManager\n"); 
 	DriverManager drvManager;
-	kprintf("Building KeyboardDriver");
+	kprintf("Building KeyboardDriver\n");
 	PrintfKeyboardEventHandler kbhandler;
 	KeyboardDriver keyboard_driver(&kbhandler);
 	drvManager.AddDriver(&keyboard_driver);
@@ -58,7 +58,7 @@ extern "C" void init(struct multiboot_info *mb_info){
 	
 	kprintf("\nStage 2 advanced\n");
 	kprintf("Init Multitasking\n");
-	init_multitasking();
+	init_multitasking(mb_info);
 	
 	//asm volatile("int $0x1");
 	

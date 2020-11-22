@@ -32,6 +32,20 @@ void pmm_init(struct multiboot_info* mb_info){
 		pmm_mark_used((void*) addr);
 		addr += 0x1000;
 	}
+	
+	struct multiboot_module* modules = mb_info->mbs_mods_addr;
+
+	pmm_mark_used(mb_info);
+	pmm_mark_used(modules);
+
+	int i;
+	for (i = 0; i < mb_info->mbs_mods_count; i++) {
+		addr = modules[i].mod_start;
+		while (addr < modules[i].mod_end) {
+			pmm_mark_used((void*) addr);
+			addr += 0x1000;
+		}
+	}
 }
 
 void* pmm_alloc(void){

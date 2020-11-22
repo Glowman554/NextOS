@@ -1,3 +1,4 @@
 title NextOS
 kernel /nxkrnl
+module /test.bin
 boot

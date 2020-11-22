@@ -1,30 +1,14 @@
 #include <task.h>
 
-static void task_a(void){
-	while (1) {
-		kprintf("A");
-	}
-}
+struct task {
+	struct cpu_state*   cpu_state;
+	struct task*        next;
+};
 
-static void task_b(void){
-	while (1) {
-		kprintf("B");
-	}
-}
+static struct task* first_task = NULL;
+static struct task* current_task = NULL;
 
-static void task_c(void){
-	while (1) {
-		kprintf("C");
-	}
-}
-
-static void task_d(void){
-	while (1) {
-		kprintf("D");
-	}
-}
-
-struct cpu_state* init_task(void* entry){
+struct task* init_task(void* entry){
 	uint8_t* stack = pmm_alloc();
 	uint8_t* user_stack = pmm_alloc();
 
@@ -49,28 +33,57 @@ struct cpu_state* init_task(void* entry){
 	struct cpu_state* state = (void*) (stack + 4096 - sizeof(new_state));
 	*state = new_state;
 
-	return state;
+	struct task* task = pmm_alloc();
+	task->cpu_state = state;
+	task->next = first_task;
+	first_task = task;
+	return task;
 }
 
-static int current_task = -1;
-static int num_tasks = 4;
-static struct cpu_state* task_states[4];
+void init_elf(void* image){
+	struct elf_header* header = image;
+	struct elf_program_header* ph;
+	int i;
 
-void init_multitasking(void){
-	task_states[0] = init_task(task_a);
-	task_states[1] = init_task(task_b);
-	task_states[2] = init_task(task_c);
-	task_states[3] = init_task(task_d);
+	if (header->magic != ELF_MAGIC) {
+		kprintf("Keine gueltige ELF-Magic!\n");
+		return;
+	}
+
+	ph = (struct elf_program_header*) (((char*) image) + header->ph_offset);
+	for (i = 0; i < header->ph_entry_count; i++, ph++) {
+		void* dest = (void*) ph->virt_addr;
+		void* src = ((char*) image) + ph->offset;
+
+		if (ph->type != 1) {
+			continue;
+		}
+		
+		memset(dest, 0, ph->mem_size);
+		memcpy(dest, src, ph->file_size);
+	}
+	init_task((void*) header->entry);
+}
+
+void init_multitasking(struct multiboot_info* mb_info){
+	struct multiboot_module* modules = mb_info->mbs_mods_addr;
+	init_elf((void*) modules[0].mod_start);
 }
 
 struct cpu_state* schedule(struct cpu_state* cpu){
-	if (current_task >= 0) {
-		task_states[current_task] = cpu;
+	if (current_task != NULL) {
+		current_task->cpu_state = cpu;
 	}
-	current_task++;
-	current_task %= num_tasks;
+	if(current_task == NULL){
+		current_task = first_task;
+	} else {
+		current_task = current_task->next;
+		if(current_task == NULL){
+			current_task = first_task;
+		}
+	}
 	
-	cpu = task_states[current_task];
+	cpu = current_task->cpu_state;
 
 	return cpu;
 }

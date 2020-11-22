@@ -1,6 +1,7 @@
 #include <interrupts.h>
 #include <task.h>
 #include <gdt.h>
+#include <syscall.h>
 #define IDT_FLAG_INTERRUPT_GATE 0xe
 #define IDT_FLAG_PRESENT 0x80
 #define IDT_FLAG_RING0 0x00
@@ -145,6 +146,8 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu){
 			outb(0xa0, 0x20);
 		}
 		outb(0x20, 0x20);
+	} else if(cpu->intr == 0x30){
+		new_cpu = syscall(cpu);
 	}
 	return new_cpu;
 }

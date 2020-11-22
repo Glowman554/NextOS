@@ -24,4 +24,12 @@ struct multiboot_mmap {
 	uint32_t    type;
 } __attribute__((packed));
 
+struct multiboot_module {
+	uint32_t    mod_start;
+	uint32_t    mod_end;
+	char*       cmdline;
+	uint32_t    reserved;
+} __attribute__((packed));
+
+
 #endif
