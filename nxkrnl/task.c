@@ -5,6 +5,10 @@ struct task {
 	struct task*        next;
 };
 
+void do_nothing(void){
+	while(1);
+}
+
 static struct task* first_task = NULL;
 static struct task* current_task = NULL;
 
@@ -40,14 +44,14 @@ struct task* init_task(void* entry){
 	return task;
 }
 
-void init_elf(void* image){
+int init_elf(void* image){
 	struct elf_header* header = image;
 	struct elf_program_header* ph;
 	int i;
 
 	if (header->magic != ELF_MAGIC) {
 		kprintf("Keine gueltige ELF-Magic!\n");
-		return;
+		return 1;
 	}
 
 	ph = (struct elf_program_header*) (((char*) image) + header->ph_offset);
@@ -63,11 +67,15 @@ void init_elf(void* image){
 		memcpy(dest, src, ph->file_size);
 	}
 	init_task((void*) header->entry);
+	return 0;
 }
 
 void init_multitasking(struct multiboot_info* mb_info){
 	struct multiboot_module* modules = mb_info->mbs_mods_addr;
-	init_elf((void*) modules[0].mod_start);
+	int ret = init_elf((void*) modules[0].mod_start);
+	if(ret == 1){
+		init_task(do_nothing);
+	}
 }
 
 struct cpu_state* schedule(struct cpu_state* cpu){

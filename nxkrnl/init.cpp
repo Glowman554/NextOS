@@ -10,6 +10,7 @@ extern "C"{
 #include <driver/keyboard.h>
 #include <config.h>
 #include <multiboot.h>
+#include <pci.h>
 
 typedef void (*constructor)();
 
@@ -53,6 +54,10 @@ extern "C" void init(struct multiboot_info *mb_info){
 	PrintfKeyboardEventHandler kbhandler;
 	KeyboardDriver keyboard_driver(&kbhandler);
 	drvManager.AddDriver(&keyboard_driver);
+	kprintf("Building PCIController\n");
+	PeripheralComponentInterconnectController PCIController;
+	//kprintf("Found PCI Devices:\n");
+	//PCIController.PrintDevices();
 	kprintf("Activating All Driver\n");
 	drvManager.ActivateAll();
 	
