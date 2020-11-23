@@ -6,6 +6,7 @@
 #include <config.h>
 #include <exec.h>
 #include <task.h>
+#include <system.h>
 
 #define SYSCALL_PUTC		0
 #define SYSCALL_PUTS		1
@@ -17,6 +18,10 @@
 #define SYSCALL_EXEC		7
 #define SYSCALL_INIT_TASK	8
 #define SYSCALL_TASK_EXIT	9
+#define SYSCALL_REBOOT		10
+#define SYSCALL_GETCHAR		11
+#define SYSCALL_GET_TICK	12
+#define SYSCALL_RESET_TICK	13
 
 struct cpu_state* syscall(struct cpu_state* cpu);
 

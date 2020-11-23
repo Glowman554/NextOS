@@ -35,6 +35,18 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_TASK_EXIT:
 			task_exit(cpu->ebx);
 			break;
+		case SYSCALL_REBOOT:
+			reboot();
+			break;
+		case SYSCALL_GETCHAR:
+			cpu->ebx = getchar();
+			break;
+		case SYSCALL_GET_TICK:
+			cpu->ebx = get_timer_tick();
+			break;
+		case SYSCALL_RESET_TICK:
+			reset_timer_tick();
+			break;
 	}
 
 	return cpu;

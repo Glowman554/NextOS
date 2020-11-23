@@ -34,5 +34,7 @@ struct cpu_state {
 };
 
 void init_intr();
+void reset_timer_tick();
+uint32_t get_timer_tick();
 
 #endif

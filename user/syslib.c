@@ -42,6 +42,26 @@ void task_exit(int code){
 	while(1);
 }
 
+void reboot(){
+	asm("int $0x30" :: "a" (SYSCALL_REBOOT));
+}
+
+char getchar(){
+	register uint32_t input asm("ebx");
+	asm("int $0x30" :: "a" (SYSCALL_GETCHAR));
+	return (char) input;
+}
+
+uint32_t get_timer_tick(){
+	register uint32_t input asm("ebx");
+	asm("int $0x30" :: "a" (SYSCALL_GET_TICK));
+	return input;
+}
+
+void reset_timer_tick(){
+	asm("int $0x30" :: "a" (SYSCALL_RESET_TICK));
+}
+
 void kprintf(const char* fmt, ...){
 	va_list ap;
 	const char* s;
@@ -90,4 +110,19 @@ void kprintf(const char* fmt, ...){
 out:
 	va_end(ap);
 
+}
+
+int strcmp(char *str1, char *str2){
+	int i = 0;
+	int failed = 0;
+	while(str1[i] != '\0' && str2[i] != '\0'){
+		if(str1[i] != str2[i]){
+			failed = 1;
+			break;
+		}
+		i++;
+	}
+	if( (str1[i] == '\0' && str2[i] != '\0') || (str1[i] != '\0' && str2[i] == '\0') )
+		failed = 1;
+	return failed;
 }

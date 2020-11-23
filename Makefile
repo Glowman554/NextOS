@@ -5,7 +5,8 @@ all:
 iso: all
 	cp nxkrnl/nxkrnl cdrom/.
 	cp user/*.bin cdrom/.
-	
+	cp README.md cdrom/.
+	cp LICENSE cdrom/.
 	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o cdrom.iso cdrom/
 	
 run: iso

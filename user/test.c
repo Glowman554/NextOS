@@ -9,7 +9,7 @@ void test_task(void){
 
 void _start(void){
 	
-	//init_task(test_task);
+	init_task(test_task);
 	
-	while(1);
+	task_exit(0);
 }

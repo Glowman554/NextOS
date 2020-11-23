@@ -18,10 +18,9 @@ typedef void (*constructor)();
 extern "C" constructor start_ctors;
 extern "C" constructor end_ctors;
 extern "C" void initialiseConstructors();
-void initialiseConstructors()
-{
-  for (constructor* i = &start_ctors;i != &end_ctors;++i)
-    (*i)();
+void initialiseConstructors(){
+	for (constructor* i = &start_ctors;i != &end_ctors;++i)
+		(*i)();
 }
 
 class PrintfKeyboardEventHandler : public KeyboardEventHandler{
@@ -47,8 +46,8 @@ extern "C" void init(struct multiboot_info *mb_info){
 	init_intr();
 	 
 	DriverManager drvManager;
-	PrintfKeyboardEventHandler kbhandler;
-	KeyboardDriver keyboard_driver(&kbhandler);
+	//PrintfKeyboardEventHandler kbhandler;
+	KeyboardDriver keyboard_driver(0);
 	drvManager.AddDriver(&keyboard_driver);
 	PeripheralComponentInterconnectController PCIController;
 	//kprintf("Found PCI Devices:\n");
@@ -58,7 +57,8 @@ extern "C" void init(struct multiboot_info *mb_info){
 	init_multitasking(mb_info);
 	
 	//asm volatile("int $0x1");
-	list_files();
-	exec_file("/init.bin");
+	if(LIST_FILES_ON_BOOT)
+		list_files();
+	exec_file(AUTOEXEC);
 	while(1);
 }

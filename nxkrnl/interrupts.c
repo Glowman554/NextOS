@@ -50,6 +50,8 @@ static long long unsigned int idt[IDT_ENTRIES];
 
 extern void intr_stub_48(void);
 
+uint32_t timer_tick = 0;
+
 static void idt_set_entry(int i, void (*fn)(), unsigned int selector, int flags){
 	unsigned long int handler = (unsigned long int) fn;
 	idt[i] = handler & 0xffffLL;
@@ -114,6 +116,14 @@ void init_intr(){
 	
 }
 
+void reset_timer_tick(){
+	timer_tick = 0;
+}
+
+uint32_t get_timer_tick(){
+	return timer_tick;
+}
+
 struct cpu_state* handle_interrupt(struct cpu_state* cpu){
 	struct cpu_state* new_cpu = cpu;
 	if(cpu->intr <= 0x1f){
@@ -138,6 +148,7 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu){
 		if(cpu->intr == 0x20){
 			new_cpu = schedule(cpu);
 			set_tss(1, (uint32_t) (new_cpu + 1));
+			timer_tick++;
 		}
 		
 		do_handle_interrupt(cpu->intr);

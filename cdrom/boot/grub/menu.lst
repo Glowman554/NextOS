@@ -1,5 +1,6 @@
 title NextOS
 kernel /nxkrnl
 module /init.bin
+module /terminal.bin
 module /test.bin
 boot

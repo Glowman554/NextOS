@@ -2,6 +2,7 @@
 #define SYSLIB_H
 
 #include <stdarg.h>
+#include <stdint.h>
 
 #define SYSCALL_PUTC		0
 #define SYSCALL_PUTS		1
@@ -13,6 +14,10 @@
 #define SYSCALL_EXEC		7
 #define SYSCALL_INIT_TASK	8
 #define SYSCALL_TASK_EXIT	9
+#define SYSCALL_REBOOT		10
+#define SYSCALL_GETCHAR		11
+#define SYSCALL_GET_TICK	12
+#define SYSCALL_RESET_TICK	13
 
 
 #define FOREGROUND_BLACK 0x00
@@ -60,5 +65,10 @@ void exec(char* file);
 void kprintf(const char* fmt, ...);
 void init_task(void* entry);
 void task_exit(int code);
+void reboot();
+char getchar();
+void reset_timer_tick();
+uint32_t get_timer_tick();
+int strcmp(char *str1, char *str2);
 
 #endif
