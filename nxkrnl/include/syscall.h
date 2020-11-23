@@ -22,6 +22,7 @@
 #define SYSCALL_GETCHAR		11
 #define SYSCALL_GET_TICK	12
 #define SYSCALL_RESET_TICK	13
+#define SYSCALL_MULTIBOOT	14
 
 struct cpu_state* syscall(struct cpu_state* cpu);
 

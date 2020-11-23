@@ -1,7 +1,7 @@
 # NextOS
 
-A simple os written in c and c++
-It's a more advanced and more stable kernel than my first kernel [GKernel](https://github.com/Glowman554/gkernel)
+A simple os written in c and c++.  
+It's a more advanced and more stable kernel than my first kernel [GKernel](https://github.com/Glowman554/gkernel)  
 
 ## Featurs
 
@@ -12,8 +12,8 @@ It's a more advanced and more stable kernel than my first kernel [GKernel](https
 - Driver Abstraction
 
 ## Building
-You need to install `genisoimage gcc g++ as ld`
-To create an ISO file you need to enter `make iso`
+You need to install `genisoimage gcc g++ as ld`.  
+To create an ISO file you need to enter `make iso`.  
 
 ## Syscalls
 
@@ -33,6 +33,7 @@ To create an ISO file you need to enter `make iso`
 | SYSCALL_GETCHAR | 11 | char c (return) | - | - |
 | SYSCALL_GET_TICK | 12 | uint32_t tick (return) | - | - |
 | SYSCALL_RESET_TICK | 13 | - | - | - |
+| SYSCALL_MULTIBOOT | 14 | multiboot_info *mb_info | - | - |
 
 ## Copyright
 

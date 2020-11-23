@@ -47,6 +47,9 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_RESET_TICK:
 			reset_timer_tick();
 			break;
+		case SYSCALL_MULTIBOOT:
+			cpu->ebx = pmb_info;
+			break;
 	}
 
 	return cpu;

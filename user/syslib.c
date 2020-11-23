@@ -62,6 +62,12 @@ void reset_timer_tick(){
 	asm("int $0x30" :: "a" (SYSCALL_RESET_TICK));
 }
 
+struct multiboot_info* get_mb_ptr(){
+	register uint32_t input asm("ebx");
+	asm("int $0x30" :: "a" (SYSCALL_MULTIBOOT));
+	return (struct multiboot_info*) input;
+}
+
 void kprintf(const char* fmt, ...){
 	va_list ap;
 	const char* s;
