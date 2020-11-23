@@ -31,7 +31,7 @@ To create an ISO file you need to enter `make iso`
 | SYSCALL_TASK_EXIT | 9 | int errorcode | - | - |
 | SYSCALL_REBOOT | 10 | - | - | - |
 | SYSCALL_GETCHAR | 11 | char c (return) | - | - |
-| SYSCALL_GET_TICK | 12 | uint64_t tick (return) | - | - |
+| SYSCALL_GET_TICK | 12 | uint32_t tick (return) | - | - |
 | SYSCALL_RESET_TICK | 13 | - | - | - |
 
 ## Copyright
