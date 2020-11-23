@@ -1,16 +1,35 @@
 #include <task.h>
 
-struct task {
-	struct cpu_state*   cpu_state;
-	struct task*        next;
-};
-
 void do_nothing(void){
 	while(1);
 }
 
 static struct task* first_task = NULL;
 static struct task* current_task = NULL;
+
+int proccount = 0;
+char nextpid = 1;
+
+void task_exit(int code){
+	kprintf("[%d] Exit Task with error code %d\n", current_task->pid, code);
+	if(code == 1){
+		asm("int $0x1");
+	}
+	proccount--;
+	struct task* temp = first_task;
+	if(current_task->pid == first_task->pid){
+		first_task = temp->next;
+		return;
+	}
+	
+	while(temp->next != NULL){
+		if(temp->next->pid == current_task->pid){
+			current_task = temp->next;
+		}
+		temp = temp->next;
+	}
+	
+}
 
 struct task* init_task(void* entry){
 	uint8_t* stack = pmm_alloc();
@@ -40,6 +59,10 @@ struct task* init_task(void* entry){
 	struct task* task = pmm_alloc();
 	task->cpu_state = state;
 	task->next = first_task;
+	task->pid = nextpid;
+	nextpid++;
+	kprintf("Starting task with pid %d\n", task->pid);
+	proccount++;
 	first_task = task;
 	return task;
 }
@@ -71,11 +94,7 @@ int init_elf(void* image){
 }
 
 void init_multitasking(struct multiboot_info* mb_info){
-	//struct multiboot_module* modules = mb_info->mbs_mods_addr;
-	//int ret = init_elf((void*) modules[0].mod_start);
-	//if(ret == 1){
-		init_task(do_nothing);
-	//}
+	init_task(do_nothing);
 }
 
 struct cpu_state* schedule(struct cpu_state* cpu){

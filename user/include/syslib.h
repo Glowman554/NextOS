@@ -11,6 +11,9 @@
 #define SYSCALL_KVERSION	5
 #define SYSCALL_KVENDOR		6
 #define SYSCALL_EXEC		7
+#define SYSCALL_INIT_TASK	8
+#define SYSCALL_TASK_EXIT	9
+
 
 #define FOREGROUND_BLACK 0x00
 #define FOREGROUND_BLUE 0x01
@@ -55,5 +58,7 @@ int kversion();
 char* kvendor();
 void exec(char* file);
 void kprintf(const char* fmt, ...);
+void init_task(void* entry);
+void task_exit(int code);
 
 #endif

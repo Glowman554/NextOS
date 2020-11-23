@@ -30,7 +30,16 @@ char* kvendor(){
 	return (char*) input;
 }
 void exec(char* file){
-	asm("int $0x30" :: "a" (SYSCALL_PUTS), "b" (file));
+	asm("int $0x30" :: "a" (SYSCALL_EXEC), "b" (file));
+}
+
+void init_task(void* entry){
+	asm("int $0x30" :: "a" (SYSCALL_INIT_TASK), "b" (entry));
+}
+
+void task_exit(int code){
+	asm("int $0x30" : : "a" (SYSCALL_TASK_EXIT), "b" (code));
+	while(1);
 }
 
 void kprintf(const char* fmt, ...){
