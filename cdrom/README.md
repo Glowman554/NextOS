@@ -12,6 +12,7 @@ It's a more advanced and more stable kernel than my first kernel [GKernel](https
 - Driver Abstraction
 - VGA Mode
 - Serial COM1 Debug Log
+- Added Initrd
 
 ## Building
 You need to install `genisoimage gcc g++ as ld nasm`.  
