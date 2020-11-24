@@ -1,5 +1,7 @@
 #include <syscall.h>
 
+uint8_t buf[4096];
+
 struct cpu_state* syscall(struct cpu_state* cpu){
 	
 	bool mode = is_vga_active();
@@ -77,6 +79,21 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 			break;
 		case SYSCALL_VGA_SETCOLOR:
 			set_vga_color(cpu->ebx, cpu->ecx);
+			break;
+		case SYSCALL_LOAD_INITRD:
+			fs_root = initialise_initrd(get_module_by_name((char*) cpu->ebx));
+			break;
+		case SYSCALL_INITRD_READDIR:
+			cpu->ecx = (uint32_t) readdir_fs(fs_root, cpu->ebx);
+			break;
+		case SYSCALL_INITRD_FINDDIR:
+			cpu->ecx = (uint32_t) finddir_fs(fs_root, (char*) cpu->ebx);
+			break;
+		case SYSCAlL_INITRD_READ:
+			read_fs((fs_node_t*) cpu->edx, cpu->ebx, cpu->ecx, buf);
+			break;
+		case SYSCALL_GET_BUFFER:
+			cpu->ebx = (uint32_t) buf;
 			break;
 	}
 

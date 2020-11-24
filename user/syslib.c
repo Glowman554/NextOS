@@ -1,6 +1,5 @@
-#include <stdint.h>
 #include <syslib.h>
-#include <stdarg.h>
+
 
 void kputc(char c){
 	asm("int $0x30" :: "a" (SYSCALL_PUTC), "b" (c));
@@ -78,6 +77,32 @@ void setpixel(int x, int y, uint32_t color){
 
 void set_vga_color(uint32_t fgcolor, uint32_t bgcolor){
 	asm("int $0x30" :: "a" (SYSCALL_VGA_SETCOLOR), "b" (fgcolor), "c" (bgcolor));
+}
+
+void load_initrd(char* file){
+	asm("int $0x30" :: "a" (SYSCALL_LOAD_INITRD), "b" (file));
+}
+
+struct dirent* initrd_readdir(int index){
+	register uint32_t input asm("ecx");
+	asm("int $0x30" :: "a" (SYSCALL_INITRD_READDIR), "b" (index));
+	return (struct dirent*) input;
+}
+
+fs_node_t* initrd_finddir(char* file){
+	register uint32_t input asm("ecx");
+	asm("int $0x30" :: "a" (SYSCALL_INITRD_FINDDIR), "b" (file));
+	return (fs_node_t*) input;
+}
+
+void initrd_read(fs_node_t *fsnode, uint32_t offset, uint32_t size){
+	asm("int $0x30" :: "a" (SYSCAlL_INITRD_READ), "b" (offset), "c" (size), "d" (fsnode));
+}
+
+uint8_t* get_buffer(){
+	register uint32_t input asm("ebx");
+	asm("int $0x30" :: "a" (SYSCALL_GET_BUFFER));
+	return (uint8_t*) input;
 }
 
 void kprintf(const char* fmt, ...){

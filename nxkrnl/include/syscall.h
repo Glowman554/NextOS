@@ -10,6 +10,8 @@
 #include <driver/vga.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <fs/fs.h>
+#include <fs/initrd.h>
 
 #define SYSCALL_PUTC			0
 #define SYSCALL_PUTS			1
@@ -29,6 +31,11 @@
 #define SYSCALL_VGA_MODE		15
 #define SYSCALL_VGA_SETPIXEL	16
 #define SYSCALL_VGA_SETCOLOR	17
+#define SYSCALL_LOAD_INITRD		18
+#define SYSCALL_INITRD_READDIR	19
+#define SYSCALL_INITRD_FINDDIR	20
+#define SYSCAlL_INITRD_READ		21
+#define SYSCALL_GET_BUFFER		22
 
 struct cpu_state* syscall(struct cpu_state* cpu);
 

@@ -9,6 +9,7 @@ void* memcpy(void* dest, const void* src, size_t n);
 int strcmp(char *str1, char *str2);
 
 int strlen(char *src);
+char *strcpy(char *dest, const char *src);
 
 
 #endif

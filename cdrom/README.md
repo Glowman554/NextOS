@@ -39,6 +39,11 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_VGA_MODE | 15 | - | - | - |
 | SYSCALL_VGA_SETPIXEL | 16 | int x | int y | uint32_t color |
 | SYSCALL_VGA_SETCOLOR | 17 | uint32_t fgcolor | uint32_t bgcolor | - |
+| SYSCALL_LOAD_INITRD | 18 | char* file | - | - |
+| SYSCALL_INITRD_READDIR | 19 | int index | struct dirent *node (return) | - |
+| SYSCALL_INITRD_FINDDIR | 20 | char* dir | fs_node_t *fsnode (return) | - |
+| SYSCAlL_INITRD_READ | 21 | uint32_t offset | uint32_t size | fs_node_t *fsnode |
+| SYSCALL_GET_BUFFER | 22 | uint8_t* buf (return) | - | - |
 
 ## Copyright
 

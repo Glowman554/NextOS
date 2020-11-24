@@ -6,6 +6,9 @@ extern "C"{
 	#include <exec.h>
 	#include <mem.h>
 	#include <driver/serial.h>
+	#include <system.h>
+	#include <fs/fs.h>
+	#include <fs/initrd.h>
 }
 
 #include <driver/keyboard.h>

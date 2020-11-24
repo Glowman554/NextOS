@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <multiboot.h>
+#include <fs.h>
 
 #define SYSCALL_PUTC			0
 #define SYSCALL_PUTS			1
@@ -23,6 +24,11 @@
 #define SYSCALL_VGA_MODE		15
 #define SYSCALL_VGA_SETPIXEL	16
 #define SYSCALL_VGA_SETCOLOR	17
+#define SYSCALL_LOAD_INITRD		18
+#define SYSCALL_INITRD_READDIR	19
+#define SYSCALL_INITRD_FINDDIR	20
+#define SYSCAlL_INITRD_READ		21
+#define SYSCALL_GET_BUFFER		22
 
 
 #define FOREGROUND_BLACK 0x00
@@ -96,5 +102,9 @@ int strcmp(char *str1, char *str2);
 void init_vga();
 void setpixel(int x, int y, uint32_t color);
 void set_vga_color(uint32_t fgcolor, uint32_t bgcolor);
-
+void load_initrd(char* file);
+struct dirent* initrd_readdir(int index);
+fs_node_t* initrd_finddir(char* file);
+void initrd_read(fs_node_t *fsnode, uint32_t offset, uint32_t size);
+uint8_t* get_buffer();
 #endif
