@@ -14,8 +14,11 @@ void kputc(char c){
 		x = 0;
 		y++;
 	}
+	
+	if(SERIAL_DEBUG) write_serial(c);
 
 	if (c == '\n') {
+		if(SERIAL_DEBUG) write_serial('\r');
 		return;
 	}
 

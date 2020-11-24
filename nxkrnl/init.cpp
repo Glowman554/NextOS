@@ -5,11 +5,9 @@ extern "C"{
 	#include <task.h>
 	#include <exec.h>
 	#include <mem.h>
-	#include <bios.h>
-	#include <driver/vga.h>
+	#include <driver/serial.h>
 }
 
-#include <driver/driver.h>
 #include <driver/keyboard.h>
 #include <config.h>
 #include <multiboot.h>
@@ -36,6 +34,7 @@ class PrintfKeyboardEventHandler : public KeyboardEventHandler{
 
 extern "C" void init(struct multiboot_info *mb_info){
 	
+	if(SERIAL_DEBUG) init_serial();
 	
 	clrscr();
 	kprintf("nxkrnl %d Loading...\n", VERSION);

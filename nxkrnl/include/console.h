@@ -3,7 +3,9 @@
 
 #include <stdarg.h>
 #include <stdint.h>
-
+#include <driver/serial.h>
+#include <config.h>
+#include <stdbool.h>
 #include <io.h>
 
 #define VIDEO_MEM 0xb8000
