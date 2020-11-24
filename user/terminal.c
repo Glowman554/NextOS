@@ -54,6 +54,7 @@ void _start(){
 		if(strcmp(in, "about")==0) print_copyright();
 		if(strcmp(in, "clear")==0) clrscr();
 		if(strcmp(in, "ls")==0) list_files();
+		if(strcmp(in, "vga-init")==0) init_vga();
 		
 		if(strcmp(in, "help")==0){
 			kprintf("Aviable Commands:\n");
@@ -64,6 +65,7 @@ void _start(){
 			kprintf("about\n");
 			kprintf("clear\n");
 			kprintf("ls\n");
+			kprintf("vga-init\n");
 		}
 		
 		if(in[len-1] == 'n' && in[len-2] == 'i' && in[len-3] == 'b' && in[len-4] == '.'){
