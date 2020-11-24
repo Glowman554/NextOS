@@ -5,6 +5,8 @@ extern "C"{
 	#include <task.h>
 	#include <exec.h>
 	#include <mem.h>
+	#include <bios.h>
+	#include <driver/vga.h>
 }
 
 #include <driver/driver.h>
@@ -26,7 +28,7 @@ void initialiseConstructors(){
 class PrintfKeyboardEventHandler : public KeyboardEventHandler{
 	public:
 		void KeyDown(char c){
-			kputc(c);
+			vga_kputc(c);
 		}
 };
 
@@ -57,6 +59,7 @@ extern "C" void init(struct multiboot_info *mb_info){
 	init_multitasking(mb_info);
 	
 	//asm volatile("int $0x1");
+	
 	if(LIST_FILES_ON_BOOT)
 		list_files();
 	exec_file(AUTOEXEC);

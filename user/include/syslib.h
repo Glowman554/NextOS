@@ -5,21 +5,24 @@
 #include <stdint.h>
 #include <multiboot.h>
 
-#define SYSCALL_PUTC		0
-#define SYSCALL_PUTS		1
-#define SYSCALL_PUTN		2
-#define SYSCALL_CLRSCR		3
-#define SYSCALL_SETCOLOR	4
-#define SYSCALL_KVERSION	5
-#define SYSCALL_KVENDOR		6
-#define SYSCALL_EXEC		7
-#define SYSCALL_INIT_TASK	8
-#define SYSCALL_TASK_EXIT	9
-#define SYSCALL_REBOOT		10
-#define SYSCALL_GETCHAR		11
-#define SYSCALL_GET_TICK	12
-#define SYSCALL_RESET_TICK	13
-#define SYSCALL_MULTIBOOT	14
+#define SYSCALL_PUTC			0
+#define SYSCALL_PUTS			1
+#define SYSCALL_PUTN			2
+#define SYSCALL_CLRSCR			3
+#define SYSCALL_SETCOLOR		4
+#define SYSCALL_KVERSION		5
+#define SYSCALL_KVENDOR			6
+#define SYSCALL_EXEC			7
+#define SYSCALL_INIT_TASK		8
+#define SYSCALL_TASK_EXIT		9
+#define SYSCALL_REBOOT			10
+#define SYSCALL_GETCHAR			11
+#define SYSCALL_GET_TICK		12
+#define SYSCALL_RESET_TICK		13
+#define SYSCALL_MULTIBOOT		14
+#define SYSCALL_VGA_MODE		15
+#define SYSCALL_VGA_SETPIXEL	16
+#define SYSCALL_VGA_SETCOLOR	17
 
 
 #define FOREGROUND_BLACK 0x00
@@ -56,6 +59,23 @@
 #define BACKGROUND_BLINKINGYELLOW 0xE0
 #define BACKGROUND_BLINKINGWHITE 0xF0
 
+#define VGA_BLACK 0x00
+#define VGA_BLUE 0x01
+#define VGA_GREEN 0x02
+#define VGA_CYAN 0x03
+#define VGA_RED 0x04
+#define VGA_MAGENTA 0x05
+#define VGA_BROWN 0x06
+#define VGA_LIGHTGRAY 0x07
+#define VGA_DARKGRAY 0x08
+#define VGA_LIGHTBLUE 0x09
+#define VGA_LIGHTGREEN 0x0A
+#define VGA_LIGHTCYAN 0x0B
+#define VGA_LIGHTRED 0x0C
+#define VGA_LIGHTMAGENTA 0x0D
+#define VGA_YELLOW 0x0E
+#define VGA_WHITE 0x0F
+
 void kputc(char c);
 void kputs(const char *s);
 void kputn(int n, int base);
@@ -73,5 +93,8 @@ void reset_timer_tick();
 uint32_t get_timer_tick();
 struct multiboot_info* get_mb_ptr();
 int strcmp(char *str1, char *str2);
+void init_vga();
+void setpixel(int x, int y, uint32_t color);
+void set_vga_color(uint32_t fgcolor, uint32_t bgcolor);
 
 #endif

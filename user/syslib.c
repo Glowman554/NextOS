@@ -68,6 +68,18 @@ struct multiboot_info* get_mb_ptr(){
 	return (struct multiboot_info*) input;
 }
 
+void init_vga(){
+	asm("int $0x30" :: "a" (SYSCALL_VGA_MODE));
+}
+
+void setpixel(int x, int y, uint32_t color){
+	asm("int $0x30" :: "a" (SYSCALL_VGA_SETPIXEL), "b" (x), "c" (y), "d" (color));
+}
+
+void set_vga_color(uint32_t fgcolor, uint32_t bgcolor){
+	asm("int $0x30" :: "a" (SYSCALL_VGA_SETCOLOR), "b" (fgcolor), "c" (bgcolor));
+}
+
 void kprintf(const char* fmt, ...){
 	va_list ap;
 	const char* s;

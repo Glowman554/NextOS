@@ -1,4 +1,4 @@
-SRCS = $(shell find -name '*.[cS]')
+SRCS = $(shell find -name '*.[cSn]')
 CPPSRC = $(shell find -name '*.cpp')
 OBJS = $(addsuffix .o,$(basename $(SRCS) $(CPPSRC)))
 
@@ -25,7 +25,11 @@ nxkrnl: $(OBJS)
 %.o: %.S
 	@echo AS $^
 	@$(CC) $(ASFLAGS) -c -o $@ $^
-	
+
+%.o: %.n
+	@echo NASM $^
+	@nasm -f elf32 -o $@ $^
+
 run: nxkrnl
 	qemu-system-i386.exe -kernel nxkrnl
 

@@ -5,6 +5,7 @@
 #include <io.h>
 #include <console.h>
 #include <panic.h>
+#include <driver/vga.h>
 
 #define IDT_FLAG_INTERRUPT_GATE 0xe
 #define IDT_FLAG_PRESENT 0x80

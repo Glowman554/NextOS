@@ -8,11 +8,8 @@ void test_task(void){
 }
 
 void _start(void){
-	
-	char c = getchar();
-	kprintf("%d\n", c - 48);
-	
 	//exec("/terminal.bin");
+	init_vga();
 	init_task(test_task);
 	
 	task_exit(0);

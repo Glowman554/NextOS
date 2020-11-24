@@ -1,21 +1,40 @@
 #include <syscall.h>
 
 struct cpu_state* syscall(struct cpu_state* cpu){
+	
+	bool mode = is_vga_active();
+	
 	switch (cpu->eax) {
 		case SYSCALL_PUTC:
-			kprintf("%c", cpu->ebx);
+			if(mode)
+				vga_kprintf("%c", cpu->ebx);
+			else
+				kprintf("%c", cpu->ebx);
 			break;
 		case SYSCALL_PUTS:
-			kprintf("%s", cpu->ebx);
+			if(mode)
+				vga_kprintf("%s", cpu->ebx);
+			else
+				kprintf("%s", cpu->ebx);
 			break;
 		case SYSCALL_PUTN:
-			if(cpu->ecx == 0xf)
-				kprintf("%x", cpu->ebx);
-			if(cpu->ecx == 0xa)
-				kprintf("%d", cpu->ebx);
+			if(mode){
+				if(cpu->ecx == 16)
+					vga_kprintf("%x", cpu->ebx);
+				if(cpu->ecx == 10)
+					vga_kprintf("%d", cpu->ebx);
+			} else {
+				if(cpu->ecx == 16)
+					kprintf("%x", cpu->ebx);
+				if(cpu->ecx == 10)
+					kprintf("%d", cpu->ebx);
+			}
 			break;
 		case SYSCALL_CLRSCR:
-			clrscr();
+			if(mode)
+				clear_vga();
+			else
+				clrscr();
 			break;
 		case SYSCALL_SETCOLOR:
 			setcolor(cpu->ebx);
@@ -49,6 +68,15 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 			break;
 		case SYSCALL_MULTIBOOT:
 			cpu->ebx = (uint32_t) pmb_info;
+			break;
+		case SYSCALL_VGA_MODE:
+			init_vga();
+			break;
+		case SYSCALL_VGA_SETPIXEL:
+			setpixel(cpu->ebx, cpu->ecx, cpu->edx);
+			break;
+		case SYSCALL_VGA_SETCOLOR:
+			set_vga_color(cpu->ebx, cpu->ecx);
 			break;
 	}
 

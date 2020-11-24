@@ -10,9 +10,10 @@ It's a more advanced and more stable kernel than my first kernel [GKernel](https
 - PCI support 
 - Multitasking support
 - Driver Abstraction
+- VGA Mode
 
 ## Building
-You need to install `genisoimage gcc g++ as ld`.  
+You need to install `genisoimage gcc g++ as ld nasm`.  
 To create an ISO file you need to enter `make iso`.  
 
 ## Syscalls
@@ -34,6 +35,9 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_GET_TICK | 12 | uint32_t tick (return) | - | - |
 | SYSCALL_RESET_TICK | 13 | - | - | - |
 | SYSCALL_MULTIBOOT | 14 | multiboot_info *mb_info | - | - |
+| SYSCALL_VGA_MODE | 15 | - | - | - |
+| SYSCALL_VGA_SETPIXEL | 16 | int x | int y | uint32_t color |
+| SYSCALL_VGA_SETCOLOR | 17 | uint32_t fgcolor | uint32_t bgcolor | - |
 
 ## Copyright
 
