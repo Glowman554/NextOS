@@ -1,5 +1,7 @@
 # NextOS
 
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Glowman554/NextOS)
+
 A simple os written in c and c++.  
 It's a more advanced and more stable kernel than my first kernel [GKernel](https://github.com/Glowman554/gkernel)  
 
