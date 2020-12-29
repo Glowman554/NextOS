@@ -41,8 +41,8 @@ extern "C" void init(struct multiboot_info *mb_info){
 	
 	clrscr();
 	kprintf("nxkrnl %d Loading...\n", VERSION);
-	kprintf("Reporting kernel version %d\n", VERSION);
-	kprintf("Reporting kernel vendor %s\n\n", VENDOR);
+	//kprintf("Reporting kernel version %d\n", VERSION);
+	//kprintf("Reporting kernel vendor %s\n\n", VENDOR);
 	
 	pmb_info = mb_info;
 	pmm_init(mb_info);
@@ -62,8 +62,6 @@ extern "C" void init(struct multiboot_info *mb_info){
 	
 	//asm volatile("int $0x1");
 	
-	if(LIST_FILES_ON_BOOT)
-		list_files();
 	exec_file(AUTOEXEC);
 	while(1);
 }

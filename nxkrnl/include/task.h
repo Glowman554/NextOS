@@ -20,6 +20,16 @@ struct task {
 	uint64_t 			r8;
 	uint64_t 			r9;
 	uint64_t 			r10;
+	uint64_t 			r11;
+	uint64_t 			r12;
+	uint64_t 			r13;
+	uint64_t 			r14;
+	uint64_t 			r15;
+	uint64_t 			r16;
+	uint64_t 			r17;
+	uint64_t 			r18;
+	uint64_t 			r19;
+	uint64_t 			r20;
 	char				pid;
 };
 

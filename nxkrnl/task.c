@@ -11,7 +11,7 @@ int proccount = 0;
 char nextpid = 1;
 
 void task_exit(int code){
-	kprintf("[%d] Exit Task with error code %d\n", current_task->pid, code);
+	//kprintf("[%d] Exit Task with error code %d\n", current_task->pid, code);
 	if(code == 1){
 		asm("int $0x1");
 	}

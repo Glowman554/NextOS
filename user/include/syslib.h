@@ -29,6 +29,9 @@
 #define SYSCALL_INITRD_FINDDIR	20
 #define SYSCAlL_INITRD_READ		21
 #define SYSCALL_GET_BUFFER		22
+#define SYSCALL_INIT_DRIVER     23
+#define SYSCALL_CALL_DRIVER     24
+#define SYSCALL_FIND_DRIVER     25
 
 
 #define FOREGROUND_BLACK 0x00
@@ -82,6 +85,8 @@
 #define VGA_YELLOW 0x0E
 #define VGA_WHITE 0x0F
 
+typedef int (*driver_handler_ptr)(void*);
+
 void kputc(char c);
 void kputs(const char *s);
 void kputn(int n, int base);
@@ -107,4 +112,8 @@ struct dirent* initrd_readdir(int index);
 fs_node_t* initrd_finddir(char* file);
 void initrd_read(fs_node_t *fsnode, uint32_t offset, uint32_t size);
 uint8_t* get_buffer();
+int init_driver(char* name, driver_handler_ptr driver_handler);
+int call_driver_handler(int id, void* data);
+int find_driver_by_name(char* name);
+
 #endif

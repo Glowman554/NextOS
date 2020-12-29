@@ -95,6 +95,15 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_GET_BUFFER:
 			cpu->ebx = (uint32_t) buf;
 			break;
+		case SYSCALL_INIT_DRIVER:
+			cpu->edx = init_driver((char*) cpu->ebx, (driver_handler_ptr) cpu->ecx);
+			break;
+		case SYSCALL_CALL_DRIVER:
+			cpu->edx = call_driver_handler(cpu->ebx, (void*) cpu->ecx);
+			break;
+		case SYSCALL_FIND_DRIVER:
+			cpu->ecx = find_driver_by_name((char*) cpu->ebx);
+			break;
 	}
 
 	return cpu;

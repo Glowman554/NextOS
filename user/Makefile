@@ -1,20 +1,20 @@
-TEST = test.o syslib.o
 INIT = init.o syslib.o
 TERMINAL = terminal.o syslib.o
+CMOS = cmos.o syslib.o driverlib.o
 
 CFLAGS = -m32 -Wall -g -fno-stack-protector -nostdinc -I include
 LDFLAGS = -melf_i386
 
-all: test.bin init.bin terminal.bin
+all: init.bin terminal.bin cmos.drv
 	
 init.bin: $(INIT)
 	ld $(LDFLAGS) -Ttext=0x200000 -o $@ $^
 	
 terminal.bin: $(TERMINAL)
 	ld $(LDFLAGS) -Ttext=0x300000 -o $@ $^
-	
-test.bin: $(TEST)
-	ld $(LDFLAGS) -Ttext=0x1000000 -o $@ $^
+
+cmos.drv: $(CMOS)
+	ld $(LDFLAGS) -Ttext=0x400000 -o $@ $^
 
 %.o: %.c
 	gcc $(CFLAGS) -c -o $@ $^

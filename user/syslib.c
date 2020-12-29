@@ -105,6 +105,24 @@ uint8_t* get_buffer(){
 	return (uint8_t*) input;
 }
 
+int init_driver(char* name, driver_handler_ptr driver_handler){
+	register uint32_t input asm("edx");
+	asm("int $0x30" :: "a" (SYSCALL_INIT_DRIVER), "b" (name), "c" (driver_handler));
+	return input;
+}
+
+int call_driver_handler(int id, void* data){
+	register uint32_t input asm("edx");
+	asm("int $0x30" :: "a" (SYSCALL_CALL_DRIVER), "b" (id), "c" (data));
+	return input;
+}
+
+int find_driver_by_name(char* name){
+	register uint32_t input asm("ecx");
+	asm("int $0x30" :: "a" (SYSCALL_FIND_DRIVER), "b" (name));
+	return input;
+}
+
 void kprintf(const char* fmt, ...){
 	va_list ap;
 	const char* s;

@@ -1,6 +1,7 @@
 #include <syslib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <cmos_defs.h>
 
 struct multiboot_info *mb_info;
 
@@ -21,6 +22,20 @@ void list_files(){
 			kprintf("Found module %s\n", modules[i].cmdline);
 		}
 	}
+}
+
+void print_time(){
+	int id = find_driver_by_name("cmos");
+
+	cmos_data_t data;
+	data.function = CMOS_FUNCTION_READH;
+	int h = call_driver_handler(id, &data);
+	data.function = CMOS_FUNCTION_READM;
+	int m = call_driver_handler(id, &data);
+	data.function = CMOS_FUNCTION_READS;
+	int s = call_driver_handler(id, &data);
+
+	kprintf("%d:%d:%d\n", h, m, s);
 }
 
 void _start(){
@@ -55,6 +70,7 @@ void _start(){
 		if(strcmp(in, "clear")==0) clrscr();
 		if(strcmp(in, "ls")==0) list_files();
 		if(strcmp(in, "vga-init")==0) init_vga();
+		if(strcmp(in, "time")==0) print_time();
 		
 		if(strcmp(in, "help")==0){
 			kprintf("Aviable Commands:\n");
@@ -66,6 +82,7 @@ void _start(){
 			kprintf("clear\n");
 			kprintf("ls\n");
 			kprintf("vga-init\n");
+			kprintf("time\n");
 		}
 		
 		if(in[len-1] == 'n' && in[len-2] == 'i' && in[len-3] == 'b' && in[len-4] == '.'){

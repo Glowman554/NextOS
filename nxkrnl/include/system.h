@@ -12,7 +12,5 @@
 void reboot();
 char getchar();
 uint32_t get_module_by_name(char* file);
-void list_initrd_files();
-void print_initrd_file(char* file);
 
 #endif

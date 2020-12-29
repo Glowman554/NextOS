@@ -7,6 +7,5 @@
 #include <string.h>
 
 void exec_file(char* file);
-void list_files();
 
 #endif

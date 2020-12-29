@@ -15,14 +15,3 @@ void exec_file(char* file){
 		}
 	}
 }
-
-void list_files(){
-	if (pmb_info->mbs_mods_count != 0) {
-		struct multiboot_module* modules = pmb_info->mbs_mods_addr;
-		int i;
-
-		for (i = 0; i < pmb_info->mbs_mods_count; i++) {
-			kprintf("Found module %s at 0x%x\n", modules[i].cmdline, modules[i].mod_start);
-		}
-	}
-}

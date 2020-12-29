@@ -17,7 +17,7 @@ It's a more advanced and more stable kernel than my first kernel [GKernel](https
 - Initrd
 
 ## Building
-You need to install `genisoimage gcc g++ as ld nasm`.  
+You need to install `genisoimage gcc g++ as ld nasm make`.  
 To create an ISO file you need to enter `make iso`.  
 
 ## Syscalls
@@ -47,6 +47,9 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_INITRD_FINDDIR | 20 | char* dir | fs_node_t *fsnode (return) | - |
 | SYSCAlL_INITRD_READ | 21 | uint32_t offset | uint32_t size | fs_node_t *fsnode |
 | SYSCALL_GET_BUFFER | 22 | uint8_t* buf (return) | - | - |
+| SYSCALL_INIT_DRIVER | 23 | char* name | driver_handler_ptr driver_handler | int id (return) |
+| SYSCALL_CALL_DRIVER | 24 | int id | void* data | int data (return) |
+| SYSCALL_FIND_DRIVER | 25 | char* name | int id (return) | - |
 
 ## Copyright
 

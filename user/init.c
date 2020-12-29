@@ -8,6 +8,7 @@ void _start(void){
 	kprintf("This program comes with ABSOLUTELY NO WARRANTY.\n");
 	kprintf("This is free software, and you are welcome to redistribute it.\n\n");
 	setcolor(BACKGROUND_BLACK | FOREGROUND_WHITE);
-	exec("/terminal.bin");
+	exec("/driver/cmos.drv");
+	exec("/progs/terminal.bin");
 	task_exit(0);
 }

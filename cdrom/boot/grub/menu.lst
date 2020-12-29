@@ -1,7 +1,7 @@
 title NextOS
 kernel /nxkrnl
 module /initrd.img
-module /init.bin
-module /terminal.bin
-module /test.bin
+module /progs/init.bin
+module /progs/terminal.bin
+module /driver/cmos.drv
 boot
