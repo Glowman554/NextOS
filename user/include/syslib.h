@@ -32,6 +32,7 @@
 #define SYSCALL_INIT_DRIVER     23
 #define SYSCALL_CALL_DRIVER     24
 #define SYSCALL_FIND_DRIVER     25
+#define SYSCALL_DRAW_CHAR       26
 
 
 #define FOREGROUND_BLACK 0x00
@@ -115,5 +116,6 @@ uint8_t* get_buffer();
 int init_driver(char* name, driver_handler_ptr driver_handler);
 int call_driver_handler(int id, void* data);
 int find_driver_by_name(char* name);
+void draw_char(char c, int x, int y);
 
 #endif

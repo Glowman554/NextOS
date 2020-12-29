@@ -3,5 +3,8 @@ kernel /nxkrnl
 module /initrd.img
 module /progs/init.bin
 module /progs/terminal.bin
+module /progs/desktop.bin
+module /progs/dtest.bin
+module /progs/timer.bin
 module /driver/cmos.drv
 boot

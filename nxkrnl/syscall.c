@@ -104,6 +104,9 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_FIND_DRIVER:
 			cpu->ecx = find_driver_by_name((char*) cpu->ebx);
 			break;
+		case SYSCALL_DRAW_CHAR:
+			draw_char((char) cpu->ebx, cpu->ecx, cpu->edx);
+			break;
 	}
 
 	return cpu;

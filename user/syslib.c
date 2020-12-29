@@ -123,6 +123,10 @@ int find_driver_by_name(char* name){
 	return input;
 }
 
+void draw_char(char c, int x, int y){
+	asm("int $0x30" :: "a" (SYSCALL_DRAW_CHAR), "b" (c), "c" (x), "d" (y));
+}
+
 void kprintf(const char* fmt, ...){
 	va_list ap;
 	const char* s;
