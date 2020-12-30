@@ -57,6 +57,7 @@ void _start(void){
 	data.window_y = 50;
 	data.window_size_x = 120;
 	data.window_size_y = 30;
+	data.window_name = "Timer";
 	data.function = DESKTOP_CREATE_WINDOW;
 
 	int window_id = call_driver_handler(desktop_id, &data);

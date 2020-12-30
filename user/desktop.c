@@ -78,7 +78,7 @@ void circleBres(int xc, int yc, int r, int color){
 int driver_handler(desktop_data_t* data){
     switch (data->function){
         case DESKTOP_CREATE_WINDOW:
-            return create_window(data->window_x, data->window_y, data->window_size_x, data->window_size_y, "Window");
+            return create_window(data->window_x, data->window_y, data->window_size_x, data->window_size_y, data->window_name);
             break;
         case DESKTOP_DRAW_QUAD:
             draw_quad(data->window_id, data->xoffset, data->yoffset, data->size, data->color);

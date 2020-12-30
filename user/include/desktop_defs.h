@@ -12,6 +12,7 @@ typedef struct {
     int window_y;
     int window_size_x;
     int window_size_y;
+    char* window_name;
 
     int window_id;
     int xoffset;

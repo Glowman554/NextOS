@@ -14,6 +14,7 @@ void _start(void){
     data.window_y = 35;
     data.window_size_x = 200;
     data.window_size_y = 100;
+    data.window_name = "dtest";
     data.function = DESKTOP_CREATE_WINDOW;
 
     int window_id = call_driver_handler(id, &data);
