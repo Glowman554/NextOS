@@ -1,7 +1,7 @@
 # NextOS
 
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Glowman554/NextOS)
-[![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)](https://travis-ci.org/dwyl/esta)
+[![Build Status](https://travis-ci.com/dwyl/esta.svg?branch=master)](https://travis-ci.com/dwyl/esta)
 [![Code Climate](https://codeclimate.com/github/dwyl/esta/badges/gpa.svg)](https://codeclimate.com/github/dwyl/esta)
 
 A simple os written in c and c++.  
