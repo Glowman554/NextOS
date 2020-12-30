@@ -4,11 +4,12 @@ DESKTOP = desktop.o syslib.o
 DTEST = dtest.o syslib.o
 CMOS = cmos.o syslib.o driverlib.o
 TIMER = timer.o syslib.o
+BF = bf.o syslib.o
 
 CFLAGS = -m32 -Wall -g -fno-stack-protector -nostdinc -I include
 LDFLAGS = -melf_i386
 
-all: init.bin terminal.bin desktop.bin cmos.drv dtest.bin timer.bin
+all: init.bin terminal.bin desktop.bin cmos.drv dtest.bin timer.bin bf.drv 
 	
 init.bin: $(INIT)
 	ld $(LDFLAGS) -Ttext=0x200000 -o $@ $^
@@ -27,6 +28,9 @@ dtest.bin: $(DTEST)
 
 timer.bin: $(TIMER)
 	ld $(LDFLAGS) -Ttext=0x700000 -o $@ $^
+
+bf.drv: $(BF)
+	ld $(LDFLAGS) -Ttext=0x800000 -o $@ $^
 
 %.o: %.c
 	@echo CC $^

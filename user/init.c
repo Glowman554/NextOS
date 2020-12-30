@@ -9,6 +9,10 @@ void _start(void){
 	kprintf("This is free software, and you are welcome to redistribute it.\n\n");
 	setcolor(BACKGROUND_BLACK | FOREGROUND_WHITE);
 	exec("/driver/cmos.drv");
+	exec("/driver/bf.drv");
+
+	load_initrd("/initrd.img");
+
 	exec("/progs/terminal.bin");
 	task_exit(0);
 }

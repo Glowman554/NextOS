@@ -7,7 +7,7 @@ typedef int (*driver_handler_ptr)(void*);
 
 typedef struct {
 	driver_handler_ptr driver_handler;
-	char name[64];
+	char* name;
 } driver_info_t;
 
 int init_driver(char* name, driver_handler_ptr driver_handler);

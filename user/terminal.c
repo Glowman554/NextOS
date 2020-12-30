@@ -24,6 +24,15 @@ void list_files(){
 	}
 }
 
+void list_initrd_files(){
+	int i = 0;
+	struct dirent *node = 0;
+	while((node = initrd_readdir(i)) != 0){
+		kprintf("Found file %s\n", node->name);
+		i++;
+	}
+}
+
 void print_time(){
 	int id = find_driver_by_name("cmos");
 
@@ -36,6 +45,51 @@ void print_time(){
 	int s = call_driver_handler(id, &data);
 
 	kprintf("%d:%d:%d\n", h, m, s);
+}
+
+void bf(){
+
+	kprintf("[.bf] >>> ");
+
+	bool reading = true;
+    
+	int len = 0;
+	char in[100];
+
+	while(reading){
+		in[len] = getchar();
+		kprintf("%c", in[len]);
+		if(in[len] == 10){
+			in[len] = '\0';
+			reading = false;
+		}else{
+			len++;
+		}
+			
+		reset_timer_tick();
+		while(get_timer_tick() < 3);
+	}
+
+	kprintf("\n\n");
+
+	int i = 0;
+	struct dirent *node = 0;
+	while((node = initrd_readdir(i)) != 0){
+		if(strcmp(in, node->name) == 0){
+			fs_node_t *fsnode = initrd_finddir(node->name);
+			if((fsnode->flags & 0x7) == FS_DIRECTORY)
+				kprintf("\n(driectory)\n");
+			else{
+				initrd_read(fsnode, 0, 4096);
+				uint8_t* buf = get_buffer();
+				int id = find_driver_by_name("bf");
+				call_driver_handler(id, (char*) buf);
+			}
+		}
+		i++;
+	}
+
+	kprintf("\n\n");
 }
 
 void _start(){
@@ -68,9 +122,16 @@ void _start(){
 		if(strcmp(in, "uname")==0) kprintf("Currently running kernel version %d\n", kversion());
 		if(strcmp(in, "about")==0) print_copyright();
 		if(strcmp(in, "clear")==0) clrscr();
-		if(strcmp(in, "ls")==0) list_files();
+		if(strcmp(in, "ls")==0){
+			kprintf("\nMultiboot:\n\n");
+			list_files();
+			kprintf("\nInitrd:\n\n");
+			list_initrd_files();
+		}
 		if(strcmp(in, "vga-init")==0) init_vga();
 		if(strcmp(in, "time")==0) print_time();
+
+		if(strcmp(in, "bf")==0) bf();
 		
 		if(strcmp(in, "help")==0){
 			kprintf("Aviable Commands:\n");
@@ -83,6 +144,7 @@ void _start(){
 			kprintf("ls\n");
 			kprintf("vga-init\n");
 			kprintf("time\n");
+			kprintf("bf\n");
 		}
 		
 		if(in[len-1] == 'n' && in[len-2] == 'i' && in[len-3] == 'b' && in[len-4] == '.'){

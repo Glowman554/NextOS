@@ -10,7 +10,7 @@ int init_driver(char* name, driver_handler_ptr driver_handler) {
 
 	driver_info_t driver;
 	driver.driver_handler = driver_handler;
-	strcpy(driver.name, name);
+	driver.name = name;
 	driver_infos[driver_index] = driver;
 	driver_index++;
 
@@ -23,6 +23,7 @@ int call_driver_handler(int id, void* data) {
 
 int find_driver_by_name(char* name) {
 	for(int i = 0; i < 256; i++) {
+
 		if(strcmp(name, driver_infos[i].name)==0) {
 			return i;
 		}

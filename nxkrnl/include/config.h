@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#define VERSION 			9
+#define VERSION 			10
 #define VENDOR 				"Glowman554"
 #define AUTOEXEC 			"/progs/init.bin"
 #define LIST_FILES_ON_BOOT 	false
