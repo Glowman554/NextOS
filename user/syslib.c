@@ -127,6 +127,26 @@ void draw_char(char c, int x, int y){
 	asm("int $0x30" :: "a" (SYSCALL_DRAW_CHAR), "b" (c), "c" (x), "d" (y));
 }
 
+void setx(int i){
+	asm("int $0x30" :: "a" (SYSCALL_SETX), "b" (i));
+}
+
+void sety(int i){
+	asm("int $0x30" :: "a" (SYSCALL_SETY), "b" (i));
+}
+
+int getx(){
+	register uint32_t input asm("ebx");
+	asm("int $0x30" :: "a" (SYSCALL_GETX));
+	return input;
+}
+
+int gety(){
+	register uint32_t input asm("ebx");
+	asm("int $0x30" :: "a" (SYSCALL_GETY));
+	return input;
+}
+
 void kprintf(const char* fmt, ...){
 	va_list ap;
 	const char* s;
@@ -190,4 +210,42 @@ int strcmp(char *str1, char *str2){
 	if( (str1[i] == '\0' && str2[i] != '\0') || (str1[i] != '\0' && str2[i] == '\0') )
 		failed = 1;
 	return failed;
+}
+
+char in[100];
+
+char* get_input() {
+	bool reading = true;
+	int len = 0;
+
+	int x;
+
+	while(reading){
+		in[len] = getchar();
+
+		x = getx();
+
+		if(in[len] == 10){
+			in[len] = '\0';
+			reading = false;
+			kprintf("\n");
+		} else if(in[len] == '\b') {
+			if(len == 0) {
+				continue;
+			}
+			in[len] = 0;
+			len--;
+			setx(x - 1);
+			kputc(' ');
+			setx(x - 1);
+		} else {
+			kprintf("%c", in[len]);
+			len++;
+		}
+		
+		reset_timer_tick();
+		while(get_timer_tick() < 3);
+	}
+
+	return in;
 }

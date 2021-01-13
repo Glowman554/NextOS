@@ -52,7 +52,10 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_CALL_DRIVER | 24 | int id | void* data | int data (return) |
 | SYSCALL_FIND_DRIVER | 25 | char* name | int id (return) | - |
 | SYSCALL_DRAW_CHAR | 26 | char c | int x | int y |
-
+| SYSCALL_SETX | 27 | int x | - | - |
+| SYSCALL_SETY | 28 | int y | - | - |
+| SYSCALL_GETX | 29 | int x (return) | - | - |
+| SYSCALL_GETY | 30 | int y (return) | - | - |
 ## Copyright
 
 See LICENSE

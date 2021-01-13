@@ -107,6 +107,18 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_DRAW_CHAR:
 			draw_char((char) cpu->ebx, cpu->ecx, cpu->edx);
 			break;
+		case SYSCALL_SETX:
+			setx(cpu->ebx);
+			break;
+		case SYSCALL_SETY:
+			sety(cpu->ebx);
+			break;
+		case SYSCALL_GETX:
+			cpu->ebx = getx();
+			break;
+		case SYSCALL_GETY:
+			cpu->ebx = gety();
+			break;
 	}
 
 	return cpu;

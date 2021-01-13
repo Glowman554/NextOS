@@ -1,8 +1,7 @@
 # NextOS
 
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Glowman554/NextOS)
-[![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)](https://travis-ci.org/dwyl/esta)
-[![Code Climate](https://codeclimate.com/github/dwyl/esta/badges/gpa.svg)](https://codeclimate.com/github/dwyl/esta)
+![Build](https://github.com/Glowman554/NextOS/workflows/C/C++%20CI/badge.svg)
 
 A simple os written in c and c++.  
 It's a more advanced and more stable kernel than my first kernel [GKernel](https://github.com/Glowman554/gkernel)  
@@ -53,7 +52,10 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_CALL_DRIVER | 24 | int id | void* data | int data (return) |
 | SYSCALL_FIND_DRIVER | 25 | char* name | int id (return) | - |
 | SYSCALL_DRAW_CHAR | 26 | char c | int x | int y |
-
+| SYSCALL_SETX | 27 | int x | - | - |
+| SYSCALL_SETY | 28 | int y | - | - |
+| SYSCALL_GETX | 29 | int x (return) | - | - |
+| SYSCALL_GETY | 30 | int y (return) | - | - |
 ## Copyright
 
 See LICENSE

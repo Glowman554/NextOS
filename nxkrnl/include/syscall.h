@@ -41,6 +41,10 @@
 #define SYSCALL_CALL_DRIVER     24
 #define SYSCALL_FIND_DRIVER     25
 #define SYSCALL_DRAW_CHAR       26
+#define SYSCALL_SETX            27
+#define SYSCALL_SETY			28
+#define SYSCALL_GETX			29
+#define SYSCALL_GETY			30
 
 struct cpu_state* syscall(struct cpu_state* cpu);
 

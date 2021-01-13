@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <multiboot.h>
 #include <fs.h>
+#include <stdbool.h>
 
 #define SYSCALL_PUTC			0
 #define SYSCALL_PUTS			1
@@ -33,6 +34,10 @@
 #define SYSCALL_CALL_DRIVER     24
 #define SYSCALL_FIND_DRIVER     25
 #define SYSCALL_DRAW_CHAR       26
+#define SYSCALL_SETX            27
+#define SYSCALL_SETY			28
+#define SYSCALL_GETX			29
+#define SYSCALL_GETY			30
 
 
 #define FOREGROUND_BLACK 0x00
@@ -117,5 +122,13 @@ int init_driver(char* name, driver_handler_ptr driver_handler);
 int call_driver_handler(int id, void* data);
 int find_driver_by_name(char* name);
 void draw_char(char c, int x, int y);
+
+void setx(int i);
+void sety(int i);
+
+int getx();
+int gety();
+
+char* get_input();
 
 #endif

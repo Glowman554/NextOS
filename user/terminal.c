@@ -33,6 +33,14 @@ void list_initrd_files(){
 	}
 }
 
+
+int strlen(char *src){
+	int i = 0;
+	while (*src++)
+		i++;
+	return i;
+}
+
 void print_time(){
 	int id = find_driver_by_name("cmos");
 
@@ -50,25 +58,9 @@ void print_time(){
 void bf(){
 
 	kprintf("[.bf] >>> ");
+	char* in;
 
-	bool reading = true;
-    
-	int len = 0;
-	char in[100];
-
-	while(reading){
-		in[len] = getchar();
-		kprintf("%c", in[len]);
-		if(in[len] == 10){
-			in[len] = '\0';
-			reading = false;
-		}else{
-			len++;
-		}
-			
-		reset_timer_tick();
-		while(get_timer_tick() < 3);
-	}
+	in = get_input();
 
 	kprintf("\n\n");
 
@@ -93,29 +85,16 @@ void bf(){
 }
 
 void _start(){
-	bool reading = true;
-    
-	int len = 0;
-	char in[100];
+	char* in;
+
+	int len;
 	
 	mb_info = get_mb_ptr();
 	
     
 	while(1){
-		kprintf(">>");
-		while(reading){
-			in[len] = getchar();
-			kprintf("%c", in[len]);
-			if(in[len] == 10){
-				in[len] = '\0';
-				reading = false;
-			}else{
-				len++;
-			}
-			
-			reset_timer_tick();
-			while(get_timer_tick() < 3);
-		}
+		kprintf(">> ");
+		in = get_input();
 		
 		if(strcmp(in, "reboot")==0) reboot();
 		if(strcmp(in, "debugerr")==0) task_exit(1);
@@ -146,13 +125,12 @@ void _start(){
 			kprintf("time\n");
 			kprintf("bf\n");
 		}
-		
+
+		len = strlen(in);
+
 		if(in[len-1] == 'n' && in[len-2] == 'i' && in[len-3] == 'b' && in[len-4] == '.'){
 			exec(in);
 			task_exit(0);
 		}
-		
-		reading = true;
-		len = 0;
 	}
 }

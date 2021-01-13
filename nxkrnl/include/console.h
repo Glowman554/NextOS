@@ -44,6 +44,12 @@
 #define BACKGROUND_BLINKINGYELLOW 0xE0
 #define BACKGROUND_BLINKINGWHITE 0xF0
 
+void setx(int i);
+void sety(int i);
+
+int getx();
+int gety();
+
 void setcolor(uint32_t c);
 void kputs(const char *s);
 void kputc(char c);

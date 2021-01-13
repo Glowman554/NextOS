@@ -5,6 +5,22 @@ int y = 0;
 char* video = (char*) VIDEO_MEM;
 uint32_t color = BACKGROUND_BLACK | FOREGROUND_WHITE;
 
+void setx(int i) {
+	x = i;
+}
+
+void sety(int i) {
+	y = i;
+}
+
+int getx() {
+	return x;
+}
+
+int gety() {
+	return y;
+}
+
 void setcolor(uint32_t c){
 	color = c;
 }

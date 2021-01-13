@@ -12,6 +12,7 @@ char keymap_de(uint8_t key){
 		case 0x09: return('8'); break;
 		case 0x0A: return('9'); break;
 		case 0x0B: return('0'); break;
+		case 0x0E: return('\b'); break;
 		case 0x10: return('q'); break;
 		case 0x11: return('w'); break;
 		case 0x12: return('e'); break;
