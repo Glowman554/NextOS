@@ -137,8 +137,8 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu){
 			vga_kprintf("esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
 			
 			set_vga_color(VGA_YELLOW, VGA_BLUE);
-			vga_kprintf("\nAbboniert Vaspel auf YouTube\n");
-			vga_kprintf("https://www.youtube.com/c/Vaspelderechte\n");
+			//vga_kprintf("\nAbboniert Vaspel auf YouTube\n");
+			//vga_kprintf("https://www.youtube.com/c/Vaspelderechte\n");
 		} else {
 						
 			kprintf("\neax: 0x%x, ebx: 0x%x, ecx: 0x%x, edx: 0x%x\n", cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);
@@ -148,8 +148,8 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu){
 			kprintf("esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
 			
 			setcolor(BACKGROUND_BLACK | FOREGROUND_YELLOW);
-			kprintf("\nEin Abschliesender Tipp: Abboniert Vaspel auf YouTube\n");
-			kprintf("https://www.youtube.com/c/Vaspelderechte\n");
+			//kprintf("\nEin Abschliesender Tipp: Abboniert Vaspel auf YouTube\n");
+			//kprintf("https://www.youtube.com/c/Vaspelderechte\n");
 
 		}
 		
