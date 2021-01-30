@@ -17,6 +17,6 @@ jobs:
     - uses: actions/checkout@v2
     - uses: Glowman554/setup-nasm@v1
     - name: setup
-      run: apt install cdrkit
+      run: sudo apt install cdrkit
     - name: make
       run: make
