@@ -8,9 +8,12 @@
 #include <multiboot.h>
 #include <fs/fs.h>
 #include <console.h>
+#include <task.h>
 
 void reboot();
 char getchar();
 uint32_t get_module_by_name(char* file);
+void exec_file(char* file);
+
 
 #endif

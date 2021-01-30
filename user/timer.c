@@ -3,13 +3,6 @@
 #include <desktop_defs.h>
 #include <cmos_defs.h>
 
-int strlen(char *src){
-	int i = 0;
-	while (*src++)
-		i++;
-	return i;
-}
-
 void tostring(char str[], int num){
     int i; 
 	int rem;

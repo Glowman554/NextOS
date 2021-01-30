@@ -131,4 +131,6 @@ int gety();
 
 char* get_input();
 
+int strlen(char *src);
+
 #endif

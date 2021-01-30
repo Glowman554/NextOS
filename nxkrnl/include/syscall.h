@@ -4,7 +4,6 @@
 #include <interrupts.h>
 #include <console.h>
 #include <config.h>
-#include <exec.h>
 #include <task.h>
 #include <system.h>
 #include <driver/vga.h>

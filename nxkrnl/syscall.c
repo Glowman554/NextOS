@@ -1,6 +1,7 @@
 #include <syscall.h>
 
-uint8_t buf[4096];
+// 64 kb
+uint8_t buf[65536];
 
 struct cpu_state* syscall(struct cpu_state* cpu){
 	

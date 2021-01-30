@@ -34,12 +34,7 @@ void list_initrd_files(){
 }
 
 
-int strlen(char *src){
-	int i = 0;
-	while (*src++)
-		i++;
-	return i;
-}
+
 
 void print_time(){
 	int id = find_driver_by_name("cmos");
@@ -72,7 +67,7 @@ void bf(){
 			if((fsnode->flags & 0x7) == FS_DIRECTORY)
 				kprintf("\n(driectory)\n");
 			else{
-				initrd_read(fsnode, 0, 4096);
+				initrd_read(fsnode, 0, 65536);
 				uint8_t* buf = get_buffer();
 				int id = find_driver_by_name("bf");
 				call_driver_handler(id, (char*) buf);

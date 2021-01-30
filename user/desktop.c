@@ -5,12 +5,6 @@
 window_t windows[16];
 int window_index = 0;
 
-int strlen(char *src){
-	int i = 0;
-	while (*src++)
-		i++;
-	return i;
-}
 
 int create_window(int window_x, int window_y, int window_size_x, int window_size_y, char* name){
     for(int x = 0; x < window_size_x + 2; x++){

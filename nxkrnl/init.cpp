@@ -3,7 +3,6 @@ extern "C"{
 	#include <console.h>
 	#include <interrupts.h>
 	#include <task.h>
-	#include <exec.h>
 	#include <mem.h>
 	#include <driver/serial.h>
 	#include <system.h>
