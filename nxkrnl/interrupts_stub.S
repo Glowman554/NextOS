@@ -34,7 +34,22 @@ intr_stub_error_code 17
 intr_stub 18
 
 intr_stub 32
-intr_stub 33 #up to 47
+intr_stub 33
+
+intr_stub 34
+intr_stub 35
+intr_stub 36
+intr_stub 37
+intr_stub 38
+intr_stub 39
+intr_stub 40
+intr_stub 41
+intr_stub 42
+intr_stub 43
+intr_stub 44
+intr_stub 45
+intr_stub 46
+intr_stub 47
 
 intr_stub 48
 	
