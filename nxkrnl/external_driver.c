@@ -1,4 +1,4 @@
-#include <externel_driver.h>
+#include <external_driver.h>
 #include <string.h>
 #include <console.h>
 

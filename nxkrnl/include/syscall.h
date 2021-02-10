@@ -11,7 +11,7 @@
 #include <stdbool.h>
 #include <fs/fs.h>
 #include <fs/initrd.h>
-#include <externel_driver.h>
+#include <external_driver.h>
 
 #define SYSCALL_PUTC			0
 #define SYSCALL_PUTS			1
