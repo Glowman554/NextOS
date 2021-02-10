@@ -12,10 +12,6 @@ void MouseEventHandler::OnMouseDown(uint8_t button) {
 
 }
 
-void MouseEventHandler::OnMouseUp(uint8_t button) {
-
-}
-
 void MouseEventHandler::OnMouseMove(long x, long y) {
 
 }
@@ -159,10 +155,20 @@ void MouseDriver::Handle() {
         }
     }
 
-    //kprintf("x: %d, y: %d\n", x, y);
-
     if(handler != 0) {
         handler->OnMouseMove(x - x_old, y - y_old);
+
+        if(mouse_packet[0] & PS2Leftbutton) {
+            handler->OnMouseDown(LeftButton);
+        }
+
+        if(mouse_packet[0] & PS2Rightbutton) {
+            handler->OnMouseDown(RightButton);
+        }
+
+        if(mouse_packet[0] & PS2Middlebutton) {
+            handler->OnMouseDown(MiddleButton);
+        }
     }
 
     mouse_packet_ready = false;

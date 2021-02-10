@@ -40,19 +40,13 @@ class MouseToConsole : public MouseEventHandler {
 		int8_t x, y;
 	public:
 		
-		MouseToConsole() {
-			uint16_t* VideoMemory = (uint16_t*)0xb8000;
-			x = 40;
-			y = 12;
-			VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4
-								| (VideoMemory[80*y+x] & 0xF000) >> 4
-								| (VideoMemory[80*y+x] & 0x00FF);        
+		MouseToConsole() {       
 		}
 		
 		virtual void OnMouseMove(long xoffset, long yoffset) {
 			//kprintf("X: %d, Y: %d\n", xoffset, yoffset);
-			xoffset = xoffset;
-			yoffset = yoffset;
+			xoffset = xoffset / 2;
+			yoffset = yoffset / 2;
 			static uint16_t* VideoMemory = (uint16_t*)0xb8000;
 			VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4
 								| (VideoMemory[80*y+x] & 0xF000) >> 4
@@ -68,6 +62,10 @@ class MouseToConsole : public MouseEventHandler {
 			VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4
 								| (VideoMemory[80*y+x] & 0xF000) >> 4
 								| (VideoMemory[80*y+x] & 0x00FF);
+		}
+
+		virtual void OnMouseDown(uint8_t button) {
+			kprintf("Button: %d\n", button);
 		}
     
 };

@@ -14,11 +14,16 @@
 #define PS2XOverflow 0b01000000
 #define PS2YOverflow 0b10000000
 
+enum MouseButtons {
+    LeftButton = 1,
+    RightButton = 2,
+    MiddleButton = 3
+};
+
 class MouseEventHandler {
     public:
         MouseEventHandler();
         virtual void OnMouseDown(uint8_t button);
-        virtual void OnMouseUp(uint8_t button);
         virtual void OnMouseMove(long x, long y);
 };
 
