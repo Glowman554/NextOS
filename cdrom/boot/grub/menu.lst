@@ -9,3 +9,12 @@ module /progs/timer.bin
 module /driver/cmos.drv
 module /driver/bf.drv
 boot
+
+title NextOS - No gui
+kernel /nxkrnl
+module /initrd.img
+module /progs/init.bin
+module /progs/terminal.bin
+module /driver/cmos.drv
+module /driver/bf.drv
+boot

@@ -158,17 +158,18 @@ void MouseDriver::Handle() {
     if(handler != 0) {
         handler->OnMouseMove(x - x_old, y - y_old);
 
-        if(mouse_packet[0] & PS2Leftbutton) {
+        if(mouse_packet[0] & 1) {
             handler->OnMouseDown(LeftButton);
         }
-
-        if(mouse_packet[0] & PS2Rightbutton) {
+	    
+        if((mouse_packet[0] >> 1) & 1) {
             handler->OnMouseDown(RightButton);
         }
-
-        if(mouse_packet[0] & PS2Middlebutton) {
+		
+        if((mouse_packet[0] >> 2) & 1) {
             handler->OnMouseDown(MiddleButton);
         }
+
     }
 
     mouse_packet_ready = false;
