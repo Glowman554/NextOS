@@ -37,7 +37,7 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_INIT_TASK | 8 | void* entry | - | - |
 | SYSCALL_TASK_EXIT | 9 | int errorcode | - | - |
 | SYSCALL_REBOOT | 10 | - | - | - |
-| SYSCALL_GETCHAR | 11 | char c (return) | - | - |
+| SYSCALL_GETCHAR (Do not use) | 11 | char c (return) | - | - |
 | SYSCALL_GET_TICK | 12 | uint32_t tick (return) | - | - |
 | SYSCALL_RESET_TICK | 13 | - | - | - |
 | SYSCALL_MULTIBOOT | 14 | multiboot_info *mb_info | - | - |
@@ -57,6 +57,7 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_SETY | 28 | int y | - | - |
 | SYSCALL_GETX | 29 | int x (return) | - | - |
 | SYSCALL_GETY | 30 | int y (return) | - | - |
+| SYSCALL_SET_KB_HANDLER | 31 | kb_handler* handler | - | - |
 ## Copyright
 
 See LICENSE

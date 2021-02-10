@@ -3,6 +3,7 @@
 extern "C"{
 	#include <console.h>
 	#include <keymap.h>
+	#include <task.h>
 }
 
 KeyboardEventHandler::KeyboardEventHandler(){
@@ -34,10 +35,9 @@ void KeyboardDriver::Activate(){
 
 void KeyboardDriver::Handle(){
 	uint8_t key = dataport.Read();
-	if(handler == 0)
-		return;
-	
-	if(key < 0x80){
+	if(handler == 0) {
+
+	} else if(key < 0x80){
 		handler->KeyDown(keymap_de(key));
 	}
 }

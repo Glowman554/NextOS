@@ -1,5 +1,6 @@
 #include <syslib.h>
 
+char buf;
 
 void kputc(char c){
 	asm("int $0x30" :: "a" (SYSCALL_PUTC), "b" (c));
@@ -45,7 +46,7 @@ void reboot(){
 	asm("int $0x30" :: "a" (SYSCALL_REBOOT));
 }
 
-char getchar(){
+char getchar_old(){
 	register uint32_t input asm("ebx");
 	asm("int $0x30" :: "a" (SYSCALL_GETCHAR));
 	return (char) input;
@@ -147,6 +148,26 @@ int gety(){
 	return input;
 }
 
+void set_kb_handler(kb_handler handler) {
+	asm("int $0x30" :: "a" (SYSCALL_SET_KB_HANDLER), "b" (handler));
+}
+
+void kb_intr_handler(char key) {
+	buf = key;
+	if(key != '\n' && key != '\b')
+		kprintf("%c", key);
+}
+
+void claim_kb_handler() {
+	set_kb_handler(&kb_intr_handler);
+}
+
+char getchar() {
+	buf = 0;
+	while(buf == 0);
+	return buf;
+}
+
 void kprintf(const char* fmt, ...){
 	va_list ap;
 	const char* s;
@@ -215,6 +236,10 @@ int strcmp(char *str1, char *str2){
 char in[100];
 
 char* get_input() {
+
+	for(int i = 0; i < 100; i++)
+		in[i] = 0;
+
 	bool reading = true;
 	int len = 0;
 
@@ -222,7 +247,6 @@ char* get_input() {
 
 	while(reading){
 		in[len] = getchar();
-
 		x = getx();
 
 		if(in[len] == 10){
@@ -239,12 +263,8 @@ char* get_input() {
 			kputc(' ');
 			setx(x - 1);
 		} else {
-			kprintf("%c", in[len]);
 			len++;
 		}
-		
-		reset_timer_tick();
-		while(get_timer_tick() < 3);
 	}
 
 	return in;

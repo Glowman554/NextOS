@@ -44,6 +44,7 @@
 #define SYSCALL_SETY			28
 #define SYSCALL_GETX			29
 #define SYSCALL_GETY			30
+#define SYSCALL_SET_KB_HANDLER  31
 
 struct cpu_state* syscall(struct cpu_state* cpu);
 

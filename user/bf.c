@@ -23,6 +23,7 @@ void interpret(char* input) {
         } else if (current_char == '.' ) {
             kprintf("%c", *ptr);
         } else if (current_char == ',') {
+            claim_kb_handler();
             *ptr = getchar();
         } else if (current_char == '[') {
             continue;

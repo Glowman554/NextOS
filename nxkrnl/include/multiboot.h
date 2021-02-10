@@ -31,6 +31,6 @@ struct multiboot_module {
 	uint32_t    reserved;
 } __attribute__((packed));
 
-struct multiboot_info *pmb_info;
+extern struct multiboot_info *pmb_info;
 
 #endif

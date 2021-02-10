@@ -38,6 +38,7 @@
 #define SYSCALL_SETY			28
 #define SYSCALL_GETX			29
 #define SYSCALL_GETY			30
+#define SYSCALL_SET_KB_HANDLER  31
 
 
 #define FOREGROUND_BLACK 0x00
@@ -92,6 +93,7 @@
 #define VGA_WHITE 0x0F
 
 typedef int (*driver_handler_ptr)(void*);
+typedef void (*kb_handler)(char key);
 
 void kputc(char c);
 void kputs(const char *s);
@@ -105,7 +107,7 @@ void kprintf(const char* fmt, ...);
 void init_task(void* entry);
 void task_exit(int code);
 void reboot();
-char getchar();
+char getchar_old();
 void reset_timer_tick();
 uint32_t get_timer_tick();
 struct multiboot_info* get_mb_ptr();
@@ -131,6 +133,10 @@ int gety();
 
 char* get_input();
 
+void set_kb_handler(kb_handler handler);
+
 int strlen(char *src);
+char getchar();
+void claim_kb_handler();
 
 #endif

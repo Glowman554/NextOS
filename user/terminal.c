@@ -54,7 +54,7 @@ void bf(){
 
 	kprintf("[.bf] >>> ");
 	char* in;
-
+	claim_kb_handler();
 	in = get_input();
 
 	kprintf("\n\n");
@@ -80,6 +80,7 @@ void bf(){
 }
 
 void _start(){
+	claim_kb_handler();
 	char* in;
 
 	int len;

@@ -120,6 +120,9 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_GETY:
 			cpu->ebx = gety();
 			break;
+		case SYSCALL_SET_KB_HANDLER:
+			set_kb_handler((kb_handler) cpu->ebx);
+			break;
 	}
 
 	return cpu;

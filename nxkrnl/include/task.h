@@ -6,6 +6,8 @@
 #include <elf.h>
 #include <console.h>
 
+typedef void (*kb_handler)(char key);
+
 struct task {
 	struct cpu_state*	cpu_state;
 	struct task*		next;
@@ -38,6 +40,9 @@ void init_multitasking(struct multiboot_info* mb_info);
 struct task* init_task(void* entry);
 int init_elf(void* image);
 void task_exit(int code);
+
+void kb_handle(char key);
+void set_kb_handler(kb_handler handler);
 
 
 #endif

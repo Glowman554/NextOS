@@ -7,6 +7,8 @@ void do_nothing(void){
 static struct task* first_task = NULL;
 static struct task* current_task = NULL;
 
+kb_handler kb_intr_handler;
+
 int proccount = 0;
 char nextpid = 1;
 
@@ -29,6 +31,15 @@ void task_exit(int code){
 		temp = temp->next;
 	}
 	
+}
+
+void set_kb_handler(kb_handler handler) {
+	kb_intr_handler = handler;
+}
+
+void kb_handle(char key) {
+	if(kb_intr_handler != 0)
+		(*(kb_intr_handler))(key);
 }
 
 struct task* init_task(void* entry){
@@ -94,7 +105,7 @@ int init_elf(void* image){
 }
 
 void init_multitasking(struct multiboot_info* mb_info){
-	init_task(do_nothing);
+	//init_task(do_nothing);
 }
 
 struct cpu_state* schedule(struct cpu_state* cpu){

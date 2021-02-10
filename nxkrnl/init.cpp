@@ -15,6 +15,8 @@ extern "C"{
 #include <multiboot.h>
 #include <pci.h>
 
+struct multiboot_info *pmb_info;
+
 typedef void (*constructor)();
 
 extern "C" constructor start_ctors;
@@ -25,10 +27,10 @@ void initialiseConstructors(){
 		(*i)();
 }
 
-class PrintfKeyboardEventHandler : public KeyboardEventHandler{
+class InterruptKeyboardEventHandler : public KeyboardEventHandler{
 	public:
 		void KeyDown(char c){
-			vga_kputc(c);
+			kb_handle(c);
 		}
 };
 
@@ -49,8 +51,8 @@ extern "C" void init(struct multiboot_info *mb_info){
 	init_intr();
 	 
 	DriverManager drvManager;
-	//PrintfKeyboardEventHandler kbhandler;
-	KeyboardDriver keyboard_driver(0);
+	InterruptKeyboardEventHandler kbhandler;
+	KeyboardDriver keyboard_driver(&kbhandler);
 	drvManager.AddDriver(&keyboard_driver);
 	PeripheralComponentInterconnectController PCIController;
 	//kprintf("Found PCI Devices:\n");
