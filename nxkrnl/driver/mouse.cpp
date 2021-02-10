@@ -16,7 +16,7 @@ void MouseEventHandler::OnMouseUp(uint8_t button) {
 
 }
 
-void MouseEventHandler::OnMouseMove(int x, int y) {
+void MouseEventHandler::OnMouseMove(long x, long y) {
 
 }
 
@@ -73,6 +73,8 @@ void MouseDriver::Activate() {
 
 void MouseDriver::Handle() {
     uint8_t data = dataport.Read();
+
+    //kprintf("%d", mouse_cycle);
     
     switch(mouse_cycle) {
         case 0:
@@ -101,10 +103,11 @@ void MouseDriver::Handle() {
     if(!mouse_packet_ready)
         return;
 
-    uint8_t x = 0;
-    uint8_t y = 0;
 
     bool xNegative, yNegative, xOverflow, yOverflow;
+
+    long x_old = x;
+    long y_old = y;
 
     if (mouse_packet[0] & PS2XSign){
         xNegative = true;
@@ -156,10 +159,10 @@ void MouseDriver::Handle() {
         }
     }
 
-    kprintf("x: %d, y: %d\n", x, y);
+    //kprintf("x: %d, y: %d\n", x, y);
 
     if(handler != 0) {
-        handler->OnMouseMove(x, y);
+        handler->OnMouseMove(x - x_old, y - y_old);
     }
 
     mouse_packet_ready = false;

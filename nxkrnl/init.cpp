@@ -49,9 +49,10 @@ class MouseToConsole : public MouseEventHandler {
 								| (VideoMemory[80*y+x] & 0x00FF);        
 		}
 		
-		virtual void OnMouseMove(int xoffset, int yoffset) {
-			xoffset = xoffset / 5;
-			yoffset = yoffset / 5;
+		virtual void OnMouseMove(long xoffset, long yoffset) {
+			//kprintf("X: %d, Y: %d\n", xoffset, yoffset);
+			xoffset = xoffset;
+			yoffset = yoffset;
 			static uint16_t* VideoMemory = (uint16_t*)0xb8000;
 			VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4
 								| (VideoMemory[80*y+x] & 0xF000) >> 4
@@ -90,8 +91,8 @@ extern "C" void init(struct multiboot_info *mb_info){
 	DriverManager drvManager;
 	InterruptKeyboardEventHandler kbhandler;
 	KeyboardDriver keyboard_driver(&kbhandler);
-	//MouseToConsole mhandler;
-	MouseDriver mouse_driver(0);
+	MouseToConsole mhandler;
+	MouseDriver mouse_driver(&mhandler);
 	drvManager.AddDriver(&keyboard_driver);
 	drvManager.AddDriver(&mouse_driver);
 	PeripheralComponentInterconnectController PCIController;

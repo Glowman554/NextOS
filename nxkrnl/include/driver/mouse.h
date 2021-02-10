@@ -19,7 +19,7 @@ class MouseEventHandler {
         MouseEventHandler();
         virtual void OnMouseDown(uint8_t button);
         virtual void OnMouseUp(uint8_t button);
-        virtual void OnMouseMove(int x, int y);
+        virtual void OnMouseMove(long x, long y);
 };
 
 class MouseDriver : public InterruptHandler, public Driver{
@@ -41,6 +41,10 @@ class MouseDriver : public InterruptHandler, public Driver{
     public:
         MouseDriver(MouseEventHandler *handler);
         ~MouseDriver();
+
+        long x = 0;
+        long y = 0;
+
         virtual void Handle();
 		virtual void Activate();
 };
