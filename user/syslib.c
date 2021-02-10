@@ -152,14 +152,30 @@ void set_kb_handler(kb_handler handler) {
 	asm("int $0x30" :: "a" (SYSCALL_SET_KB_HANDLER), "b" (handler));
 }
 
+void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2) {
+	asm("int $0x30" :: "a" (SYSCALL_SET_MOUSE_HANDLER), "b" (h1), "c" (h2));
+}
+
 void kb_intr_handler(char key) {
 	buf = key;
 	if(key != '\n' && key != '\b')
 		kprintf("%c", key);
 }
 
+void mouse_intr_move_handler(long xoffset, long yoffset) {
+	//kprintf("x: %d y: %d\n", xoffset, yoffset);
+}
+
+void mouse_intr_button_handler(int button) {
+	//kprintf("Button: %d\n", button);
+}
+
 void claim_kb_handler() {
 	set_kb_handler(&kb_intr_handler);
+}
+
+void claim_mouse_handlers() {
+	set_mouse_handlers(mouse_intr_move_handler, mouse_intr_button_handler);
 }
 
 char getchar() {

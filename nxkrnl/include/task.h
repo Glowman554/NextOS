@@ -7,6 +7,8 @@
 #include <console.h>
 
 typedef void (*kb_handler)(char key);
+typedef void (*mouse_move_handler)(long xoffset, long yoffset);
+typedef void (*mouse_button_handler)(int button);
 
 struct task {
 	struct cpu_state*	cpu_state;
@@ -43,6 +45,10 @@ void task_exit(int code);
 
 void kb_handle(char key);
 void set_kb_handler(kb_handler handler);
+
+void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2);
+void mouse_handle_move(long x, long y);
+void mouse_handle_button(int button);
 
 
 #endif

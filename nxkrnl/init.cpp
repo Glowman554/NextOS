@@ -35,6 +35,17 @@ class InterruptKeyboardEventHandler : public KeyboardEventHandler{
 		}
 };
 
+class InterruptMouseEventHandler : public MouseEventHandler {
+	public:
+		virtual void OnMouseMove(long xoffset, long yoffset) {
+			mouse_handle_move(xoffset, yoffset);
+		}
+
+		virtual void OnMouseDown(uint8_t button) {
+			mouse_handle_button(button);
+		}
+};
+
 class MouseToConsole : public MouseEventHandler {
 	private:
 		int8_t x, y;
@@ -87,12 +98,15 @@ extern "C" void init(struct multiboot_info *mb_info){
 	init_intr();
 	 
 	DriverManager drvManager;
+
 	InterruptKeyboardEventHandler kbhandler;
 	KeyboardDriver keyboard_driver(&kbhandler);
-	MouseToConsole mhandler;
-	MouseDriver mouse_driver(&mhandler);
 	drvManager.AddDriver(&keyboard_driver);
+
+	InterruptMouseEventHandler mshandler;
+	MouseDriver mouse_driver(&mshandler);
 	drvManager.AddDriver(&mouse_driver);
+	
 	PeripheralComponentInterconnectController PCIController;
 	//kprintf("Found PCI Devices:\n");
 	//PCIController.PrintDevices();

@@ -8,6 +8,8 @@ static struct task* first_task = NULL;
 static struct task* current_task = NULL;
 
 kb_handler kb_intr_handler;
+mouse_move_handler mouse_intr_move_handler;
+mouse_button_handler mouse_intr_button_handler;
 
 int proccount = 0;
 char nextpid = 1;
@@ -40,6 +42,19 @@ void set_kb_handler(kb_handler handler) {
 void kb_handle(char key) {
 	if(kb_intr_handler != 0)
 		(*(kb_intr_handler))(key);
+}
+
+void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2) {
+	mouse_intr_move_handler = h1;
+	mouse_intr_button_handler = h2;
+}
+
+void mouse_handle_move(long x, long y) {
+	(*(mouse_intr_move_handler))(x, y);
+}
+
+void mouse_handle_button(int button) {
+	(*(mouse_intr_button_handler))(button);
 }
 
 struct task* init_task(void* entry){
