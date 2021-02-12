@@ -13,6 +13,6 @@ void _start(void){
 
 	load_initrd("/initrd.img");
 
-	exec("/progs/dtest.bin");
+	exec("/progs/terminal.bin");
 	task_exit(0);
 }

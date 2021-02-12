@@ -12,9 +12,6 @@ void _start(void){
     reset_timer_tick();
 	while(get_timer_tick() < 100);
 
-    claim_mouse_handlers();
-    set_mouse_handler(&mouse_test_handler);
-
     int id = find_driver_by_name("desktop");
     desktop_data_t data;
     data.window_x = 20;
@@ -47,6 +44,9 @@ void _start(void){
     data._char = 'X';
     data.function = DESKTOP_DRAW_CHAR;
     call_driver_handler(id, &data);
+
+    claim_mouse_handlers();
+    set_mouse_handler(&mouse_test_handler);
 	
 	task_exit(0);
 }
