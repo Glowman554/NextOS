@@ -5,11 +5,12 @@ DTEST = dtest.o syslib.o
 CMOS = cmos.o syslib.o driverlib.o
 TIMER = timer.o syslib.o
 BF = bf.o syslib.o
+REBOOT = reboot.o syslib.o
 
 CFLAGS = -m32 -Wall -g -fno-stack-protector -nostdinc -I include
 LDFLAGS = -melf_i386
 
-all: init.bin terminal.bin desktop.bin cmos.drv dtest.bin timer.bin bf.drv 
+all: init.bin terminal.bin desktop.bin cmos.drv dtest.bin timer.bin bf.drv reboot.bin
 	
 init.bin: $(INIT)
 	ld $(LDFLAGS) -Ttext=0x200000 -o $@ $^
@@ -31,6 +32,9 @@ timer.bin: $(TIMER)
 
 bf.drv: $(BF)
 	ld $(LDFLAGS) -Ttext=0x800000 -o $@ $^
+
+reboot.bin: $(REBOOT)
+	ld $(LDFLAGS) -Ttext=0x900000 -o $@ $^
 
 %.o: %.c
 	@echo CC $^

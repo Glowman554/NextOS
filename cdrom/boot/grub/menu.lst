@@ -8,6 +8,7 @@ module /progs/dtest.bin
 module /progs/timer.bin
 module /driver/cmos.drv
 module /driver/bf.drv
+module /progs/reboot.bin
 boot
 
 title NextOS - No gui
