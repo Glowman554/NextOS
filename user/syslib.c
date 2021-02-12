@@ -239,8 +239,16 @@ void mouse_intr_move_handler(long x_new, long y_new) {
 	redraw();
 }
 
+mouse_handler handler = 0;
+
 void mouse_intr_button_handler(int button) {
 	//kprintf("Button: %d\n", button);
+	if(handler != 0)
+		(*(handler))(button, x, y);
+}
+
+void set_mouse_handler(mouse_handler h) {
+	handler = h;
 }
 
 void claim_kb_handler() {

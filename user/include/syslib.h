@@ -98,6 +98,7 @@ typedef int (*driver_handler_ptr)(void*);
 typedef void (*kb_handler)(char key);
 typedef void (*mouse_move_handler)(long x, long y);
 typedef void (*mouse_button_handler)(int button);
+typedef void (*mouse_handler)(int button, int x, int y);
 
 void kputc(char c);
 void kputs(const char *s);
@@ -138,6 +139,7 @@ void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2);
 char getpixel(int x, int y);
 int strlen(char *src);
 char getchar();
+void set_mouse_handler(mouse_handler h);
 void claim_kb_handler();
 void claim_mouse_handlers();
 

@@ -2,11 +2,18 @@
 #include <stdint.h>
 #include <desktop_defs.h>
 
+void mouse_test_handler(int button, int x, int y) {
+    kprintf("B: %d, X: %d, Y: %d\n", button, x, y);
+}
+
 void _start(void){
     exec("/progs/desktop.bin");
 
     reset_timer_tick();
 	while(get_timer_tick() < 100);
+
+    claim_mouse_handlers();
+    set_mouse_handler(&mouse_test_handler);
 
     int id = find_driver_by_name("desktop");
     desktop_data_t data;
