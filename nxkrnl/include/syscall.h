@@ -46,6 +46,7 @@
 #define SYSCALL_GETY			    30
 #define SYSCALL_SET_KB_HANDLER      31
 #define SYSCALL_SET_MOUSE_HANDLER   32
+#define SYSCALL_GETPIXEL            33
 
 struct cpu_state* syscall(struct cpu_state* cpu);
 

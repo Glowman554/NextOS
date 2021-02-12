@@ -126,6 +126,9 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_SET_MOUSE_HANDLER:
 			set_mouse_handlers((mouse_move_handler) cpu->ebx, (mouse_button_handler) cpu->ecx);
 			break;
+		case SYSCALL_GETPIXEL:
+			cpu->edx = getpixel(cpu->ebx, cpu->ecx);
+			break;
 	}
 
 	return cpu;

@@ -7,7 +7,7 @@
 #include <console.h>
 
 typedef void (*kb_handler)(char key);
-typedef void (*mouse_move_handler)(long xoffset, long yoffset);
+typedef void (*mouse_move_handler)(long x, long y);
 typedef void (*mouse_button_handler)(int button);
 
 struct task {

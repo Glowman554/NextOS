@@ -86,6 +86,8 @@ void _start(){
 	int len;
 	
 	mb_info = get_mb_ptr();
+
+	claim_mouse_handlers();
 	
     
 	while(1){

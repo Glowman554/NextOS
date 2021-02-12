@@ -68,7 +68,7 @@ void MouseDriver::Activate() {
 }
 
 void MouseDriver::Handle() {
-    uint8_t data = dataport.Read();
+    uint8_t data = MouseRead();
 
     //kprintf("%d", mouse_cycle);
     
@@ -101,9 +101,6 @@ void MouseDriver::Handle() {
 
 
     bool xNegative, yNegative, xOverflow, yOverflow;
-
-    long x_old = x;
-    long y_old = y;
 
     if (mouse_packet[0] & PS2XSign){
         xNegative = true;
@@ -155,8 +152,26 @@ void MouseDriver::Handle() {
         }
     }
 
+    if(x > 320) {
+        x = 320;
+    }
+
+    if(x < 0) {
+        x = 0;
+    }
+
+    if(y > 200) {
+        y = 200;
+    }
+
+    if(y < 0) {
+        y = 0;
+    }
+
+    //kprintf("X: %d Y: %d\n", x, y);
+
     if(handler != 0) {
-        handler->OnMouseMove(x - x_old, y - y_old);
+        handler->OnMouseMove(x, y);
 
         if(mouse_packet[0] & 1) {
             handler->OnMouseDown(LeftButton);

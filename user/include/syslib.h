@@ -40,6 +40,7 @@
 #define SYSCALL_GETY			    30
 #define SYSCALL_SET_KB_HANDLER      31
 #define SYSCALL_SET_MOUSE_HANDLER   32
+#define SYSCALL_GETPIXEL            33
 
 
 #define FOREGROUND_BLACK 0x00
@@ -95,7 +96,7 @@
 
 typedef int (*driver_handler_ptr)(void*);
 typedef void (*kb_handler)(char key);
-typedef void (*mouse_move_handler)(long xoffset, long yoffset);
+typedef void (*mouse_move_handler)(long x, long y);
 typedef void (*mouse_button_handler)(int button);
 
 void kputc(char c);
@@ -127,18 +128,14 @@ int init_driver(char* name, driver_handler_ptr driver_handler);
 int call_driver_handler(int id, void* data);
 int find_driver_by_name(char* name);
 void draw_char(char c, int x, int y);
-
 void setx(int i);
 void sety(int i);
-
 int getx();
 int gety();
-
 char* get_input();
-
 void set_kb_handler(kb_handler handler);
 void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2);
-
+char getpixel(int x, int y);
 int strlen(char *src);
 char getchar();
 void claim_kb_handler();

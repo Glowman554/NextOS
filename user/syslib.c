@@ -156,14 +156,87 @@ void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2) {
 	asm("int $0x30" :: "a" (SYSCALL_SET_MOUSE_HANDLER), "b" (h1), "c" (h2));
 }
 
+char getpixel(int x, int y) {
+	register char c asm("edx");
+	asm("int $0x30" : : "a" (SYSCALL_GETPIXEL), "b" (x), "c" (y));
+	return c;
+}
+
 void kb_intr_handler(char key) {
 	buf = key;
 	if(key != '\n' && key != '\b')
 		kprintf("%c", key);
 }
 
-void mouse_intr_move_handler(long xoffset, long yoffset) {
-	//kprintf("x: %d y: %d\n", xoffset, yoffset);
+char pixbuf[15] = {0};
+bool reloadp = false;
+
+int x, y = 0;
+
+void redraw() {
+	setpixel(x, y, 15);
+	setpixel(x + 1, y, 15);
+	setpixel(x, y + 1, 15);
+	setpixel(x + 1, y + 1, 15);
+	setpixel(x + 2, y, 15);
+	setpixel(x, y + 2, 15);
+	setpixel(x + 2, y + 2, 15);
+	setpixel(x + 1, y + 2, 15);
+	setpixel(x + 2, y + 1, 15);
+	setpixel(x + 3, y, 15);
+	setpixel(x, y + 3, 15);
+	setpixel(x + 4, y + 4, 15);
+	setpixel(x + 5, y + 5, 15);
+	setpixel(x + 3, y + 3, 15);
+	setpixel(x + 6, y + 6, 15);
+
+}
+
+void loadpixel(){
+	setpixel(x, y, pixbuf[0]);
+	setpixel(x + 1, y, pixbuf[1]);
+	setpixel(x, y + 1, pixbuf[2]);
+	setpixel(x + 1, y + 1, pixbuf[3]);
+	setpixel(x + 2, y, pixbuf[4]);
+	setpixel(x, y + 2, pixbuf[5]);
+	setpixel(x + 2, y + 2, pixbuf[6]);
+	setpixel(x + 1, y + 2, pixbuf[7]);
+	setpixel(x + 2, y + 1, pixbuf[8]);
+	setpixel(x + 3, y, pixbuf[9]);
+	setpixel(x, y + 3, pixbuf[10]);
+	setpixel(x + 4, y + 4, pixbuf[11]);
+	setpixel(x + 5, y + 5, pixbuf[12]);
+	setpixel(x + 3, y + 3, pixbuf[13]);
+	setpixel(x + 6, y + 6, pixbuf[14]);
+
+}
+
+void savepixel() {
+	pixbuf[0] = getpixel(x, y);
+	pixbuf[1] = getpixel(x + 1, y);
+	pixbuf[2] = getpixel(x, y + 1);
+	pixbuf[3] = getpixel(x + 1, y + 1);
+	pixbuf[4] = getpixel(x + 2, y);
+	pixbuf[5] = getpixel(x, y + 2);
+	pixbuf[6] = getpixel(x + 2, y + 2);
+	pixbuf[7] = getpixel(x + 1, y + 2);
+	pixbuf[8] = getpixel(x + 2, y + 1);
+	pixbuf[9] = getpixel(x + 3, y);
+	pixbuf[10] = getpixel(x, y + 3);
+	pixbuf[11] = getpixel(x + 4, y + 4);
+	pixbuf[12] = getpixel(x + 5, y + 5);
+	pixbuf[13] = getpixel(x + 3, y + 3);
+	pixbuf[14] = getpixel(x + 6, y + 6);
+}
+
+void mouse_intr_move_handler(long x_new, long y_new) {
+	//kprintf("x: %d y: %d\n", x, y);
+
+	loadpixel();
+	x = x_new;
+	y = y_new;
+	savepixel();
+	redraw();
 }
 
 void mouse_intr_button_handler(int button) {

@@ -37,48 +37,13 @@ class InterruptKeyboardEventHandler : public KeyboardEventHandler{
 
 class InterruptMouseEventHandler : public MouseEventHandler {
 	public:
-		virtual void OnMouseMove(long xoffset, long yoffset) {
-			mouse_handle_move(xoffset, yoffset);
+		virtual void OnMouseMove(long x, long y) {
+			mouse_handle_move(x, y);
 		}
 
 		virtual void OnMouseDown(uint8_t button) {
 			mouse_handle_button(button);
 		}
-};
-
-class MouseToConsole : public MouseEventHandler {
-	private:
-		int8_t x, y;
-	public:
-		
-		MouseToConsole() {       
-		}
-		
-		virtual void OnMouseMove(long xoffset, long yoffset) {
-			//kprintf("X: %d, Y: %d\n", xoffset, yoffset);
-			xoffset = xoffset / 2;
-			yoffset = yoffset / 2;
-			static uint16_t* VideoMemory = (uint16_t*)0xb8000;
-			VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4
-								| (VideoMemory[80*y+x] & 0xF000) >> 4
-								| (VideoMemory[80*y+x] & 0x00FF);
-
-			x += xoffset;
-			if(x >= 80) x = 79;
-			if(x < 0) x = 0;
-			y += yoffset;
-			if(y >= 25) y = 24;
-			if(y < 0) y = 0;
-
-			VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4
-								| (VideoMemory[80*y+x] & 0xF000) >> 4
-								| (VideoMemory[80*y+x] & 0x00FF);
-		}
-
-		virtual void OnMouseDown(uint8_t button) {
-			kprintf("Button: %d\n", button);
-		}
-    
 };
 
 
