@@ -103,7 +103,10 @@ void _start(){
 			kprintf("\nInitrd:\n\n");
 			list_initrd_files();
 		}
-		if(strcmp(in, "vga-init")==0) init_vga();
+		if(strcmp(in, "vga-init")==0) {
+			init_vga();
+			claim_mouse_handlers();
+		}
 		if(strcmp(in, "time")==0) print_time();
 
 		if(strcmp(in, "bf")==0) bf();
