@@ -274,7 +274,7 @@ int sprintf(char *buf, const char *fmt, ...) {
 	return i;
 }
 
-int printf(const char *fmt, ...) {
+int printf_k(const char *fmt, ...) {
 	char printf_buf[1024];
 	va_list args;
 	int printed;
