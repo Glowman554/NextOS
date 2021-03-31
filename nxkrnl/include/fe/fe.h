@@ -20,8 +20,9 @@
 #define GCMARKBIT			(0x2)
 #define GCSTACKSIZE			(256)
 
-#define fe_exit(code)	printf_k("EXIT: %d", code); \
-						task_exit(code);
+#define fe_exit(code)	printf_k("EXIT: %d", code);	\
+						task_exit(code);			\
+						while(1);
 
 
 #define evalarg() eval(ctx, fe_nextarg(ctx, &arg), env, (fe_Object**) NULL)
@@ -65,6 +66,12 @@ struct fe_Context {
 	fe_Object *t;
 	int nextchr;
 };
+
+typedef struct {
+	const char* code;
+	size_t code_length;
+	int index;
+} fe_Code;
 
 enum {
 	FE_TPAIR,
@@ -150,6 +157,8 @@ fe_Object* getbound(fe_Object *sym, fe_Object *env);
 void fe_set(fe_Context *ctx, fe_Object *sym, fe_Object *v);
 fe_Object* read_data(fe_Context *ctx, fe_ReadFn fn, void *udata);
 fe_Object* fe_read(fe_Context *ctx, fe_ReadFn fn, void *udata);
+fe_Context* fe_open(void *ptr, int size);
+void fe_close(fe_Context *ctx);
 
 fe_Object* evallist(fe_Context *ctx, fe_Object *lst, fe_Object *env);
 fe_Object* dolist(fe_Context *ctx, fe_Object *lst, fe_Object *env);

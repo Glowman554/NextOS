@@ -9,11 +9,11 @@ void fe_error(fe_Context *ctx, const char *msg) {
 		ctx->handlers.error(ctx, msg, cl);
 	}
 	
-	printf_k("error: %s\n", msg);
+	kprintf("error: %s\n", msg);
 	for (; !isnil(cl); cl = cdr(cl)) {
 		char buf[64];
 		fe_tostring(ctx, car(cl), buf, sizeof(buf));
-		printf_k("=> %s\n", buf);
+		kprintf("=> %s\n", buf);
 	}
 	fe_exit(-0xf00dbabe);
 }

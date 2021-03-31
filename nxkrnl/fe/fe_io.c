@@ -66,7 +66,7 @@ void fe_write(fe_Context *ctx, fe_Object *obj, fe_WriteFn fn, void *udata, int q
 
 void write_screen(fe_Context *ctx, void* udata, char chr) {
 	unused(ctx);
-	printf_k("%c", chr);
+	kprintf("%c", chr);
 }
 
 void writebuf(fe_Context *ctx, void *udata, char chr) {
@@ -187,4 +187,49 @@ fe_Object* fe_read(fe_Context *ctx, fe_ReadFn fn, void *udata) {
 		fe_error(ctx, "stray ')'");
 	}
 	return obj;
+}
+
+fe_Context* fe_open(void *ptr, int size) {
+	int i, save;
+	fe_Context *ctx;
+
+	ctx = (fe_Context*) ptr;
+	memset(ctx, 0, sizeof(fe_Context));
+	ptr = (char*) ptr + sizeof(fe_Context);
+	size -= sizeof(fe_Context);
+
+	ctx->objects = (fe_Object*) ptr;
+	ctx->object_count = size / sizeof(fe_Object);
+
+	ctx->calllist = &nil;
+	ctx->freelist = &nil;
+	ctx->symlist = &nil;
+
+	for (i = 0; i < ctx->object_count; i++) {
+		fe_Object *obj = &ctx->objects[i];
+		settype(obj, FE_TFREE);
+		cdr(obj) = ctx->freelist;
+		ctx->freelist = obj;
+	}
+
+	ctx->t = fe_symbol(ctx, "t");
+	fe_set(ctx, ctx->t, ctx->t);
+
+	save = fe_savegc(ctx);
+	for (i = 0; i < P_MAX; i++) {
+		fe_Object *v = object(ctx);
+		settype(v, FE_TPRIM);
+		prim(v) = i;
+		fe_set(ctx, fe_symbol(ctx, primnames[i]), v);
+		fe_restoregc(ctx, save);
+	}
+
+	return ctx;
+}
+
+
+void fe_close(fe_Context *ctx) {
+	ctx->gcstack_idx = 0;
+	ctx->symlist = &nil;
+	collectgarbage(ctx);
 }

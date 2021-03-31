@@ -163,10 +163,10 @@ fe_Object* eval(fe_Context *ctx, fe_Object *obj, fe_Object *env, fe_Object **new
 					while (!isnil(arg)) {
 						fe_write(ctx, evalarg(), write_screen, 0, 0);
 						if (!isnil(arg)) {
-							printf_k(" ");
+							kprintf(" ");
 						}
 					}
-					printf_k("\n");
+					kprintf("\n");
 					break;
 
 				case P_LT: numcmpop(<); break;

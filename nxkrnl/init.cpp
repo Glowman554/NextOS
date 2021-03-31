@@ -16,6 +16,8 @@ extern "C"{
 #include <multiboot.h>
 #include <pci.h>
 
+#include <fe/fe_runner.h>
+
 struct multiboot_info *pmb_info;
 
 typedef void (*constructor)();
@@ -46,8 +48,6 @@ class InterruptMouseEventHandler : public MouseEventHandler {
 		}
 };
 
-
-
 extern "C" void init(struct multiboot_info *mb_info){
 	
 	if(SERIAL_DEBUG) init_serial();
@@ -76,11 +76,15 @@ extern "C" void init(struct multiboot_info *mb_info){
 	//kprintf("Found PCI Devices:\n");
 	//PCIController.PrintDevices();
 	drvManager.ActivateAll();
+
+	run_fe("( = reverse (fn (lst) (let res nil) (while lst ( = res (cons (car lst) res)) ( = lst (cdr lst))) res)) (= animals '(\"cat\" \"dog\" \"fox\")) (print (reverse animals))");
+	
 	
 	init_multitasking(mb_info);
 	
 	//asm volatile("int $0x1");
 	
 	exec_file(AUTOEXEC);
+
 	while(1);
 }
