@@ -1,6 +1,7 @@
 extern "C"{
 	#include <gdt.h>
 	#include <console.h>
+	#include <string.h>
 	#include <interrupts.h>
 	#include <task.h>
 	#include <mem.h>
@@ -50,7 +51,7 @@ class InterruptMouseEventHandler : public MouseEventHandler {
 
 extern "C" void init(struct multiboot_info *mb_info){
 	
-	if(SERIAL_DEBUG) init_serial();
+	//init_serial();
 	
 	clrscr();
 	kprintf("nxkrnl %d Loading...\n\n", VERSION);
@@ -58,16 +59,22 @@ extern "C" void init(struct multiboot_info *mb_info){
 	//kprintf("Reporting kernel vendor %s\n\n", VENDOR);
 	
 	pmb_info = mb_info;
+	debug_write("Setting global multiboot pointer!");
+	debug_write("Initializing memory!");
 	pmm_init(mb_info);
+	debug_write("Initializing GDT!");
 	init_gdt();
+	debug_write("Initializing interrupts!");
 	init_intr();
 	 
 	DriverManager drvManager;
 
+	debug_write("Adding keyboard driver!");
 	InterruptKeyboardEventHandler kbhandler;
 	KeyboardDriver keyboard_driver(&kbhandler);
 	drvManager.AddDriver(&keyboard_driver);
 
+	debug_write("Adding keyboard mouse!");
 	InterruptMouseEventHandler mshandler;
 	MouseDriver mouse_driver(&mshandler);
 	drvManager.AddDriver(&mouse_driver);
@@ -75,18 +82,21 @@ extern "C" void init(struct multiboot_info *mb_info){
 	PeripheralComponentInterconnectController PCIController;
 	//kprintf("Found PCI Devices:\n");
 	//PCIController.PrintDevices();
+	debug_write("Activating all drivers!");
 	drvManager.ActivateAll(false);
 	
+	debug_write("Initializing multitasking!");
 	init_multitasking(mb_info);
 	
 	//asm volatile("int $0x1");
 
+	debug_write("Running main.fe!");
 	extern const char fe_main[];
 
 	kprintf("\nRunnning main.fe now!\n");
 	run_fe((char*) fe_main);
-	task_exit(0);
 
+	debug_write("Loading autoexec!");
 	exec_file(AUTOEXEC);
 
 	while(1);

@@ -31,10 +31,10 @@ void kputc(char c){
 		y++;
 	}
 	
-	if(SERIAL_DEBUG) write_serial(c);
+	//if(SERIAL_DEBUG) write_serial(c);
 
 	if (c == '\n') {
-		if(SERIAL_DEBUG) write_serial('\r');
+	//	if(SERIAL_DEBUG) write_serial('\r');
 		return;
 	}
 

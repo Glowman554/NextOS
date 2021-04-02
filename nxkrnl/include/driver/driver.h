@@ -3,6 +3,8 @@
 
 extern "C" {
 	#include <console.h>
+	#include <driver/serial.h>
+	#include <string.h>
 }
 
 #define DRIVER_NUM 265

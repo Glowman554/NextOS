@@ -14,7 +14,11 @@
         {
             "label": "build and run",
             "type": "shell",
-            "command": "make run"
+            "command": "make clean -i && make run",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
         },
         {
             "label": "pack",

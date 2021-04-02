@@ -28,4 +28,6 @@ char* strchr(const char* s, int c);
 
 double strtod(const char* string, char** endPtr);
 
+char* strcat(char *dest, const char *src);
+
 #endif

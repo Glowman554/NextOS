@@ -3,9 +3,8 @@
 
 #include <stdbool.h>
 
-#define VERSION 			17
+#define VERSION 			18
 #define VENDOR 				"Glowman554"
 #define AUTOEXEC 			"/progs/init.bin"
-#define SERIAL_DEBUG		true
 
 #endif

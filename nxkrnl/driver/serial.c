@@ -27,3 +27,87 @@ void write_serial(char a){
 	while(is_transmit_empty() == 0);
 	outb(PORT, a);
 }
+
+void kputc_serial(char c){
+
+	
+	write_serial(c);
+
+	if (c == '\n') {
+		write_serial('\r');
+		return;
+	}
+}
+
+void kputs_serial(const char *s){
+	while(*s){
+		kputc_serial(*s++);
+	}
+}
+
+void kputn_serial(unsigned long x, int base){
+	char buf[65];
+	const char* digits = "0123456789abcdefghijklmnopqrstuvwxyz";
+	char* p;
+	
+	if(base > 36) return;
+	
+	p = buf + 64;
+	*p = '\0';
+	do {
+		*--p = digits[x % base];
+		x /= base;
+	} while (x);
+	kputs_serial(p);
+
+}
+
+void kprintf_serial(const char* fmt, ...){
+	va_list ap;
+	const char* s;
+	unsigned long n;
+
+	va_start(ap, fmt);
+	while (*fmt) {
+		if (*fmt == '%') {
+			fmt++;
+			switch (*fmt) {
+				case 's':
+					s = va_arg(ap, char*);
+					kputs_serial(s);
+					break;
+				case 'c':
+					n = va_arg(ap, int);
+					kputc_serial(n);
+					break;
+				case 'd':
+				case 'u':
+					n = va_arg(ap, unsigned long int);
+					kputn_serial(n, 10);
+					break;
+				case 'x':
+				case 'p':
+					n = va_arg(ap, unsigned long int);
+					kputn_serial(n, 16);
+					break;
+				case '%':
+					kputc_serial('%');
+					break;
+				case '\0':
+					goto out;
+				default:
+					kputc_serial('%');
+					kputc_serial(*fmt);
+					break;
+			}
+		} else {
+			kputc_serial(*fmt);
+		}
+
+		fmt++;
+	}
+
+out:
+	va_end(ap);
+
+}
