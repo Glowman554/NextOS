@@ -129,6 +129,9 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_GETPIXEL:
 			cpu->edx = getpixel(cpu->ebx, cpu->ecx);
 			break;
+		case SYSCALL_RUN_FE:
+			run_fe((char*) cpu->ebx);
+			break;
 	}
 
 	return cpu;

@@ -61,6 +61,7 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_SET_KB_HANDLER | 31 | kb_handler handler | - | - |
 | SYSCALL_SET_MOUSE_HANDLER | 32 | mouse_move_handler h1 | mouse_button_handler h2 | - |
 | SYSCALL_GETPIXEL | 33 | int x | int y | char c (return) |
+| SYSCALL_RUN_FE | 34 | char* fe_code | - | - | 
 
 ## Copyright
 

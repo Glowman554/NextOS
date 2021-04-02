@@ -41,6 +41,7 @@
 #define SYSCALL_SET_KB_HANDLER      31
 #define SYSCALL_SET_MOUSE_HANDLER   32
 #define SYSCALL_GETPIXEL            33
+#define SYSCALL_RUN_FE				34
 
 
 #define FOREGROUND_BLACK 0x00
@@ -139,6 +140,7 @@ void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2);
 char getpixel(int x, int y);
 int strlen(char *src);
 char getchar();
+void run_fe(char* code);
 void set_mouse_handler(mouse_handler h);
 void claim_kb_handler();
 void claim_mouse_handlers();

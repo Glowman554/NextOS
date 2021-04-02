@@ -162,6 +162,10 @@ char getpixel(int x, int y) {
 	return c;
 }
 
+void run_fe(char* code) {
+	asm("int $0x30" : : "a" (SYSCALL_RUN_FE), "b" (code));
+}
+
 void kb_intr_handler(char key) {
 	buf = key;
 	if(key != '\n' && key != '\b')

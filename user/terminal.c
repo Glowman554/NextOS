@@ -79,6 +79,34 @@ void bf(){
 	kprintf("\n\n");
 }
 
+void fe(){
+
+	kprintf("[.fe] >>> ");
+	char* in;
+	claim_kb_handler();
+	in = get_input();
+
+	kprintf("\n\n");
+
+	int i = 0;
+	struct dirent *node = 0;
+	while((node = initrd_readdir(i)) != 0){
+		if(strcmp(in, node->name) == 0){
+			fs_node_t *fsnode = initrd_finddir(node->name);
+			if((fsnode->flags & 0x7) == FS_DIRECTORY)
+				kprintf("\n(driectory)\n");
+			else{
+				initrd_read(fsnode, 0, 65536);
+				uint8_t* buf = get_buffer();
+				run_fe((char*) buf);
+			}
+		}
+		i++;
+	}
+
+	kprintf("\n\n");
+}
+
 void _start(){
 	claim_kb_handler();
 	char* in;
@@ -110,6 +138,7 @@ void _start(){
 		if(strcmp(in, "time")==0) print_time();
 
 		if(strcmp(in, "bf")==0) bf();
+		if(strcmp(in, "fe")==0) fe();
 		
 		if(strcmp(in, "help")==0){
 			kprintf("Aviable Commands:\n");
@@ -123,6 +152,7 @@ void _start(){
 			kprintf("vga-init\n");
 			kprintf("time\n");
 			kprintf("bf\n");
+			kprintf("fe\n");
 		}
 
 		len = strlen(in);

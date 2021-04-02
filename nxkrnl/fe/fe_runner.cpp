@@ -1,6 +1,6 @@
 #include <fe/fe_runner.h>
 
-void run_fe(char* code) {
+extern "C" void run_fe(char* code) {
 	fe_Code code_obj;
 	code_obj.code = code;
 	code_obj.code_length = strlen(code);

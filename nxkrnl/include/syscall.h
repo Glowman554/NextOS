@@ -12,6 +12,7 @@
 #include <fs/fs.h>
 #include <fs/initrd.h>
 #include <external_driver.h>
+#include <fe/fe_runner.h>
 
 #define SYSCALL_PUTC			    0
 #define SYSCALL_PUTS			    1
@@ -47,6 +48,7 @@
 #define SYSCALL_SET_KB_HANDLER      31
 #define SYSCALL_SET_MOUSE_HANDLER   32
 #define SYSCALL_GETPIXEL            33
+#define SYSCALL_RUN_FE				34
 
 struct cpu_state* syscall(struct cpu_state* cpu);
 
