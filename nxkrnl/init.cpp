@@ -48,20 +48,12 @@ class InterruptMouseEventHandler : public MouseEventHandler {
 		}
 };
 
-void post_init(void) {
-	extern const char fe_main[];
-
-	kprintf("Runnning main.fe now!\n");
-	run_fe((char*) fe_main);
-	task_exit(0);
-}
-
 extern "C" void init(struct multiboot_info *mb_info){
 	
 	if(SERIAL_DEBUG) init_serial();
 	
 	clrscr();
-	kprintf("nxkrnl %d Loading...\n", VERSION);
+	kprintf("nxkrnl %d Loading...\n\n", VERSION);
 	//kprintf("Reporting kernel version %d\n", VERSION);
 	//kprintf("Reporting kernel vendor %s\n\n", VENDOR);
 	
@@ -83,13 +75,17 @@ extern "C" void init(struct multiboot_info *mb_info){
 	PeripheralComponentInterconnectController PCIController;
 	//kprintf("Found PCI Devices:\n");
 	//PCIController.PrintDevices();
-	drvManager.ActivateAll();
+	drvManager.ActivateAll(false);
 	
 	init_multitasking(mb_info);
 	
 	//asm volatile("int $0x1");
 
-	init_task((void*) post_init);
+	extern const char fe_main[];
+
+	kprintf("\nRunnning main.fe now!\n");
+	run_fe((char*) fe_main);
+	task_exit(0);
 
 	exec_file(AUTOEXEC);
 

@@ -50,7 +50,7 @@ uint8_t MouseDriver::MouseRead() {
     return dataport.Read();
 }
 
-void MouseDriver::Activate() {
+void MouseDriver::activate() {
     commandport.Write(0xa8);
     MouseWait();
     commandport.Write(0x20);
@@ -188,4 +188,12 @@ void MouseDriver::Handle() {
     }
 
     mouse_packet_ready = false;
+}
+
+bool MouseDriver::is_presend() {
+	return true;
+}
+
+char* MouseDriver::get_name() {
+	return "mouse";
 }

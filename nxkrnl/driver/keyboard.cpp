@@ -22,7 +22,7 @@ KeyboardDriver::KeyboardDriver(KeyboardEventHandler *handler) : InterruptHandler
 	this->handler = handler;
 }
 
-void KeyboardDriver::Activate(){
+void KeyboardDriver::activate(){
 	while(commandport.Read() & 0x1)
 		dataport.Read();
 	commandport.Write(0xae);
@@ -40,4 +40,12 @@ void KeyboardDriver::Handle(){
 	} else if(key < 0x80){
 		handler->KeyDown(keymap_de(key));
 	}
+}
+
+bool KeyboardDriver::is_presend() {
+	return true;
+}
+
+char* KeyboardDriver::get_name() {
+	return "keyboard";
 }

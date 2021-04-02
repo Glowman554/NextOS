@@ -25,7 +25,9 @@ class KeyboardDriver : public InterruptHandler, public Driver{
 		KeyboardDriver(KeyboardEventHandler *handler);
 		~KeyboardDriver();
 		virtual void Handle();
-		virtual void Activate();
+		virtual void activate();
+		virtual bool is_presend();
+		virtual char* get_name();
 };
 
 #endif

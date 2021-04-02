@@ -1,6 +1,10 @@
 #ifndef DRIVER_H
 #define DRIVER_H
 
+extern "C" {
+	#include <console.h>
+}
+
 #define DRIVER_NUM 265
 
 class Driver{
@@ -8,7 +12,9 @@ class Driver{
 		Driver();
 		~Driver();
 		
-		virtual void Activate();
+		virtual void activate();
+		virtual bool is_presend();
+		virtual char* get_name();
 };
 
 class DriverManager{
@@ -17,8 +23,8 @@ class DriverManager{
 		int num_drivers;
 	public:
 		DriverManager();
-		void AddDriver(Driver*);
-		void ActivateAll();
+		void AddDriver(Driver* drv);
+		void ActivateAll(bool force);
 };
 
 #endif
