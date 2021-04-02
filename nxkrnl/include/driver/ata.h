@@ -20,11 +20,13 @@ class AdvancedTechnologyAttachment: public Driver {
 
 		char* name;
 
+		uint16_t bytesPerSector;
+
 	public:
 		AdvancedTechnologyAttachment(bool master, uint16_t portBase, char* name);
 		~AdvancedTechnologyAttachment();
 
-		void Read28(uint32_t sectorNum, int count = 512);
+		void Read28(uint32_t sector, uint8_t* data, int count);
 		void Write28(uint32_t sectorNum, uint8_t* data, uint32_t count);
 		void Flush();
 

@@ -14,6 +14,7 @@ iso: all
 
 img:
 	qemu-img create test.img 10m
+	mkfs.vfat test.img
 
 run: iso img
 	qemu-system-i386 -cdrom cdrom.iso -hda test.img
