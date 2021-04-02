@@ -11,13 +11,17 @@ iso: all
 	cp README.md cdrom/.
 	cp LICENSE cdrom/.
 	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o cdrom.iso cdrom/
-	
-run: iso
-	qemu-system-i386 -cdrom cdrom.iso
+
+img:
+	qemu-img create test.img 10m
+
+run: iso img
+	qemu-system-i386 -cdrom cdrom.iso -hda test.img
 
 clean:
 	make -C nxkrnl clean
 	make -C user clean
+	rm test.img
 
 pack: clean
 	mkdir pack
