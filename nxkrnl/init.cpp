@@ -14,6 +14,7 @@ extern "C"{
 
 #include <driver/keyboard.h>
 #include <driver/mouse.h>
+#include <driver/pit.h>
 #include <config.h>
 #include <multiboot.h>
 #include <pci.h>
@@ -77,10 +78,14 @@ extern "C" void init(struct multiboot_info *mb_info){
 	KeyboardDriver keyboard_driver(&kbhandler);
 	drvManager.AddDriver(&keyboard_driver);
 
-	debug_write("Adding keyboard mouse!");
+	debug_write("Adding mouse driver!");
 	InterruptMouseEventHandler mshandler;
 	MouseDriver mouse_driver(&mshandler);
 	drvManager.AddDriver(&mouse_driver);
+
+	debug_write("Adding pit driver!");
+	ProgrammableIntervalTimerDriver pit_driver(5);
+	drvManager.AddDriver(&pit_driver);
 	
 	PeripheralComponentInterconnectController PCIController;
 	//kprintf("Found PCI Devices:\n");
