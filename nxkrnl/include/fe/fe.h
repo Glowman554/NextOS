@@ -20,7 +20,7 @@
 #define GCMARKBIT			(0x2)
 #define GCSTACKSIZE			(256)
 
-#define fe_exit(code)	printf_k("EXIT: %d", code);	\
+#define fe_exit(code)	printf_k("EXIT: %d\n", code);	\
 						task_exit(code);			\
 						while(1);
 
