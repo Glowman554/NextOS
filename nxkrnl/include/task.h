@@ -5,6 +5,7 @@
 #include <mem.h>
 #include <elf.h>
 #include <console.h>
+#include <info_line.h>
 
 typedef void (*kb_handler)(char key);
 typedef void (*mouse_move_handler)(long x, long y);
@@ -36,6 +37,8 @@ struct task {
 	uint64_t 			r20;
 	char				pid;
 };
+
+extern int proccount;
 
 struct cpu_state* schedule(struct cpu_state* cpu);
 void init_multitasking(struct multiboot_info* mb_info);

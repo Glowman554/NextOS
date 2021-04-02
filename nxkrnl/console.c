@@ -5,6 +5,8 @@ int y = 0;
 char* video = (char*) VIDEO_MEM;
 uint32_t color = BACKGROUND_BLACK | FOREGROUND_WHITE;
 
+bool scrole = true;
+
 void setx(int i) {
 	x = i;
 }
@@ -38,9 +40,9 @@ void kputc(char c){
 		return;
 	}
 
-	if (y > 24) {
+	if (scrole && y > 22) {
 		int i;
-		for (i = 0; i < 2 * 24 * 80; i++) {
+		for (i = 0; i < 2 * 22 * 80; i++) {
 			video[i] = video[i + 160];
 		}
 

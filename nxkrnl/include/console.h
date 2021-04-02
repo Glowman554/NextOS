@@ -2,6 +2,7 @@
 #define CONSOLE_H
 
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <driver/serial.h>
 #include <config.h>
@@ -43,6 +44,8 @@
 #define BACKGROUND_BLINKINGMAGENTA 0xD0
 #define BACKGROUND_BLINKINGYELLOW 0xE0
 #define BACKGROUND_BLINKINGWHITE 0xF0
+
+extern bool scrole;
 
 void setx(int i);
 void sety(int i);

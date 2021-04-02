@@ -176,6 +176,7 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu){
 			new_cpu = schedule(cpu);
 			set_tss(1, (uint32_t) (new_cpu + 1));
 			timer_tick++;
+			drawinfo();
 		}
 		
 		do_handle_interrupt(cpu->intr);
