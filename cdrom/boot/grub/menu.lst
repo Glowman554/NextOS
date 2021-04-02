@@ -11,11 +11,54 @@ module /driver/bf.drv
 module /progs/reboot.bin
 boot
 
-title NextOS - No gui
-kernel /nxkrnl
+title NextOS (Debug)
+kernel /nxkrnl --debug
 module /initrd.img
 module /progs/init.bin
 module /progs/terminal.bin
+module /progs/desktop.bin
+module /progs/dtest.bin
+module /progs/timer.bin
 module /driver/cmos.drv
 module /driver/bf.drv
+module /progs/reboot.bin
+boot
+
+title NextOS (Force load)
+kernel /nxkrnl --force
+module /initrd.img
+module /progs/init.bin
+module /progs/terminal.bin
+module /progs/desktop.bin
+module /progs/dtest.bin
+module /progs/timer.bin
+module /driver/cmos.drv
+module /driver/bf.drv
+module /progs/reboot.bin
+boot
+
+title NextOS (Force load) (Debug)
+kernel /nxkrnl --force --debug
+module /initrd.img
+module /progs/init.bin
+module /progs/terminal.bin
+module /progs/desktop.bin
+module /progs/dtest.bin
+module /progs/timer.bin
+module /driver/cmos.drv
+module /driver/bf.drv
+module /progs/reboot.bin
+boot
+
+title NextOS (Fe)
+kernel /nxkrnl --fe
+module /initrd.img
+module /progs/init.bin
+module /progs/terminal.bin
+module /progs/desktop.bin
+module /progs/dtest.bin
+module /progs/timer.bin
+module /driver/cmos.drv
+module /driver/bf.drv
+module /progs/reboot.bin
 boot

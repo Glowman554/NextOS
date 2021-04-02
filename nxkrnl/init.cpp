@@ -9,6 +9,7 @@ extern "C"{
 	#include <system.h>
 	#include <fs/fs.h>
 	#include <fs/initrd.h>
+	#include <parser.h>
 }
 
 #include <driver/keyboard.h>
@@ -51,12 +52,14 @@ class InterruptMouseEventHandler : public MouseEventHandler {
 
 extern "C" void init(struct multiboot_info *mb_info){
 	
-	//init_serial();
-	
+	init_serial();
+
 	clrscr();
 	kprintf("nxkrnl %d Loading...\n\n", VERSION);
 	//kprintf("Reporting kernel version %d\n", VERSION);
 	//kprintf("Reporting kernel vendor %s\n\n", VENDOR);
+	
+	global_kernel_info = parse_arguments((char*) mb_info->mbs_cmdline, parser_buffer);
 	
 	pmb_info = mb_info;
 	debug_write("Setting global multiboot pointer!");
@@ -83,21 +86,23 @@ extern "C" void init(struct multiboot_info *mb_info){
 	//kprintf("Found PCI Devices:\n");
 	//PCIController.PrintDevices();
 	debug_write("Activating all drivers!");
-	drvManager.ActivateAll(false);
+	drvManager.ActivateAll(global_kernel_info.force);
 	
 	debug_write("Initializing multitasking!");
 	init_multitasking(mb_info);
 	
 	//asm volatile("int $0x1");
 
-	debug_write("Running main.fe!");
-	extern const char fe_main[];
+	if(global_kernel_info.fe) {
+		debug_write("Running main.fe!");
+		extern const char fe_main[];
 
-	kprintf("\nRunnning main.fe now!\n");
-	run_fe((char*) fe_main);
+		kprintf("\nRunnning main.fe now!\n");
+		run_fe((char*) fe_main);
+	}
 
 	debug_write("Loading autoexec!");
-	exec_file(AUTOEXEC);
+	exec_file(global_kernel_info.autoexec);
 
 	while(1);
 }
