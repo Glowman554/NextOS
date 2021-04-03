@@ -1,5 +1,5 @@
 
-name: C/C++ CI
+name: Website update
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
       run: make pack
     - name: Clone and patch website
       run: |
-        https://github.com/Glowman554/Glowman554.github.io.git
+        git clone https://github.com/Glowman554/Glowman554.github.io.git
         cp pack/* Glowman554.github.io/downloads/.
         cd Glowman554.github.io
         git add *
