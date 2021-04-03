@@ -23,6 +23,10 @@ It's a more advanced and more stable kernel than my first kernel [GKernel](https
 You need to install `genisoimage gcc g++ as ld nasm make`.  
 To create an ISO file you need to enter `make iso`.  
 
+## Demo
+
+<a href="https://glowman554.github.io/NextOS/?profile=custom&cdrom.url=https://glowman554.github.io/NextOS/cdrom.iso">Click here to run demo!</a>  
+
 ## Syscalls
 
 | Name | eax | ebx | ecx | edx |
