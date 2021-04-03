@@ -16,6 +16,9 @@ iso: all
 run: iso
 	qemu-system-i386 -cdrom cdrom.iso
 
+test: iso
+	node os-test/index.js
+
 clean:
 	make -C nxkrnl clean
 	make -C user clean
