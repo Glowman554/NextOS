@@ -25,9 +25,10 @@ jobs:
         token: '${{ secrets.TOKEN }}'
     - name: Clone and patch website
       run: |
-        git clone git@github.com:Glowman554/Glowman554.github.io.git
+        git clone https://github.com/Glowman554/Glowman554.github.io.git
         cp pack/* Glowman554.github.io/downloads/.
         cd Glowman554.github.io
+        git remote set-url origin https://github.com/Glowman554/Glowman554.github.io.git
         git add *
         git commit -m "auto update"
         git push
