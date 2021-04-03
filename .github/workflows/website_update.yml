@@ -22,6 +22,7 @@ jobs:
         global: true
         name: 'github-actions[bot]'
         email: '41898282+github-actions[bot]@users.noreply.github.com'
+        token: secrets.GITHUB_TOKEN
     - name: Clone and patch website
       run: |
         git clone https://github.com/Glowman554/Glowman554.github.io.git
