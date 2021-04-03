@@ -16,5 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: Glowman554/setup-nasm@v1
-    - name: make
-      run: make
+    - name: setup
+      run: sudo apt install genisoimage nodejs -y
+    - name: Run test
+      run: make test

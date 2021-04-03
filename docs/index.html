@@ -1,0 +1,221 @@
+<!doctype html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title>Virtual x86</title>
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="description" content="Run KolibriOS, Linux or Windows 98 in your browser">
+
+<script src="build/v86_all.js"></script>
+<link rel="stylesheet" href="v86.css">
+
+<div>
+    <div id="boot_options">
+        <hr>
+        <h4>Setup</h4>
+        <table>
+            <tr>
+                <td width="350"><label for="cd_image">CD image</label></td>
+                <td>
+                    <input type="file" id="cd_image">
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="floppy_image">Floppy disk image</label></td>
+                <td> <input type="file" id="floppy_image"><br></td>
+            </tr>
+
+            <tr>
+                <td><label for="hda_image">Hard drive disk image</label></td>
+                <td><input type="file" id="hda_image"><br></td>
+            </tr>
+
+            <!--
+            <tr>
+                <td><label for="multiboot_image">Multiboot kernel image (experimental)</td>
+                <td><input type="file" id="multiboot_image"><br></td>
+            </tr>
+            -->
+
+
+            <tr>
+                <td colspan="2"><small>Disk images are not uploaded to the server</small><hr></td>
+            </tr>
+
+            <tr>
+                <td><label for="memory_size">Memory size</label></td>
+                <td>
+                    <input id="memory_size" type="number" value="128" min="16" max="2048" step="16"> MB<br>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="video_memory_size">Video Memory size</label></td>
+                <td>
+                    <input id="video_memory_size" type="number" value="8" min="1" max="128" step="1"> MB<br>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="networking_proxy">Networking proxy (leave blank to disable)</label></td>
+                <td>
+                    <input id="networking_proxy" type="text" value="wss://relay.widgetry.org/">
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><hr></td>
+            </tr>
+
+            <tr>
+                <td><label for="disable_audio">Disable audio</label></td>
+                <td>
+                    <input id="disable_audio" type="checkbox"><br>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="enable_acpi">Enable ACPI (experimental)</label></td>
+                <td>
+                    <input id="enable_acpi" type="checkbox"><br>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><hr></td>
+            </tr>
+
+            <tr>
+                <td><label for="boot_order">Boot order</label></td>
+                <td>
+                    <select id="boot_order">
+                        <option value="213">CD / Floppy / Hard Disk</option>
+                        <option value="123">CD / Hard Disk / Floppy</option>
+                        <option value="231">Floppy / CD / Hard Disk</option>
+                        <option value="321">Floppy / Hard Disk / CD</option>
+                        <option value="312">Hard Disk / Floppy / CD</option>
+                        <option value="132">Hard Disk / CD / Floppy</option>
+                    </select>
+                 </td>
+            </tr>
+        </table>
+
+        <br>
+        <button id="start_emulation">Start Emulation</button>
+    </div>
+
+    <div id="runtime_options" style="display: none">
+        <input type="button" value="Pause" id="run">
+        <input type="button" value="Reset" id="reset">
+        <input type="button" value="Exit" id="exit">
+        <input type="button" value="Send Ctrl-Alt-Del" id="ctrlaltdel">
+        <input type="button" value="Send Alt-Tab" id="alttab">
+        <input type="button" value="Get floppy image" id="get_fda_image">
+        <input type="button" value="Get second floppy image" id="get_fdb_image">
+        <input type="button" value="Get hard disk image" id="get_hda_image">
+        <input type="button" value="Get second hard disk image" id="get_hdb_image">
+        <input type="button" value="Get cdrom image" id="get_cdrom_image">
+        <input type="button" value="Save State" id="save_state">
+        <input type="button" value="Load State" id="load_state"> <input type="file" style="display: none" id="load_state_input">
+        <input type="button" value="Memory Dump" id="memory_dump">
+        <input type="button" value="Disable mouse" id="toggle_mouse">
+        <input type="button" value="Lock mouse" id="lock_mouse">
+        <input type="button" value="Go fullscreen" id="fullscreen">
+        <input type="button" value="Take screenshot (only graphic modes)" id="take_screenshot">
+
+        <label>
+            Scale:
+            <input type="number" min="0.25" step="0.25" value="1.0" id="scale" style="width: 50px">
+        </label>
+
+        <br>
+        <label id="change_fda" style="display: none">
+            Change floppy:
+            <input type="file">
+        </label>
+
+        <label id="change_cdrom" style="display: none">
+            Change CD:
+            <input type="file">
+        </label>
+
+        <br>
+
+    </div>
+    <pre style="display: none" id="loading"></pre>
+</div>
+
+<div id="screen_container" style="display: none">
+    <div id="screen"></div>
+    <canvas id="vga"></canvas>
+    <div style="position: absolute; top: 0; z-index: 10">
+        <textarea class="phone_keyboard"></textarea>
+    </div>
+</div>
+
+
+<div id="runtime_infos" style="display: none">
+    Running: <span id="running_time">0s</span> <br>
+    Speed: <span id="speed">0</span> mIPS<br>
+    Avg speed: <span id="avg_speed">0</span> mIPS<br>
+    <br>
+    <div id="info_storage" style="display: none">
+        <b>IDE device (HDA or CDROM)</b><br>
+        Sectors read: <span id="info_storage_sectors_read">0</span><br>
+        Bytes read: <span id="info_storage_bytes_read">0</span><br>
+        Sectors written: <span id="info_storage_sectors_written">0</span><br>
+        Bytes written: <span id="info_storage_bytes_written">0</span><br>
+        Status: <span id="info_storage_status"></span><br>
+        <br>
+    </div>
+    <div id="info_filesystem" style="display: none">
+        <b>9p Filesystem</b><br>
+        Bytes read: <span id="info_filesystem_bytes_read">0</span><br>
+        Bytes written: <span id="info_filesystem_bytes_written">0</span><br>
+        <div style="white-space: nowrap; overflow-x: hidden">Last file: <span id="info_filesystem_last_file"></span></div>
+        Status: <span id="info_filesystem_status"></span><br>
+        <br>
+    </div>
+    <div id="info_network" style="display: none">
+        <b>Network</b><br>
+        Bytes received: <span id="info_network_bytes_received">0</span><br>
+        Bytes transmitted: <span id="info_network_bytes_transmitted">0</span><br>
+        <br>
+    </div>
+    <b>VGA</b><br>
+    Mode: <span id="info_vga_mode"></span><br>
+    Resolution: <span id="info_res">-</span><br>
+    BPP: <span id="info_bpp">-</span><br>
+    <br>
+    Mouse: <span id="info_mouse_enabled">No</span><br>
+
+    <div id="description" style="display: none"><br></div>
+</div>
+
+<div id="filesystem_panel" style="display: none">
+    <label>
+        Send files to emulator<br>
+        <input type="file" id="filesystem_send_file" multiple>
+    </label>
+    <br><br>
+    <label>
+        Get file from emulator<br>
+        <input type="text" id="filesystem_get_file" placeholder="Absolute path">
+    </label>
+</div>
+
+<br style="clear: both"><br>
+
+<div id="terminal"></div>
+
+<br style="clear: both">
+<code>Version: <a href="https://github.com/copy/v86/commits/98e7110c2">98e7110c2</a> (Feb 16, 2021 12:02)</code>
+
+<hr>
+<a href="debug.html">Enable debug</a>
+&mdash;
+<a href="https://github.com/copy/v86/blob/master/Readme.md">Readme</a>
+&mdash;
+<a href="https://github.com/copy/v86">Project on Github</a>
+&mdash;
+<a href="https://github.com/copy/v86#compatibility">Compatibility</a>

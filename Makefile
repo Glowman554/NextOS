@@ -18,6 +18,10 @@ img:
 
 run: iso img
 	qemu-system-i386 -cdrom cdrom.iso -hda test.img
+	cp cdrom.iso docs/.
+
+test: iso
+	node os-test/index.js
 
 clean:
 	make -C nxkrnl clean
