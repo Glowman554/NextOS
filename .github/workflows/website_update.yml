@@ -1,0 +1,29 @@
+
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: Glowman554/setup-nasm@v1
+    - name: make
+      run: make
+    - name: pack
+      run: make pack
+    - name: Clone and patch website
+      run: |
+        https://github.com/Glowman554/Glowman554.github.io.git
+        cp pack/* Glowman554.github.io/downloads/.
+        cd Glowman554.github.io
+        git add *
+        git commit -m "auto update"
+        git push
+        
+        
