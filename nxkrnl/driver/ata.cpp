@@ -56,6 +56,9 @@ char* AdvancedTechnologyAttachment::get_name() {
 	return this->name;
 }
 
+void AdvancedTechnologyAttachment::activate() {
+}
+
 void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int count) {
 	if(sector & 0xF0000000) {
 		return;

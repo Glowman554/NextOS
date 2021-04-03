@@ -30,7 +30,7 @@ class AdvancedTechnologyAttachment: public Driver {
 		void Write28(uint32_t sectorNum, uint8_t* data, uint32_t count);
 		void Flush();
 
-		//virtual void activate();
+		virtual void activate();
 		virtual bool is_presend();
 		virtual char* get_name();
 			
