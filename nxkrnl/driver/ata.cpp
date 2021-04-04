@@ -71,9 +71,9 @@ void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int co
 	errorPort.Write(0);
 	sectorCountPort.Write(1);
 	
-	lbaLowPort.Write( sector & 0x000000FF );
+	lbaLowPort.Write(sector & 0x000000FF);
 	lbaMidPort.Write((sector & 0x0000FF00) >> 8);
-	lbaHiPort.Write( (sector & 0x00FF0000) >> 16);
+	lbaHiPort.Write((sector & 0x00FF0000) >> 16);
 	commandPort.Write(0x20);
 	
 	
@@ -87,12 +87,12 @@ void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int co
 		return;
 	}
 	
-	for(uint16_t i = 0; i < count; i+= 2) {
+	for(uint16_t i = 0; i < count; i += 2) {
 		uint16_t wdata = dataPort.Read();
 		
 		data[i] = wdata & 0x00FF;
-		if(i+1 < count) {
-			data[i+1] = (wdata >> 8) & 0x00FF;
+		if(i + 1 < count) {
+			data[i + 1] = (wdata >> 8) & 0x00FF;
 		}
 	}
 	
@@ -110,30 +110,31 @@ void AdvancedTechnologyAttachment::Write28(uint32_t sectorNum, uint8_t* data, ui
 	}
 	
 	
-	devicePort.Write( (master ? 0xE0 : 0xF0) | ((sectorNum & 0x0F000000) >> 24) );
+	devicePort.Write((master ? 0xE0 : 0xF0) | ((sectorNum & 0x0F000000) >> 24));
 	errorPort.Write(0);
 	sectorCountPort.Write(1);
-	lbaLowPort.Write(  sectorNum & 0x000000FF );
-	lbaMidPort.Write( (sectorNum & 0x0000FF00) >> 8);
-	lbaLowPort.Write( (sectorNum & 0x00FF0000) >> 16 );
+	lbaLowPort.Write(sectorNum & 0x000000FF);
+	lbaMidPort.Write((sectorNum & 0x0000FF00) >> 8);
+	lbaLowPort.Write((sectorNum & 0x00FF0000) >> 16);
 	commandPort.Write(0x30);
 
 
-	for(int i = 0; i < count; i += 2) {
+	for(int i = 0; i < (int) count; i += 2) {
 		uint16_t wdata = data[i];
-		if(i+1 < count) {
-			wdata |= ((uint16_t)data[i+1]) << 8;
+		if(i + 1 < (int) count) {
+			wdata |= ((uint16_t)data[i + 1]) << 8;
 		}
 		dataPort.Write(wdata);
 	}
 	
-	for(int i = count + (count%2); i < 512; i += 2)
+	for(int i = count + (count % 2); i < 512; i += 2) {
 		dataPort.Write(0x0000);
+	}
 
 }
 
 void AdvancedTechnologyAttachment::Flush() {
-	devicePort.Write( master ? 0xE0 : 0xF0 );
+	devicePort.Write(master ? 0xE0 : 0xF0);
 	commandPort.Write(0xE7);
 
 	uint8_t status = commandPort.Read();
