@@ -20,6 +20,7 @@ void KeyboardEventHandler::KeyDown(char){
 
 KeyboardDriver::KeyboardDriver(KeyboardEventHandler *handler) : InterruptHandler(0x21), dataport(0x60), commandport(0x64){
 	this->handler = handler;
+	this->l_shift = false;
 }
 
 void KeyboardDriver::activate(){
@@ -35,10 +36,24 @@ void KeyboardDriver::activate(){
 
 void KeyboardDriver::handle(){
 	uint8_t key = dataport.read();
+	uint8_t charcode = 0;
 	if(handler == 0) {
 
-	} else if(key < 0x80){
-		handler->KeyDown(keymap_de(key));
+	} else {
+		switch (key) {
+			case 0x2a:
+				this->l_shift = true;
+				break;
+			case 0xaa:
+				this->l_shift = false;
+				break;
+			default:
+				charcode = keymap_de(key, this->l_shift);
+				if(charcode != 0) {
+					handler->KeyDown(charcode);
+				}
+				break;
+		}
 	}
 }
 

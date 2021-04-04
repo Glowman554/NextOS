@@ -20,6 +20,8 @@ class KeyboardDriver : public InterruptHandler, public Driver{
 		Port8Bit commandport;
 		
 		KeyboardEventHandler* handler;
+
+		bool l_shift;
 		
 	public:
 		KeyboardDriver(KeyboardEventHandler *handler);

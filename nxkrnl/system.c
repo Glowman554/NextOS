@@ -13,7 +13,7 @@ char getchar(){
 	char inbuff = 0;
 	while(inbuff == 0){
 		in = inb(0x60);
-		inbuff = keymap_de(in);
+		inbuff = keymap_de(in, false);
 	}
 	return inbuff;
 }
