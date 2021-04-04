@@ -42,7 +42,7 @@ char* syscall_names[] = {
 };
 
 struct cpu_state* syscall(struct cpu_state* cpu){
-	if(global_kernel_info.debug) {
+	if(global_kernel_info.dump_syscall) {
 		char buffer[1000];
 		sprintf(buffer, "Syscall %s -> eax: 0x%x, ebx: 0x%x, ecx: 0x%x, edx: 0x%x", syscall_names[cpu->eax], cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);
 		debug_write(buffer);

@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#define VERSION 			27
+#define VERSION 			28
 #define VENDOR 				"Glowman554"
 #define AUTOEXEC 			"/progs/init.bin"
 

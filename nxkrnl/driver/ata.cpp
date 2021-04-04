@@ -65,11 +65,12 @@ void AdvancedTechnologyAttachment::activate() {
 	debug_write(buffer);
 
 	if(!fs.is_next_fs()) {
-		fs.format("test");
-		fs.print_fs_info();
-	} else {
-		fs.print_fs_info();
+		if(global_kernel_info.auto_format) {
+			fs.format(global_kernel_info.format_label);
+		}
 	}
+	
+	fs.print_fs_info();
 }
 
 void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int count) {
