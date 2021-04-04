@@ -122,7 +122,7 @@ int init_elf(void* image){
 }
 
 void init_multitasking(struct multiboot_info* mb_info){
-	//init_task(do_nothing);
+	init_task(do_nothing);
 }
 
 struct cpu_state* schedule(struct cpu_state* cpu){

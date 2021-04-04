@@ -69,7 +69,7 @@ setInterval(() => {
 		}, 5000);
 	}
 
-	if(line_to_text(screen, 24).startsWith("Running proceses: 1")) {
+	if(line_to_text(screen, 24).startsWith("Running proceses: 2")) {
 		console.log("Test Passed!");
 		console.log(screen_to_text(screen));
 		process.exit(0);

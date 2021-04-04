@@ -171,8 +171,10 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu){
 		}
 	}
 	if (cpu->intr >= 0x20 && cpu->intr <= 0x2f) {
+
+		extern bool is_init_done;
 		
-		if(cpu->intr == 0x20){
+		if(cpu->intr == 0x20 && is_init_done){
 			new_cpu = schedule(cpu);
 			set_tss(1, (uint32_t) (new_cpu + 1));
 			timer_tick++;

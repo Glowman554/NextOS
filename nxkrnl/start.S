@@ -19,6 +19,8 @@
 // sichtbar)
 .global _start
 _start:
+	cli
+
 	// Stack initialisieren
 	mov $kernel_stack, %esp
 
@@ -27,6 +29,7 @@ _start:
 	call init
 	// Falls wir jemals aus init zurueckkommen sollten, gehen wir in eine
 	// Endlosschleife
+
 	jmp .
 
 // 8 kB Stack fuer den Kernel. Das Label steht hinter dem freien Speicher,

@@ -12,12 +12,13 @@ iso: all
 	cp LICENSE cdrom/.
 	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o cdrom.iso cdrom/
 
+	cp cdrom.iso docs/.
+
 img:
 	qemu-img create test.img 1m
 
 run: iso img
 	qemu-system-i386 -cdrom cdrom.iso -hda test.img -boot d
-	cp cdrom.iso docs/.
 
 test: iso
 	node os-test/index.js

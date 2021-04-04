@@ -42,7 +42,7 @@ class MouseDriver : public InterruptHandler, public Driver{
 
     public:
         MouseDriver(MouseEventHandler *handler);
-        ~MouseDriver();
+        //~MouseDriver();
 
         long x = 0;
         long y = 0;

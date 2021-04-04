@@ -23,6 +23,7 @@ extern "C"{
 #include <fe/fe_runner.h>
 
 struct multiboot_info *pmb_info;
+bool is_init_done = false;
 
 typedef void (*constructor)();
 
@@ -120,6 +121,9 @@ extern "C" void init(struct multiboot_info *mb_info){
 
 	debug_write("Loading autoexec!");
 	exec_file(global_kernel_info.autoexec);
+
+	debug_write("Setting is_init_done to true!");
+	is_init_done = true;
 
 	while(1);
 }
