@@ -23,8 +23,8 @@ void* memcpy(void* dest, const void* src, size_t n){
 
 int memcmp(const void * _s1, const void* _s2, size_t n) {
 
-    const unsigned char* s1 = _s1;
-    const unsigned char* s2 = _s2;
+	const unsigned char* s1 = _s1;
+	const unsigned char* s2 = _s2;
 
 	while(n--) {
 		if(*s1 != *s2) {
@@ -246,17 +246,17 @@ done:
 }
 
 char* strcat(char *dest, const char *src){
-    int i;
-    int j;
+	int i;
+	int j;
 
-    for (i = 0; dest[i] != '\0'; i++);
-    for (j = 0; src[j] != '\0'; j++) {
-        dest[i+j] = src[j];
-    }
+	for (i = 0; dest[i] != '\0'; i++);
+	for (j = 0; src[j] != '\0'; j++) {
+		dest[i+j] = src[j];
+	}
 
-    dest[i+j] = '\0';
+	dest[i+j] = '\0';
 
-    return dest;
+	return dest;
 }
 
 char* strncpy(char* _dst, const char* _src, size_t count) {

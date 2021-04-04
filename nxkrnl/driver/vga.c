@@ -270,7 +270,7 @@ uint32_t vga_bgcolor = VGA_BLACK;
 
 void init_vga(){
 	regs16_t regs;
-	//            x   y  color
+	//			x   y  color
 	// switch to 320x200x256 graphics mode
 	regs.ax = 0x0013;
 	int32(0x10, &regs);

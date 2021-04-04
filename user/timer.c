@@ -4,22 +4,22 @@
 #include <cmos_defs.h>
 
 void tostring(char str[], int num){
-    int i; 
+	int i; 
 	int rem;
 	int len = 0;
 	int n;
  
-    n = num;
-    while (n != 0){
-        len++;
-        n /= 10;
-    }
-    for (i = 0; i < len; i++){
-        rem = num % 10;
-        num = num / 10;
-        str[len - (i + 1)] = rem + '0';
-    }
-    str[len] = '\0';
+	n = num;
+	while (n != 0){
+		len++;
+		n /= 10;
+	}
+	for (i = 0; i < len; i++){
+		rem = num % 10;
+		num = num / 10;
+		str[len - (i + 1)] = rem + '0';
+	}
+	str[len] = '\0';
 }
 
 void print_string(int driver_id, int window_id, int xoff, int yoff, char* str) {
@@ -29,19 +29,18 @@ void print_string(int driver_id, int window_id, int xoff, int yoff, char* str) {
 	data.window_id = window_id;
 
 	int len = strlen(str);
-    for(int i = 0; i < len; i++){
+	for(int i = 0; i < len; i++){
 		data.xoffset = xoff + 1 + (i * 8);
 		data.yoffset = yoff;
 		data._char = str[i];
 		call_driver_handler(driver_id, &data);
-    }
+	}
 }
 
 void _start(void){
 	exec("/progs/desktop.bin");
 
-	reset_timer_tick();
-	while(get_timer_tick() < 100);
+	while(find_driver_by_name("desktop") == -1);
 
 	int desktop_id = find_driver_by_name("desktop");
 	int cmos_id = find_driver_by_name("cmos");

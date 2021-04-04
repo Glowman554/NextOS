@@ -67,7 +67,7 @@ void PeripheralComponentInterconnectController::print_devices(){
 			for(int function = 0; function < numFunctions; function++){
 				PeripheralComponentInterconnectDeviceDescriptor dev = get_device_descriptor(bus, device, function);
 				if(dev.vendor_id == 0x0000 || dev.vendor_id == 0xFFFF)
-                    continue;
+					continue;
 				
 				kprintf_serial("bus: 0x%x, device: 0x%x, function: 0x%x, vendor: 0x%x, deviceid 0x%x\n", dev.bus, dev.device, dev.function, dev.vendor_id, dev.device_id);
 			}

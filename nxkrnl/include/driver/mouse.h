@@ -12,42 +12,42 @@
 #define PS2YOverflow 0b10000000
 
 enum MouseButtons {
-    LeftButton = 1,
-    RightButton = 2,
-    MiddleButton = 3
+	LeftButton = 1,
+	RightButton = 2,
+	MiddleButton = 3
 };
 
 class MouseEventHandler {
-    public:
-        MouseEventHandler();
-        virtual void OnMouseDown(uint8_t button);
-        virtual void OnMouseMove(long x, long y);
+	public:
+		MouseEventHandler();
+		virtual void OnMouseDown(uint8_t button);
+		virtual void OnMouseMove(long x, long y);
 };
 
 class MouseDriver : public InterruptHandler, public Driver{
-    private:
+	private:
 		Port8Bit dataport;
 		Port8Bit commandport;
 		
-        MouseEventHandler* handler;
+		MouseEventHandler* handler;
 
-        void MouseWait();
-        void MouseWaitInput();
-        void MouseWrite(uint8_t value);
-        uint8_t MouseRead();
+		void MouseWait();
+		void MouseWaitInput();
+		void MouseWrite(uint8_t value);
+		uint8_t MouseRead();
 
-        uint8_t mouse_cycle = 0;
-        uint8_t mouse_packet[4];
-        bool mouse_packet_ready = false;
+		uint8_t mouse_cycle = 0;
+		uint8_t mouse_packet[4];
+		bool mouse_packet_ready = false;
 
-    public:
-        MouseDriver(MouseEventHandler *handler);
-        //~MouseDriver();
+	public:
+		MouseDriver(MouseEventHandler *handler);
+		//~MouseDriver();
 
-        long x = 0;
-        long y = 0;
+		long x = 0;
+		long y = 0;
 
-        virtual void handle();
+		virtual void handle();
 		virtual void activate();
 		virtual bool is_presend();
 		virtual char* get_name();

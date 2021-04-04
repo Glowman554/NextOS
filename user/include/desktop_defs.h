@@ -8,27 +8,27 @@
 
 typedef struct {
 	int function;
-    int window_x;
-    int window_y;
-    int window_size_x;
-    int window_size_y;
-    char* window_name;
+	int window_x;
+	int window_y;
+	int window_size_x;
+	int window_size_y;
+	char* window_name;
 
-    int window_id;
-    int xoffset;
-    int yoffset;
-    int size;
-    int color;
-    int radius;
+	int window_id;
+	int xoffset;
+	int yoffset;
+	int size;
+	int color;
+	int radius;
 
-    char _char;
+	char _char;
 } desktop_data_t;
 
 typedef struct {
-    int window_x;
-    int window_y;
-    int window_size_x;
-    int window_size_y;
+	int window_x;
+	int window_y;
+	int window_size_x;
+	int window_size_y;
 } window_t;
 
 #endif

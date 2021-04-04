@@ -115,7 +115,7 @@ void _start(){
 	
 	mb_info = get_mb_ptr();
 	
-    
+	
 	while(1){
 		kprintf(">> ");
 		in = get_input();

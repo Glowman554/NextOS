@@ -3,8 +3,51 @@
 // 64 kb
 uint8_t buf[65536];
 
+char* syscall_names[] = {
+	"putc",
+	"puts",
+	"putn",
+	"clrscr",
+	"setcolor",
+	"kversion",
+	"kvendor",
+	"exec",
+	"init task",
+	"task exit",
+	"reboot",
+	"getchar",
+	"get tick",
+	"reset tick",
+	"multiboot",
+	"vga mode",
+	"set pixel",
+	"set color",
+	"load initrd",
+	"initrd readdir",
+	"initrd finddir",
+	"initrd read",
+	"get buffer",
+	"init driver",
+	"call driver",
+	"find driver",
+	"draw char",
+	"set x",
+	"set y",
+	"get x",
+	"get y",
+	"set kb handler",
+	"set mouse handler",
+	"get pixel",
+	"run fe"
+};
+
 struct cpu_state* syscall(struct cpu_state* cpu){
-	
+	if(global_kernel_info.debug) {
+		char buffer[1000];
+		sprintf(buffer, "Syscall %s -> eax: 0x%x, ebx: 0x%x, ecx: 0x%x, edx: 0x%x", syscall_names[cpu->eax], cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);
+		debug_write(buffer);
+	}
+
 	bool mode = is_vga_active();
 	
 	switch (cpu->eax) {

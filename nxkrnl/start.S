@@ -5,9 +5,9 @@
 
 // Der Multiboot-Header
 .align 4
-.int    MB_MAGIC
-.int    MB_FLAGS
-.int    MB_CHECKSUM
+.int	MB_MAGIC
+.int	MB_FLAGS
+.int	MB_CHECKSUM
 
 .section .text
 
