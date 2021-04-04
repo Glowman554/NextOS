@@ -15,6 +15,7 @@ extern "C"{
 #include <driver/keyboard.h>
 #include <driver/mouse.h>
 #include <driver/pit.h>
+#include <driver/ata.h>
 #include <config.h>
 #include <multiboot.h>
 #include <pci.h>
@@ -86,6 +87,17 @@ extern "C" void init(struct multiboot_info *mb_info){
 	debug_write("Adding pit driver!");
 	ProgrammableIntervalTimerDriver pit_driver(5);
 	drvManager.AddDriver(&pit_driver);
+
+	debug_write("Adding ata drivers!");
+	AdvancedTechnologyAttachment ata0m(true, 0x1F0, "ata0m");
+	AdvancedTechnologyAttachment ata0s(false, 0x1F0, "ata0s");
+	AdvancedTechnologyAttachment ata1m(true, 0x170, "ata1m");
+	AdvancedTechnologyAttachment ata1s(false, 0x170, "ata1s");
+
+	drvManager.AddDriver(&ata0m);
+	drvManager.AddDriver(&ata0s);
+	drvManager.AddDriver(&ata1m);
+	drvManager.AddDriver(&ata1s);
 	
 	PeripheralComponentInterconnectController PCIController;
 	//kprintf("Found PCI Devices:\n");

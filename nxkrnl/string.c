@@ -21,6 +21,21 @@ void* memcpy(void* dest, const void* src, size_t n){
 	return dest;
 }
 
+int memcmp(const void * _s1, const void* _s2, size_t n) {
+
+    const unsigned char* s1 = _s1;
+    const unsigned char* s2 = _s2;
+
+	while(n--) {
+		if(*s1 != *s2) {
+			return *s1 - *s2;
+		}
+		++s1;
+		++s2;
+	}
+	return 0;
+}
+
 
 
 int strcmp(char *str1, char *str2){
@@ -59,6 +74,17 @@ char* strchr(const char* s, int c) {
 		}
 		s++;
 	}
+	return NULL;
+}
+
+char* strrchr(const char* s, int c) {
+	size_t i = 0;
+	while (s && s[i++]);
+	do {
+		if (s && s[--i] == (char) c) {
+			return (char*) s + i;
+		}
+	} while ( i );
 	return NULL;
 }
 
@@ -231,4 +257,40 @@ char* strcat(char *dest, const char *src){
     dest[i+j] = '\0';
 
     return dest;
+}
+
+char* strncpy(char* _dst, const char* _src, size_t count) {
+	size_t len = strlen((char*) _src);
+	if(count < len) {
+		len = count;
+	}
+	memcpy(_dst, _src, len);
+	for(size_t i = len; i < count; ++i) {
+		_dst[i] = 0;
+	}
+	return _dst;
+}
+
+int strncmp(const char* _s1, const char* _s2, size_t count) {
+	size_t len1 = strlen((char*) _s1);
+	size_t len2 = strlen((char*) _s2);
+	size_t len = len1 < len2 ? len1 : len2;
+
+	if(count < len) {
+		len = count;
+	}
+	int ret = memcmp(_s1, _s2, len);
+	if(len < len1 && len < len2) {
+		return ret;
+	}
+	if(ret == 0) {
+		if(len1 == len2) {
+			return 0;
+		} else if (len == len1) {
+			return -1;
+		} else {
+			return 1;
+		}
+	}
+	return ret;
 }
