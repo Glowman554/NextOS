@@ -1,6 +1,7 @@
 # NextOS
 
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Glowman554/NextOS)
+![lines_of_code](https://tokei.rs/b1/github/Glowman554/NextOS)
 ![Build](https://github.com/Glowman554/NextOS/workflows/C/C++%20CI/badge.svg)
 ![Automatic Release](https://github.com/Glowman554/NextOS/workflows/Automatic%20Release/badge.svg)
 
