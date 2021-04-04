@@ -3,6 +3,9 @@
 
 #include <string.h>
 
+#include <stdio.h>
+#include <driver/serial.h>
+
 typedef int (*driver_handler_ptr)(void*);
 
 typedef struct {

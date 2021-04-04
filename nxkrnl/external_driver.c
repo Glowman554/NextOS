@@ -14,6 +14,10 @@ int init_driver(char* name, driver_handler_ptr driver_handler) {
 	driver_infos[driver_index] = driver;
 	driver_index++;
 
+	char buffer[1000];
+	sprintf(buffer, "Registering driver handler at 0x%x with id %d and name %s!", (unsigned int) driver_handler, driver_index - 1, name);
+	debug_write(buffer);
+
 	return driver_index - 1;
 }
 

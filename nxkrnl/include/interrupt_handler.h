@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+extern "C" {
+	#include <stdio.h>
+	#include <driver/serial.h>
+}
+
 extern "C" void handle_interrupt(uint32_t interrupt_num);
 
 class InterruptHandler{

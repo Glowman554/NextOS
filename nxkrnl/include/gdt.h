@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+#include <stdio.h>
+#include <driver/serial.h>
+
 #define GDT_FLAG_DATASEG 0x02
 #define GDT_FLAG_CODESEG 0x0a
 #define GDT_FLAG_TSS     0x09

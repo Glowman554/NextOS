@@ -10,6 +10,9 @@
 #include <console.h>
 #include <task.h>
 
+#include <stdio.h>
+#include <driver/serial.h>
+
 void reboot();
 char getchar();
 uint32_t get_module_by_name(char* file);

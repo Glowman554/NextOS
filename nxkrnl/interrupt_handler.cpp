@@ -14,13 +14,16 @@ extern "C" void do_handle_interrupt(uint32_t interrupt_num){
 }
 
 InterruptHandler::InterruptHandler(uint32_t itrn){
+	char buffer[100];
+	sprintf(buffer, "Reisterring interrupt handler %d at 0x%x!", itrn, this);
+	debug_write(buffer);
 	int_num = itrn;
 	handlers[itrn] = this;
 }
 
 InterruptHandler::~InterruptHandler(){
 	if(handlers[int_num] == this)
-		handlers[int_num] =0;
+		handlers[int_num] = 0;
 }
 
 void InterruptHandler::Handle(){

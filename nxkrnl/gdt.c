@@ -8,6 +8,11 @@ void set_tss(int index, uint32_t val){
 
 
 static void gdt_set_entry(int i, unsigned int base, unsigned int limit, int flags){
+
+	char buffer[1000];
+	sprintf(buffer, "Setting gdt entry at %d with base 0x%x and limit 0x%x and the flags 0x%x", i, base, limit, flags);
+	debug_write(buffer);
+
 	gdt[i] = limit & 0xffffLL;
 	gdt[i] |= (base & 0xffffffLL) << 16;
 	gdt[i] |= (flags & 0xffLL) << 40;

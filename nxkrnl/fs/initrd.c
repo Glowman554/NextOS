@@ -45,6 +45,11 @@ static fs_node_t *initrd_finddir(fs_node_t *node, char *name){
 }
 
 fs_node_t *initialise_initrd(uint32_t location){
+
+	char buffer[100];
+	sprintf(buffer, "Loading initrd at 0x%x!", location);
+	debug_write(buffer);
+
 	initrd_header = (initrd_header_t*) location;
 	file_headers = (initrd_file_header_t*) (location + sizeof(initrd_header_t));
 	initrd_root = (fs_node_t*) pmm_alloc();

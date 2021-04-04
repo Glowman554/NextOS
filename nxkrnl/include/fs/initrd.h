@@ -6,6 +6,9 @@
 #include <fs/fs.h>
 #include <string.h>
 
+#include <stdio.h>
+#include <driver/serial.h>
+
 typedef struct{
 	uint32_t nfiles;
 } initrd_header_t;

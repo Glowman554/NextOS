@@ -7,6 +7,9 @@
 #include <panic.h>
 #include <driver/vga.h>
 
+#include <driver/serial.h>
+#include <stdio.h>
+
 #define IDT_FLAG_INTERRUPT_GATE 0xe
 #define IDT_FLAG_PRESENT 0x80
 #define IDT_FLAG_RING0 0x00

@@ -57,6 +57,9 @@ void* pmm_alloc(void){
 			for (j = 0; j < 32; j++) {
 				if (bitmap[i] & (1 << j)) {
 					bitmap[i] &= ~(1 << j);
+					char buffer[100];
+					sprintf(buffer, "Allocating memory at 0x%x!", (i * 32 + j) * 4096);
+					debug_write(buffer);
 					return (void*)( (i * 32 + j) * 4096);
 				}
 			}

@@ -53,6 +53,10 @@ static long long unsigned int idt[IDT_ENTRIES];
 uint32_t timer_tick = 0;
 
 static void idt_set_entry(int i, void (*fn)(), unsigned int selector, int flags){
+	char buffer[1000];
+	sprintf(buffer, "Setting idt entry at %d with handler 0x%x and selector 0x%x and the flags 0x%x", i, (uint32_t) fn, selector, flags);
+	debug_write(buffer);
+
 	unsigned long int handler = (unsigned long int) fn;
 	idt[i] = handler & 0xffffLL;
 	idt[i] |= (selector & 0xffffLL) << 16;
@@ -125,6 +129,7 @@ void init_intr(){
 	// Syscall
 	idt_set_entry(48, intr_stub_48, 0x8, IDT_FLAG_INTERRUPT_GATE | IDT_FLAG_RING3 | IDT_FLAG_PRESENT);
 	asm volatile("lidt %0" : : "m" (idtp));
+	debug_write("Enabling interrupts!");
 	asm volatile("sti");
 	
 }

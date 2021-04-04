@@ -5,6 +5,9 @@
 #include <multiboot.h>
 #include <string.h>
 
+#include <stdio.h>
+#include <driver/serial.h>
+
 #define NULL ((void*) 0)
 
 #define BITMAP_SIZE 32768
