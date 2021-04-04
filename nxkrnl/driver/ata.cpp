@@ -57,6 +57,19 @@ char* AdvancedTechnologyAttachment::get_name() {
 }
 
 void AdvancedTechnologyAttachment::activate() {
+
+	NextFS fs = NextFS(this);
+
+	char buffer[1000];
+	sprintf(buffer, "Is nextfs: %s!", fs.is_next_fs() ? "true" : "false");
+	debug_write(buffer);
+
+	if(!fs.is_next_fs()) {
+		fs.format("test");
+		fs.print_fs_info();
+	} else {
+		fs.print_fs_info();
+	}
 }
 
 void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int count) {
@@ -115,7 +128,7 @@ void AdvancedTechnologyAttachment::Write28(uint32_t sectorNum, uint8_t* data, ui
 	sectorCountPort.write(1);
 	lbaLowPort.write(sectorNum & 0x000000FF);
 	lbaMidPort.write((sectorNum & 0x0000FF00) >> 8);
-	lbaLowPort.write((sectorNum & 0x00FF0000) >> 16);
+	lbaHiPort.write((sectorNum & 0x00FF0000) >> 16);
 	commandPort.write(0x30);
 
 

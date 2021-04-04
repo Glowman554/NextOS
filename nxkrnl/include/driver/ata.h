@@ -1,6 +1,10 @@
 #ifndef ATA_H
 #define ATA_H
 
+extern "C" {
+	#include <mem.h>
+}
+
 #include <stdint.h>
 #include <driver/driver.h>
 #include <port.h>
@@ -36,6 +40,7 @@ class AdvancedTechnologyAttachment: public Driver {
 			
 			
 };
-		
+
+#include <fs/nextfs.h>	
 
 #endif
