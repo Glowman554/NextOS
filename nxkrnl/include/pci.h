@@ -3,6 +3,7 @@
 
 extern "C"{
 	#include <console.h>
+	#include <driver/serial.h>
 }
 
 #include <stdint.h>
@@ -43,12 +44,12 @@ class PeripheralComponentInterconnectController{
 		PeripheralComponentInterconnectController();
 		~PeripheralComponentInterconnectController();
 		
-		uint32_t Read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset);
-		void Write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value);
-		bool DeviceHasFunctions(uint16_t bus, uint16_t device);
-		PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(uint16_t bus, uint16_t device, uint16_t function);
-		BaseAddressRegister GetBaseAddresRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar);
-		void PrintDevices();
+		uint32_t read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset);
+		void write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value);
+		bool device_has_functions(uint16_t bus, uint16_t device);
+		PeripheralComponentInterconnectDeviceDescriptor get_device_descriptor(uint16_t bus, uint16_t device, uint16_t function);
+		BaseAddressRegister get_base_addres_register(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar);
+		void print_devices();
 	
 };
 

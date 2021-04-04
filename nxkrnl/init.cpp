@@ -78,16 +78,16 @@ extern "C" void init(struct multiboot_info *mb_info){
 	debug_write("Adding keyboard driver!");
 	InterruptKeyboardEventHandler kbhandler;
 	KeyboardDriver keyboard_driver(&kbhandler);
-	drvManager.AddDriver(&keyboard_driver);
+	drvManager.add_driver(&keyboard_driver);
 
 	debug_write("Adding mouse driver!");
 	InterruptMouseEventHandler mshandler;
 	MouseDriver mouse_driver(&mshandler);
-	drvManager.AddDriver(&mouse_driver);
+	drvManager.add_driver(&mouse_driver);
 
 	debug_write("Adding pit driver!");
 	ProgrammableIntervalTimerDriver pit_driver(5);
-	drvManager.AddDriver(&pit_driver);
+	drvManager.add_driver(&pit_driver);
 
 	debug_write("Adding ata drivers!");
 	AdvancedTechnologyAttachment ata0m(true, 0x1F0, "ata0m");
@@ -95,16 +95,16 @@ extern "C" void init(struct multiboot_info *mb_info){
 	AdvancedTechnologyAttachment ata1m(true, 0x170, "ata1m");
 	AdvancedTechnologyAttachment ata1s(false, 0x170, "ata1s");
 
-	drvManager.AddDriver(&ata0m);
-	drvManager.AddDriver(&ata0s);
-	drvManager.AddDriver(&ata1m);
-	drvManager.AddDriver(&ata1s);
+	drvManager.add_driver(&ata0m);
+	drvManager.add_driver(&ata0s);
+	drvManager.add_driver(&ata1m);
+	drvManager.add_driver(&ata1s);
 	
 	PeripheralComponentInterconnectController PCIController;
-	//kprintf("Found PCI Devices:\n");
-	//PCIController.PrintDevices();
+	PCIController.print_devices();
+
 	debug_write("Activating all drivers!");
-	drvManager.ActivateAll(global_kernel_info.force);
+	drvManager.activate_all(global_kernel_info.force);
 	
 	debug_write("Initializing multitasking!");
 	init_multitasking(mb_info);

@@ -47,7 +47,7 @@ class MouseDriver : public InterruptHandler, public Driver{
         long x = 0;
         long y = 0;
 
-        virtual void Handle();
+        virtual void handle();
 		virtual void activate();
 		virtual bool is_presend();
 		virtual char* get_name();

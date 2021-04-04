@@ -10,31 +10,31 @@ AdvancedTechnologyAttachment::~AdvancedTechnologyAttachment() {
 }
 
 bool AdvancedTechnologyAttachment::is_presend() {
-	devicePort.Write(master ? 0xA0 : 0xB0);
-	controlPort.Write(0);
+	devicePort.write(master ? 0xA0 : 0xB0);
+	controlPort.write(0);
 	
-	devicePort.Write(0xA0);
-	uint8_t status = commandPort.Read();
+	devicePort.write(0xA0);
+	uint8_t status = commandPort.read();
 	if(status == 0xFF) {
 		return false;
 	}
 	
 	
-	devicePort.Write(master ? 0xA0 : 0xB0);
-	sectorCountPort.Write(0);
-	lbaLowPort.Write(0);
-	lbaMidPort.Write(0);
-	lbaHiPort.Write(0);
-	commandPort.Write(0xEC); // identify command
+	devicePort.write(master ? 0xA0 : 0xB0);
+	sectorCountPort.write(0);
+	lbaLowPort.write(0);
+	lbaMidPort.write(0);
+	lbaHiPort.write(0);
+	commandPort.write(0xEC); // identify command
 	
 	
-	status = commandPort.Read();
+	status = commandPort.read();
 	if(status == 0x00) {
 		return false;
 	}
 	
 	while(((status & 0x80) == 0x80) && ((status & 0x01) != 0x01)) {
-		status = commandPort.Read();
+		status = commandPort.read();
 	}
 		
 	if(status & 0x01) {
@@ -43,7 +43,7 @@ bool AdvancedTechnologyAttachment::is_presend() {
 
 	
 	for(int i = 0; i < 256; i++) {
-		uint16_t data = dataPort.Read();
+		uint16_t data = dataPort.read();
 		char *text = "  \0";
 		text[0] = (data >> 8) & 0xFF;
 		text[1] = data & 0xFF;
@@ -67,20 +67,20 @@ void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int co
 		return;
 	}
 	
-	devicePort.Write((master ? 0xE0 : 0xF0) | ((sector & 0x0F000000) >> 24));
-	errorPort.Write(0);
-	sectorCountPort.Write(1);
+	devicePort.write((master ? 0xE0 : 0xF0) | ((sector & 0x0F000000) >> 24));
+	errorPort.write(0);
+	sectorCountPort.write(1);
 	
-	lbaLowPort.Write(sector & 0x000000FF);
-	lbaMidPort.Write((sector & 0x0000FF00) >> 8);
-	lbaHiPort.Write((sector & 0x00FF0000) >> 16);
-	commandPort.Write(0x20);
+	lbaLowPort.write(sector & 0x000000FF);
+	lbaMidPort.write((sector & 0x0000FF00) >> 8);
+	lbaHiPort.write((sector & 0x00FF0000) >> 16);
+	commandPort.write(0x20);
 	
 	
 	
-	uint8_t status = commandPort.Read();
+	uint8_t status = commandPort.read();
 	while(((status & 0x80) == 0x80) && ((status & 0x01) != 0x01)) {
-		status = commandPort.Read();
+		status = commandPort.read();
 	}
 	
 	if(status & 0x01) {
@@ -88,7 +88,7 @@ void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int co
 	}
 	
 	for(uint16_t i = 0; i < count; i += 2) {
-		uint16_t wdata = dataPort.Read();
+		uint16_t wdata = dataPort.read();
 		
 		data[i] = wdata & 0x00FF;
 		if(i + 1 < count) {
@@ -97,7 +97,7 @@ void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int co
 	}
 	
 	for(uint16_t i = count + (count % 2); i < bytesPerSector; i+= 2) {
-		dataPort.Read();
+		dataPort.read();
 	}
 }
 
@@ -110,13 +110,13 @@ void AdvancedTechnologyAttachment::Write28(uint32_t sectorNum, uint8_t* data, ui
 	}
 	
 	
-	devicePort.Write((master ? 0xE0 : 0xF0) | ((sectorNum & 0x0F000000) >> 24));
-	errorPort.Write(0);
-	sectorCountPort.Write(1);
-	lbaLowPort.Write(sectorNum & 0x000000FF);
-	lbaMidPort.Write((sectorNum & 0x0000FF00) >> 8);
-	lbaLowPort.Write((sectorNum & 0x00FF0000) >> 16);
-	commandPort.Write(0x30);
+	devicePort.write((master ? 0xE0 : 0xF0) | ((sectorNum & 0x0F000000) >> 24));
+	errorPort.write(0);
+	sectorCountPort.write(1);
+	lbaLowPort.write(sectorNum & 0x000000FF);
+	lbaMidPort.write((sectorNum & 0x0000FF00) >> 8);
+	lbaLowPort.write((sectorNum & 0x00FF0000) >> 16);
+	commandPort.write(0x30);
 
 
 	for(int i = 0; i < (int) count; i += 2) {
@@ -124,26 +124,26 @@ void AdvancedTechnologyAttachment::Write28(uint32_t sectorNum, uint8_t* data, ui
 		if(i + 1 < (int) count) {
 			wdata |= ((uint16_t)data[i + 1]) << 8;
 		}
-		dataPort.Write(wdata);
+		dataPort.write(wdata);
 	}
 	
 	for(int i = count + (count % 2); i < 512; i += 2) {
-		dataPort.Write(0x0000);
+		dataPort.write(0x0000);
 	}
 
 }
 
 void AdvancedTechnologyAttachment::Flush() {
-	devicePort.Write(master ? 0xE0 : 0xF0);
-	commandPort.Write(0xE7);
+	devicePort.write(master ? 0xE0 : 0xF0);
+	commandPort.write(0xE7);
 
-	uint8_t status = commandPort.Read();
+	uint8_t status = commandPort.read();
 	if(status == 0x00) {
 		return;
 	}
 	
 	while(((status & 0x80) == 0x80) && ((status & 0x01) != 0x01)) {
-		status = commandPort.Read();
+		status = commandPort.read();
 	}
 		
 	if(status & 0x01) {

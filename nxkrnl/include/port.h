@@ -9,8 +9,8 @@ class Port8Bit{
 		Port8Bit(uint16_t port);
 		~Port8Bit();
 		
-		void Write(uint8_t data);
-		uint8_t Read();
+		void write(uint8_t data);
+		uint8_t read();
 };
 
 class Port8BitSlow{
@@ -20,8 +20,8 @@ class Port8BitSlow{
 		Port8BitSlow(uint16_t port);
 		~Port8BitSlow();
 		
-		void Write(uint8_t data);
-		uint8_t Read();
+		void write(uint8_t data);
+		uint8_t read();
 };
 
 class Port16Bit{
@@ -31,8 +31,8 @@ class Port16Bit{
 		Port16Bit(uint16_t port);
 		~Port16Bit();
 		
-		void Write(uint16_t data);
-		uint16_t Read();
+		void write(uint16_t data);
+		uint16_t read();
 };
 
 class Port32Bit{
@@ -42,8 +42,8 @@ class Port32Bit{
 		Port32Bit(uint16_t port);
 		~Port32Bit();
 		
-		void Write(uint32_t data);
-		uint32_t Read();
+		void write(uint32_t data);
+		uint32_t read();
 };
 
 #endif

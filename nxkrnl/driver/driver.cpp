@@ -24,12 +24,12 @@ DriverManager::DriverManager(){
 	num_drivers = 0;
 }
 
-void DriverManager::AddDriver(Driver* drv){
+void DriverManager::add_driver(Driver* drv){
 	drivers[num_drivers] = drv;
 	num_drivers++;
 }
 
-void DriverManager::ActivateAll(bool force){
+void DriverManager::activate_all(bool force){
 	for(int i = 0; i < num_drivers; i++) {
 		kprintf("Loading %s driver at index %d!", drivers[i]->get_name(), i);
 		char base[1000] = "Loading driver: ";

@@ -8,42 +8,42 @@ PeripheralComponentInterconnectController::~PeripheralComponentInterconnectContr
 	
 }
 
-uint32_t PeripheralComponentInterconnectController::Read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset){
+uint32_t PeripheralComponentInterconnectController::read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset){
 	uint32_t id = 0x1 << 31 | ((bus & 0xFF) << 16) | ((device & 0x1F) << 11) | ((function & 0x07) << 8) | (registeroffset & 0xFC);
-	commandPort.Write(id);
-	uint32_t result = dataPort.Read();
+	commandPort.write(id);
+	uint32_t result = dataPort.read();
 	return result >> (8 * (registeroffset % 4));
 }
-void PeripheralComponentInterconnectController::Write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value){
+void PeripheralComponentInterconnectController::write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value){
 	uint32_t id = 0x1 << 31 | ((bus & 0xFF) << 16) | ((device & 0x1F) << 11) | ((function & 0x07) << 8) | (registeroffset & 0xFC);
-	commandPort.Write(id);
-	dataPort.Write(value);
+	commandPort.write(id);
+	dataPort.write(value);
 }
-bool PeripheralComponentInterconnectController::DeviceHasFunctions(uint16_t bus, uint16_t device){
-	return Read(bus, device, 0, 0x0e) & (1<<7);
+bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bus, uint16_t device){
+	return read(bus, device, 0, 0x0e) & (1<<7);
 }
-PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectController::GetDeviceDescriptor(uint16_t bus, uint16_t device, uint16_t function){
+PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectController::get_device_descriptor(uint16_t bus, uint16_t device, uint16_t function){
 	PeripheralComponentInterconnectDeviceDescriptor result;
 	result.bus = bus;
 	result.device = device;
 	result.function = function;
-	result.vendor_id = Read(bus, device, function, 0x00);
-	result.device_id = Read(bus, device, function, 0x02);
-	result.class_id = Read(bus, device, function, 0x0b);
-	result.subclass_id = Read(bus, device, function, 0x0a);
-	result.interface_id = Read(bus, device, function, 0x09);
-	result.revision = Read(bus, device, function, 0x08);
-	result.interrupt = Read(bus, device, function, 0x3c);
+	result.vendor_id = read(bus, device, function, 0x00);
+	result.device_id = read(bus, device, function, 0x02);
+	result.class_id = read(bus, device, function, 0x0b);
+	result.subclass_id = read(bus, device, function, 0x0a);
+	result.interface_id = read(bus, device, function, 0x09);
+	result.revision = read(bus, device, function, 0x08);
+	result.interrupt = read(bus, device, function, 0x3c);
 	return result;
 }
-BaseAddressRegister PeripheralComponentInterconnectController::GetBaseAddresRegister(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar){
+BaseAddressRegister PeripheralComponentInterconnectController::get_base_addres_register(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar){
 	BaseAddressRegister result;
-	uint32_t headertype = Read(bus, device, function, 0x0E) & 0x7F;
+	uint32_t headertype = read(bus, device, function, 0x0E) & 0x7F;
 	int maxBARs = 6 - (4*headertype);
 	if(bar >= maxBARs)
 		return result;
 
-	uint32_t bar_value = Read(bus, device, function, 0x10 + 4*bar);
+	uint32_t bar_value = read(bus, device, function, 0x10 + 4*bar);
 	result.type = (bar_value & 0x1) ? InputOutput : MemoryMapping;
 
 	if(result.type == MemoryMapping){
@@ -59,16 +59,17 @@ BaseAddressRegister PeripheralComponentInterconnectController::GetBaseAddresRegi
 	}
 	return result;
 }
-void PeripheralComponentInterconnectController::PrintDevices(){
+void PeripheralComponentInterconnectController::print_devices(){
+	debug_write("Found PCI Devices:");
 	for(int bus = 0; bus < 8; bus++){
 		for(int device = 0; device < 32; device++){
-			int numFunctions = DeviceHasFunctions(bus, device) ? 8 : 1;
+			int numFunctions = device_has_functions(bus, device) ? 8 : 1;
 			for(int function = 0; function < numFunctions; function++){
-				PeripheralComponentInterconnectDeviceDescriptor dev = GetDeviceDescriptor(bus, device, function);
+				PeripheralComponentInterconnectDeviceDescriptor dev = get_device_descriptor(bus, device, function);
 				if(dev.vendor_id == 0x0000 || dev.vendor_id == 0xFFFF)
                     continue;
 				
-				kprintf("bus: 0x%x, device: 0x%x, function: 0x%x, vendor: 0x%x, deviceid 0x%x\n", dev.bus, dev.device, dev.function, dev.vendor_id, dev.device_id);
+				kprintf_serial("bus: 0x%x, device: 0x%x, function: 0x%x, vendor: 0x%x, deviceid 0x%x\n", dev.bus, dev.device, dev.function, dev.vendor_id, dev.device_id);
 			}
 		}
 	}

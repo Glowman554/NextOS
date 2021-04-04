@@ -23,18 +23,18 @@ KeyboardDriver::KeyboardDriver(KeyboardEventHandler *handler) : InterruptHandler
 }
 
 void KeyboardDriver::activate(){
-	while(commandport.Read() & 0x1)
-		dataport.Read();
-	commandport.Write(0xae);
-	commandport.Write(0x20);
-	uint8_t status = (dataport.Read() | 1) & ~0x10;
-	commandport.Write(0x60);
-	dataport.Write(status);
-	dataport.Write(0xf4);
+	while(commandport.read() & 0x1)
+		dataport.read();
+	commandport.write(0xae);
+	commandport.write(0x20);
+	uint8_t status = (dataport.read() | 1) & ~0x10;
+	commandport.write(0x60);
+	dataport.write(status);
+	dataport.write(0xf4);
 }
 
-void KeyboardDriver::Handle(){
-	uint8_t key = dataport.Read();
+void KeyboardDriver::handle(){
+	uint8_t key = dataport.read();
 	if(handler == 0) {
 
 	} else if(key < 0x80){

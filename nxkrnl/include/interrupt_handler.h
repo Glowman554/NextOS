@@ -16,7 +16,7 @@ class InterruptHandler{
 		InterruptHandler(uint32_t itrn);
 		~InterruptHandler();
 	public:
-		virtual void Handle();
+		virtual void handle();
 };
 
 

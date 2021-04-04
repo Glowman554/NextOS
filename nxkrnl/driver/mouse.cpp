@@ -23,7 +23,7 @@ MouseDriver::MouseDriver(MouseEventHandler *handler) : InterruptHandler(0x2c), d
 void MouseDriver::MouseWait() {
     uint32_t timeout = 1000;
     while (timeout--){
-        if ((commandport.Read() & 0b10) == 0){
+        if ((commandport.read() & 0b10) == 0){
             return;
         }
     }
@@ -32,7 +32,7 @@ void MouseDriver::MouseWait() {
 void MouseDriver::MouseWaitInput() {
     uint32_t timeout = 1000;
     while (timeout--){
-        if (commandport.Read() & 0b1){
+        if (commandport.read() & 0b1){
             return;
         }
     }
@@ -40,34 +40,34 @@ void MouseDriver::MouseWaitInput() {
 
 void MouseDriver::MouseWrite(uint8_t value) {
     MouseWait();
-    commandport.Write(0xD4);
+    commandport.write(0xD4);
     MouseWait();
-    dataport.Write(value);
+    dataport.write(value);
 }
 
 uint8_t MouseDriver::MouseRead() {
     MouseWaitInput();
-    return dataport.Read();
+    return dataport.read();
 }
 
 void MouseDriver::activate() {
-    commandport.Write(0xa8);
+    commandport.write(0xa8);
     MouseWait();
-    commandport.Write(0x20);
+    commandport.write(0x20);
     MouseWaitInput();
-    uint8_t status = dataport.Read();
+    uint8_t status = dataport.read();
     status |= 0b10;
     MouseWait();
-    commandport.Write(0x60);
+    commandport.write(0x60);
     MouseWait();
-    dataport.Write(status);
+    dataport.write(status);
     MouseWrite(0xf6);
     MouseRead();
     MouseWrite(0xf4);
     MouseRead();
 }
 
-void MouseDriver::Handle() {
+void MouseDriver::handle() {
     uint8_t data = MouseRead();
 
     //kprintf("%d", mouse_cycle);

@@ -10,7 +10,7 @@ extern "C"{
 extern "C" void do_handle_interrupt(uint32_t interrupt_num){
 	//kprintf("Interrupt 0x%x\n", interrupt_num);
 	if(handlers[interrupt_num] != 0)
-		handlers[interrupt_num]->Handle();
+		handlers[interrupt_num]->handle();
 }
 
 InterruptHandler::InterruptHandler(uint32_t itrn){
@@ -26,6 +26,6 @@ InterruptHandler::~InterruptHandler(){
 		handlers[int_num] = 0;
 }
 
-void InterruptHandler::Handle(){
+void InterruptHandler::handle(){
 	
 }

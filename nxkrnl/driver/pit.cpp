@@ -10,10 +10,10 @@ ProgrammableIntervalTimerDriver::~ProgrammableIntervalTimerDriver() {
 
 void ProgrammableIntervalTimerDriver::activate() {
 	int counter = 1193182 / this->frequency;
-	this->init_port.Write(0x34);
+	this->init_port.write(0x34);
 
-	this->counter0_port.Write(counter & 0xff);
-	this->counter0_port.Write(counter >> 8);
+	this->counter0_port.write(counter & 0xff);
+	this->counter0_port.write(counter >> 8);
 }
 
 

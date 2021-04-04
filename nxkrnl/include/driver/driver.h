@@ -25,8 +25,8 @@ class DriverManager{
 		int num_drivers;
 	public:
 		DriverManager();
-		void AddDriver(Driver* drv);
-		void ActivateAll(bool force);
+		void add_driver(Driver* drv);
+		void activate_all(bool force);
 };
 
 #endif
