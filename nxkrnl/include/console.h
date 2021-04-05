@@ -46,6 +46,7 @@
 #define BACKGROUND_BLINKINGWHITE 0xF0
 
 extern bool scrole;
+extern uint32_t color;
 
 void setx(int i);
 void sety(int i);

@@ -4,6 +4,8 @@ void drawinfo() {
 
 	scrole = false;
 
+	uint32_t old_color = color;
+
 	char buffer[75];
 
 	sprintf(buffer, "Running proceses: %d, Timer tick: %d, Kernel version: %d", proccount, get_timer_tick(), VERSION);
@@ -27,7 +29,7 @@ void drawinfo() {
 	sety(old_y);
 	setx(old_x);
 
-	setcolor(BACKGROUND_BLACK | FOREGROUND_WHITE);
+	setcolor(old_color);
 
 	scrole = true;
 }
