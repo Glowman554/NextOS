@@ -67,3 +67,12 @@ void DriverManager::activate_all(bool force){
 		}
 	}
 }
+
+Driver* DriverManager::find_driver_by_name(char* name) {
+	for (int i = 0; i < num_drivers; i++) {
+		if(strcmp(drivers[i]->get_name(), name) == 0) {
+			return drivers[i];
+		}
+	}
+	return nullptr;
+}

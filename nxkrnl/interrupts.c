@@ -146,6 +146,8 @@ struct cpu_state* handle_interrupt(struct cpu_state* cpu){
 	struct cpu_state* new_cpu = cpu;
 	if(cpu->intr <= 0x1f){
 		print_exception(cpu->intr);
+        extern void dump_kernel_panic(struct cpu_state* cpu);
+        dump_kernel_panic(cpu);
 		if(is_vga_active()){
 			
 			vga_kprintf("eax: 0x%x, ebx: 0x%x\necx: 0x%x, edx: 0x%x\n", cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);

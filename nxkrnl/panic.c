@@ -74,7 +74,7 @@ void print_exception(int intr){
 		set_vga_color(VGA_WHITE, VGA_BLUE);
 		clear_vga();
 		vga_kprintf("Kernel PANIC:\nExcpetion 0x%x -> %s\n", intr, get_exception_name(intr));
-	}
-	else
+	} else {
 		kprintf("Kernel PANIC: Excpetion 0x%x -> %s\n", intr, get_exception_name(intr));
+    }
 }

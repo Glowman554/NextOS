@@ -6,7 +6,7 @@
 #include <driver/vga.h>
 #include <stdbool.h>
 
-
+char* get_exception_name(int exc);
 void print_exception(int intr);
 
 #endif

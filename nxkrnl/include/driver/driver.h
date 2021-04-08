@@ -27,6 +27,7 @@ class DriverManager{
 		DriverManager();
 		void add_driver(Driver* drv);
 		void activate_all(bool force);
+        Driver* find_driver_by_name(char* name);
 };
 
 #endif
