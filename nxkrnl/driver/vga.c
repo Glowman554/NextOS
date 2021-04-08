@@ -259,6 +259,25 @@ const int LSB[256][14]={
 {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00} 	// 0xFF
 };
 
+unsigned char g_320x200x256[] = {
+/* MISC */
+	0x63,
+/* SEQ */
+ 	0x03, 0x01, 0x0F, 0x00, 0x0E,
+/* CRTC */
+	0x5F, 0x4F, 0x50, 0x82, 0x54, 0x80, 0xBF, 0x1F,
+	0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x9C, 0x0E, 0x8F, 0x28, 0x40, 0x96, 0xB9, 0xA3,
+	0xFF,
+/* GC */
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x05, 0x0F,
+	0xFF,
+/* AC */
+	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+	0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+	0x41, 0x00, 0x0F, 0x00, 0x00
+};
+
 unsigned char* VGA = (unsigned char*) 0xA0000;
 int vga_x = 0;
 int vga_y = 0;
@@ -268,13 +287,81 @@ bool vga_active = false;
 uint32_t vga_fgcolor = VGA_WHITE;
 uint32_t vga_bgcolor = VGA_BLACK;
 
+void vga_write_registers(uint8_t* regs) {
+	outb(MISC_PORT, *(regs++));
+
+	for (uint8_t i = 0; i < 5; i++) {
+		outb(SEQUENCER_INDEX_PORT, i);
+		outb(SEQUENCER_DATA_PORT, *(regs++));
+	}
+
+	outb(CRTC_INDEX_PORT, 0x03);
+	outb(CRTC_DATA_PORT, inb(CRTC_DATA_PORT) | 0x80);
+	outb(CRTC_INDEX_PORT, 0x11);
+	outb(CRTC_DATA_PORT, inb(CRTC_DATA_PORT) & ~0x80);
+
+	regs[0x03] = regs[0x03] | 0x80;
+	regs[0x11] = regs[0x11] & ~0x80;
+
+	for (uint8_t i = 0; i < 25; i++) {
+		outb(CRTC_INDEX_PORT, i);
+		outb(CRTC_DATA_PORT, *(regs++));
+	}
+
+	for (uint8_t i = 0; i < 9; i++) {
+		outb(GRAPHICS_CONTROLLER_INDEX_PORT, i);
+		outb(GRAPHICS_CONTROLLER_DATA_PORT, *(regs++));
+	}
+
+	for (uint8_t i = 0; i < 21; i++) {
+		inb(ATTRIBUTE_CONTROLLER_RESET_PORT);
+		outb(ATTRIBUTE_CONTROLLER_INDEX_PORT, i);
+		outb(ATTRIBUTE_CONTROLLER_WRITE_PORT, *(regs++));
+	}
+
+	inb(ATTRIBUTE_CONTROLLER_RESET_PORT);
+	outb(ATTRIBUTE_CONTROLLER_INDEX_PORT, 0x20);
+}
+
+unsigned char* get_framebuffer() {
+	outb(GRAPHICS_CONTROLLER_INDEX_PORT, 0x06);
+	uint8_t segment_number = inb(GRAPHICS_CONTROLLER_DATA_PORT) & (3 << 2);
+
+	switch (segment_number) {
+		case 0 << 2:
+			return (unsigned char*) 0x00000;
+		case 1 << 2:
+			return (unsigned char*) 0xa0000;
+		case 2 << 2:
+			return (unsigned char*) 0xb0000;
+		case 3 << 2:
+			return (unsigned char*) 0xb8000;
+		default:
+			return NULL;
+	}
+}
+
 void init_vga(){
-	regs16_t regs;
-	//			x   y  color
-	// switch to 320x200x256 graphics mode
-	regs.ax = 0x0013;
-	int32(0x10, &regs);
+
+	if(VGA_MODE_METHOD == VGA_NEW) {
+		vga_write_registers(g_320x200x256);
+		VGA = get_framebuffer();
+	} else {
+
+		regs16_t regs;
+		//			x   y  color
+		// switch to 320x200x256 graphics mode
+		regs.ax = 0x0013;
+		int32(0x10, &regs);
+	}
+
+	clear_vga();
+
 	vga_active = true;
+
+	char buffer[500];
+	sprintf(buffer, "Initialized vga mode with method %s framebuffer located at 0x%x!", VGA_MODE_METHOD ? "new" : "old", (unsigned int) VGA);
+	debug_write(buffer);
 }
 
 void set_vga_color(uint32_t fgcolor, uint32_t bgcolor){
@@ -341,7 +428,7 @@ void vga_kputc(char c){
 	}
 	
 	if(vga_y > 12){
-		clear_vga(0);
+		clear_vga();
 	}
 	
 	draw_char(c, 1 + (vga_x * 8), 1 + (vga_y * 14));
