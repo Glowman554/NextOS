@@ -109,7 +109,7 @@ int init_elf(void* image){
 	int i;
 
 	if (header->magic != ELF_MAGIC) {
-		kprintf("Keine gueltige ELF-Magic!\n");
+		kprintf("Found invalid ELF-Magic!\n");
 		return 1;
 	}
 
