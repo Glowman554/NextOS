@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: Glowman554/setup-nasm@v1
     - name: setup
-      run: sudo apt install genisoimage qemu-img
+      run: sudo apt install genisoimage qemu-utils -y
     - name: make
       run: make iso
     - uses: marvinpinto/action-automatic-releases@latest
