@@ -1,5 +1,24 @@
 #include <driver/ata.h>
 
+extern "C" bool write_file(char* driver_name, char* file_name, char* file_content) {
+	extern DriverManager* global_driver_manager;
+	AdvancedTechnologyAttachment* ata = (AdvancedTechnologyAttachment*) global_driver_manager->find_driver_by_name(driver_name);
+
+	if(ata->is_presend()) {
+		NextFS fs = NextFS(ata);
+		if(fs.is_next_fs()) {
+			char buffer[1000];
+			sprintf(buffer, "Writing file %s to %s!", file_name, driver_name);
+			debug_write(buffer);
+
+			fs.new_text_file(file_name, file_content);
+			return true;
+		}
+	}
+	return false;
+}
+
+
 AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(bool master, uint16_t portBase, char* name): dataPort(portBase), errorPort(portBase + 0x1), sectorCountPort(portBase + 0x2), lbaLowPort(portBase + 0x3), lbaMidPort(portBase + 0x4), lbaHiPort(portBase + 0x5), devicePort(portBase + 0x6), commandPort(portBase + 0x7), controlPort(portBase + 0x206) {
 	this->name = name;
 	this->master = master;

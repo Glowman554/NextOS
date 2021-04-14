@@ -1,3 +1,4 @@
 (
-	print "Hello fe world!"
+	write_file "ata0m" "hello.txt" "Hello nice fe world im abel to write text files now :D!"
+	(print "Hello world!")
 )

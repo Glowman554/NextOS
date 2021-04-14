@@ -9,11 +9,32 @@ extern "C" void run_fe(char* code) {
 	run_fe(&code_obj);
 }
 
+extern "C" bool write_file(char* driver_name, char* file_name, char* file_content);
+
+static fe_Object* f_write_file(fe_Context *ctx, fe_Object *arg) {
+	char* driver = (char*) pmm_alloc();
+	char* file = (char*) pmm_alloc();
+	char* content = (char*) pmm_alloc();
+	fe_tostring(ctx, fe_nextarg(ctx, &arg), driver, 4096);
+	fe_tostring(ctx, fe_nextarg(ctx, &arg), file, 4096);
+	fe_tostring(ctx, fe_nextarg(ctx, &arg), content, 4096);
+
+	bool res = write_file(driver, file, content);
+
+	pmm_free(driver);
+	pmm_free(file);
+	pmm_free(content);
+
+	return fe_number(ctx, res);
+}
+
 void run_fe(fe_Code* code_ptr) {
 
 	char* buf = (char*) pmm_alloc();
 
 	fe_Context *ctx = fe_open(buf, 4096);
+
+	fe_set(ctx, fe_symbol(ctx, "write_file"), fe_cfunc(ctx, f_write_file));
 
 	int gc = fe_savegc(ctx);
 

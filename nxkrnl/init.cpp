@@ -56,21 +56,7 @@ class InterruptMouseEventHandler : public MouseEventHandler {
 
 DriverManager* global_driver_manager;
 
-void write_file(char* driver_name, char* file_name, char* file_content) {
-	AdvancedTechnologyAttachment* ata = (AdvancedTechnologyAttachment*) global_driver_manager->find_driver_by_name(driver_name);
-
-	if(ata->is_presend()) {
-		NextFS fs = NextFS(ata);
-		if(fs.is_next_fs()) {
-			char buffer[1000];
-			sprintf(buffer, "Writing file %s to %s!", file_name, driver_name);
-			debug_write(buffer);
-
-			fs.new_text_file(file_name, file_content);
-		}
-	}
-}
-
+/*
 extern "C" void dump_kernel_panic(cpu_state* cpu) {
 	char buffer1[200];
 	char buffer2[4096];
@@ -116,6 +102,7 @@ extern "C" void dump_kernel_panic(cpu_state* cpu) {
 	write_file("ata1m", buffer3, buffer2);
 	write_file("ata1s", buffer3, buffer2);
 }
+*/
 
 extern "C" void init(struct multiboot_info *mb_info){
 	
