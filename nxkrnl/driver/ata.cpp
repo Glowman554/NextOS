@@ -7,10 +7,7 @@ extern "C" bool write_file(char* driver_name, char* file_name, char* file_conten
 	if(ata->is_presend()) {
 		NextFS fs = NextFS(ata);
 		if(fs.is_next_fs()) {
-			char buffer[1000];
-			sprintf(buffer, "Writing file %s to %s!", file_name, driver_name);
-			debug_write(buffer);
-
+			debug_write("Writing file %s to %s!", file_name, driver_name);
 			fs.new_text_file(file_name, file_content);
 			return true;
 		}
@@ -79,16 +76,8 @@ void AdvancedTechnologyAttachment::activate() {
 
 	NextFS fs = NextFS(this);
 
-	char buffer[1000];
-	sprintf(buffer, "Is nextfs: %s!", fs.is_next_fs() ? "true" : "false");
-	debug_write(buffer);
+	debug_write("Is nextfs: %s!", fs.is_next_fs() ? "true" : "false");
 
-	if(!fs.is_next_fs()) {
-		if(global_kernel_info.auto_format) {
-			fs.format(global_kernel_info.format_label);
-		}
-	}
-	
 	fs.print_fs_info();
 }
 

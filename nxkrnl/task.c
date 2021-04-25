@@ -15,9 +15,7 @@ int proccount = 0;
 char nextpid = 1;
 
 void task_exit(int code){
-	char buffer[100];
-	sprintf(buffer, "[%d] Exit Task with error code %d!", current_task->pid, code);
-	debug_write(buffer);
+	debug_write("[%d] Exit Task with error code %d!", current_task->pid, code);
 	if(code == 1){
 		asm("int $0x1");
 	}
@@ -62,9 +60,7 @@ void mouse_handle_button(int button) {
 }
 
 struct task* init_task(void* entry){
-	char buffer[100];
-	sprintf(buffer, "Initializing task at 0x%x!", (uint32_t) entry);
-	debug_write(buffer);
+	debug_write("Initializing task at 0x%x!", (uint32_t) entry);
 	uint8_t* stack = pmm_alloc();
 	uint8_t* user_stack = pmm_alloc();
 
@@ -101,9 +97,7 @@ struct task* init_task(void* entry){
 }
 
 int init_elf(void* image){
-	char buffer[100];
-	sprintf(buffer, "Loading elf image at 0x%x!", (uint32_t) image);
-	debug_write(buffer);
+	debug_write("Loading elf image at 0x%x!", (uint32_t) image);
 	struct elf_header* header = image;
 	struct elf_program_header* ph;
 	int i;

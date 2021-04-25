@@ -21,6 +21,8 @@ extern "C"{
 #include <multiboot.h>
 #include <pci.h>
 
+char debug_write_buffer[1000];
+
 
 struct multiboot_info *pmb_info;
 bool is_init_done = false;
@@ -115,31 +117,31 @@ extern "C" void init(struct multiboot_info *mb_info){
 	global_kernel_info = parse_arguments((char*) mb_info->mbs_cmdline, parser_buffer);
 	
 	pmb_info = mb_info;
-	debug_write("Setting global multiboot pointer!");
-	debug_write("Initializing memory!");
+	debug_write_lame("Setting global multiboot pointer!");
+	debug_write_lame("Initializing memory!");
 	pmm_init(mb_info);
-	debug_write("Initializing GDT!");
+	debug_write_lame("Initializing GDT!");
 	init_gdt();
-	debug_write("Initializing interrupts!");
+	debug_write_lame("Initializing interrupts!");
 	init_intr();
 	 
 	DriverManager drv_manager;
 
-	debug_write("Adding keyboard driver!");
+	debug_write_lame("Adding keyboard driver!");
 	InterruptKeyboardEventHandler kbhandler;
 	KeyboardDriver keyboard_driver(&kbhandler);
 	drv_manager.add_driver(&keyboard_driver);
 
-	debug_write("Adding mouse driver!");
+	debug_write_lame("Adding mouse driver!");
 	InterruptMouseEventHandler mshandler;
 	MouseDriver mouse_driver(&mshandler);
 	drv_manager.add_driver(&mouse_driver);
 
-	debug_write("Adding pit driver!");
+	debug_write_lame("Adding pit driver!");
 	ProgrammableIntervalTimerDriver pit_driver(5);
 	drv_manager.add_driver(&pit_driver);
 
-	debug_write("Adding ata drivers!");
+	debug_write_lame("Adding ata drivers!");
 	AdvancedTechnologyAttachment ata0m(true, 0x1F0, "ata0m");
 	AdvancedTechnologyAttachment ata0s(false, 0x1F0, "ata0s");
 	AdvancedTechnologyAttachment ata1m(true, 0x170, "ata1m");
@@ -153,21 +155,21 @@ extern "C" void init(struct multiboot_info *mb_info){
 	PeripheralComponentInterconnectController pci_controller;
 	pci_controller.print_devices();
 
-	debug_write("Activating all drivers!");
+	debug_write_lame("Activating all drivers!");
 	drv_manager.activate_all(global_kernel_info.force);
 	
-	debug_write("Setting global driver manager pointer!");
+	debug_write_lame("Setting global driver manager pointer!");
 	global_driver_manager = &drv_manager;
 
-	debug_write("Initializing multitasking!");
+	debug_write_lame("Initializing multitasking!");
 	init_multitasking(mb_info);
 	
 	//asm volatile("int $0x1");
 
-	debug_write("Loading autoexec!");
+	debug_write_lame("Loading autoexec!");
 	exec_file(global_kernel_info.autoexec);
 
-	debug_write("Setting is_init_done to true!");
+	debug_write_lame("Setting is_init_done to true!");
 	is_init_done = true;
 
 	while(1);

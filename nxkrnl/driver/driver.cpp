@@ -32,12 +32,11 @@ void DriverManager::add_driver(Driver* drv){
 void DriverManager::activate_all(bool force){
 	for(int i = 0; i < num_drivers; i++) {
 		kprintf("Loading %s driver at index %d!", drivers[i]->get_name(), i);
-		char base[1000] = "Loading driver: ";
-		debug_write(strcat(base, drivers[i]->get_name()));
+		debug_write("Loading driver: %s", drivers[i]->get_name());
 		if(force) {
-			debug_write("Type: force!");
+			debug_write_lame("Type: force!");
 			drivers[i]->activate();
-			debug_write("Done!\n");
+			debug_write_lame("Done!\n");
 			setx(80 - 8);
 			kprintf("[");
 			setcolor(BACKGROUND_BLACK | FOREGROUND_CYAN);
@@ -46,9 +45,9 @@ void DriverManager::activate_all(bool force){
 			kprintf("]\n");
 		} else {
 			if(drivers[i]->is_presend()) {
-				debug_write("Type: normal!");
+				debug_write_lame("Type: normal!");
 				drivers[i]->activate();
-				debug_write("Done!\n");
+				debug_write_lame("Done!\n");
 				setx(80 - 5);
 				kprintf("[");
 				setcolor(BACKGROUND_BLACK | FOREGROUND_GREEN);
@@ -56,7 +55,7 @@ void DriverManager::activate_all(bool force){
 				setcolor(BACKGROUND_BLACK | FOREGROUND_WHITE);
 				kprintf("]\n");
 			} else {
-				debug_write("Not loading driver!\n");
+				debug_write_lame("Not loading driver!\n");
 				setx(80 - 7);
 				kprintf("[");
 				setcolor(BACKGROUND_BLACK | FOREGROUND_RED);

@@ -350,9 +350,7 @@ void init_vga(){
 
 	vga_active = true;
 
-	char buffer[500];
-	sprintf(buffer, "Initialized vga mode with framebuffer located at 0x%x!", (unsigned int) VGA);
-	debug_write(buffer);
+	debug_write("Initialized vga mode with framebuffer located at 0x%x!", (unsigned int) VGA);
 }
 
 void set_vga_color(uint32_t fgcolor, uint32_t bgcolor){

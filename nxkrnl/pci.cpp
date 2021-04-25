@@ -60,7 +60,7 @@ BaseAddressRegister PeripheralComponentInterconnectController::get_base_addres_r
 	return result;
 }
 void PeripheralComponentInterconnectController::print_devices(){
-	debug_write("Found PCI Devices:");
+	debug_write_lame("Found PCI Devices:");
 	for(int bus = 0; bus < 8; bus++){
 		for(int device = 0; device < 32; device++){
 			int numFunctions = device_has_functions(bus, device) ? 8 : 1;
@@ -69,7 +69,7 @@ void PeripheralComponentInterconnectController::print_devices(){
 				if(dev.vendor_id == 0x0000 || dev.vendor_id == 0xFFFF)
 					continue;
 				
-				kprintf_serial("bus: 0x%x, device: 0x%x, function: 0x%x, vendor: 0x%x, deviceid 0x%x\n", dev.bus, dev.device, dev.function, dev.vendor_id, dev.device_id);
+				debug_write("bus: 0x%x, device: 0x%x, function: 0x%x, vendor: 0x%x, deviceid 0x%x\n", dev.bus, dev.device, dev.function, dev.vendor_id, dev.device_id);
 			}
 		}
 	}

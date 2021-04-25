@@ -26,14 +26,10 @@ NextFS::~NextFS() {
 }
 
 void NextFS::print_fs_info() {
-	char buffer[1000];
-	sprintf(buffer, "[%s][%s] current sector: %d, file header idx: %d!", this->header->origin, this->header->name, this->header->current_sector, this->header->file_header_index);
-	debug_write(buffer);
+	debug_write("[%s][%s] current sector: %d, file header idx: %d!", this->header->origin, this->header->name, this->header->current_sector, this->header->file_header_index);
 
 	for(int i = 1; i < this->header->file_header_index; i++) {
-		char buffer2[1000];
-		sprintf(buffer2, "[%s] length: %d, start sector: %d!", this->file_array[i].name, this->file_array[i].length, this->file_array[i].start_sector);
-		debug_write(buffer2);
+		debug_write("[%s] length: %d, start sector: %d!", this->file_array[i].name, this->file_array[i].length, this->file_array[i].start_sector);
 	}
 }
 
@@ -68,7 +64,7 @@ void NextFS::new_text_file(char* name, char* data) {
 void NextFS::read_text_file(char* name, char* data) {
 	for(int i = 1; i < this->header->file_header_index; i++) {
 		if(strcmp(this->file_array[i].name, name) == 0) {
-			debug_write("Found file in fs!");
+			debug_write_lame("Found file in fs!");
 
 			int sectors_needed = this->file_array[i].length / 512;
 
