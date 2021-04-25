@@ -10,11 +10,11 @@ KeyboardEventHandler::KeyboardEventHandler(){
 	
 }
 
-void KeyboardEventHandler::KeyUp(char){
+void KeyboardEventHandler::key_up(char){
 	
 }
 
-void KeyboardEventHandler::KeyDown(char){
+void KeyboardEventHandler::key_down(char){
 	
 }
 
@@ -50,7 +50,7 @@ void KeyboardDriver::handle(){
 			default:
 				charcode = keymap_de(key, this->l_shift);
 				if(charcode != 0) {
-					handler->KeyDown(charcode);
+					handler->key_down(charcode);
 				}
 				break;
 		}

@@ -2,11 +2,6 @@
 
 InterruptHandler* handlers[256];
 
-
-extern "C"{
-	#include <console.h>
-}
-
 extern "C" void do_handle_interrupt(uint32_t interrupt_num){
 	//kprintf("Interrupt 0x%x\n", interrupt_num);
 	if(handlers[interrupt_num] != 0)

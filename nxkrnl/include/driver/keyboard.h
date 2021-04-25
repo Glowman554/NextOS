@@ -10,8 +10,8 @@ class KeyboardEventHandler{
 	public:
 		KeyboardEventHandler();
 		
-		virtual void KeyDown(char);
-		virtual void KeyUp(char);
+		virtual void key_down(char);
+		virtual void key_up(char);
 };
 
 class KeyboardDriver : public InterruptHandler, public Driver{

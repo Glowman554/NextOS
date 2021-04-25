@@ -38,7 +38,6 @@ char* syscall_names[] = {
 	"set kb handler",
 	"set mouse handler",
 	"get pixel",
-	"run fe"
 };
 
 struct cpu_state* syscall(struct cpu_state* cpu){
@@ -171,9 +170,6 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 			break;
 		case SYSCALL_GETPIXEL:
 			cpu->edx = getpixel(cpu->ebx, cpu->ecx);
-			break;
-		case SYSCALL_RUN_FE:
-			run_fe((char*) cpu->ebx);
 			break;
 	}
 

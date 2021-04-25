@@ -20,8 +20,8 @@ enum MouseButtons {
 class MouseEventHandler {
 	public:
 		MouseEventHandler();
-		virtual void OnMouseDown(uint8_t button);
-		virtual void OnMouseMove(long x, long y);
+		virtual void on_mouse_down(uint8_t button);
+		virtual void on_mouse_move(long x, long y);
 };
 
 class MouseDriver : public InterruptHandler, public Driver{
@@ -31,10 +31,10 @@ class MouseDriver : public InterruptHandler, public Driver{
 		
 		MouseEventHandler* handler;
 
-		void MouseWait();
-		void MouseWaitInput();
-		void MouseWrite(uint8_t value);
-		uint8_t MouseRead();
+		void mouse_wait();
+		void mouse_wait_input();
+		void mouse_write(uint8_t value);
+		uint8_t mouse_read();
 
 		uint8_t mouse_cycle = 0;
 		uint8_t mouse_packet[4];

@@ -92,7 +92,7 @@ void AdvancedTechnologyAttachment::activate() {
 	fs.print_fs_info();
 }
 
-void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int count) {
+void AdvancedTechnologyAttachment::read28(uint32_t sector, uint8_t* data, int count) {
 	if(sector & 0xF0000000) {
 		return;
 	}
@@ -134,7 +134,7 @@ void AdvancedTechnologyAttachment::Read28(uint32_t sector, uint8_t* data, int co
 	}
 }
 
-void AdvancedTechnologyAttachment::Write28(uint32_t sectorNum, uint8_t* data, uint32_t count) {
+void AdvancedTechnologyAttachment::write28(uint32_t sectorNum, uint8_t* data, uint32_t count) {
 	if(sectorNum > 0x0FFFFFFF) {
 		return;
 	}
@@ -166,7 +166,7 @@ void AdvancedTechnologyAttachment::Write28(uint32_t sectorNum, uint8_t* data, ui
 
 }
 
-void AdvancedTechnologyAttachment::Flush() {
+void AdvancedTechnologyAttachment::flush() {
 	devicePort.write(master ? 0xE0 : 0xF0);
 	commandPort.write(0xE7);
 

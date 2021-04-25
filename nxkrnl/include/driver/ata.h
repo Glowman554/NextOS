@@ -30,9 +30,9 @@ class AdvancedTechnologyAttachment: public Driver {
 		AdvancedTechnologyAttachment(bool master, uint16_t portBase, char* name);
 		~AdvancedTechnologyAttachment();
 
-		void Read28(uint32_t sector, uint8_t* data, int count);
-		void Write28(uint32_t sectorNum, uint8_t* data, uint32_t count);
-		void Flush();
+		void read28(uint32_t sector, uint8_t* data, int count);
+		void write28(uint32_t sectorNum, uint8_t* data, uint32_t count);
+		void flush();
 
 		virtual void activate();
 		virtual bool is_presend();

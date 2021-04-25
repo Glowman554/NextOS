@@ -8,11 +8,11 @@ MouseEventHandler::MouseEventHandler() {
 
 }
 
-void MouseEventHandler::OnMouseDown(uint8_t button) {
+void MouseEventHandler::on_mouse_down(uint8_t button) {
 
 }
 
-void MouseEventHandler::OnMouseMove(long x, long y) {
+void MouseEventHandler::on_mouse_move(long x, long y) {
 
 }
 
@@ -20,7 +20,7 @@ MouseDriver::MouseDriver(MouseEventHandler *handler) : InterruptHandler(0x2c), d
 	this->handler = handler;
 }
 
-void MouseDriver::MouseWait() {
+void MouseDriver::mouse_wait() {
 	uint32_t timeout = 1000;
 	while (timeout--){
 		if ((commandport.read() & 0b10) == 0){
@@ -29,7 +29,7 @@ void MouseDriver::MouseWait() {
 	}
 }
 
-void MouseDriver::MouseWaitInput() {
+void MouseDriver::mouse_wait_input() {
 	uint32_t timeout = 1000;
 	while (timeout--){
 		if (commandport.read() & 0b1){
@@ -38,37 +38,37 @@ void MouseDriver::MouseWaitInput() {
 	}
 }
 
-void MouseDriver::MouseWrite(uint8_t value) {
-	MouseWait();
+void MouseDriver::mouse_write(uint8_t value) {
+	mouse_wait();
 	commandport.write(0xD4);
-	MouseWait();
+	mouse_wait();
 	dataport.write(value);
 }
 
-uint8_t MouseDriver::MouseRead() {
-	MouseWaitInput();
+uint8_t MouseDriver::mouse_read() {
+	mouse_wait_input();
 	return dataport.read();
 }
 
 void MouseDriver::activate() {
 	commandport.write(0xa8);
-	MouseWait();
+	mouse_wait();
 	commandport.write(0x20);
-	MouseWaitInput();
+	mouse_wait_input();
 	uint8_t status = dataport.read();
 	status |= 0b10;
-	MouseWait();
+	mouse_wait();
 	commandport.write(0x60);
-	MouseWait();
+	mouse_wait();
 	dataport.write(status);
-	MouseWrite(0xf6);
-	MouseRead();
-	MouseWrite(0xf4);
-	MouseRead();
+	mouse_write(0xf6);
+	mouse_read();
+	mouse_write(0xf4);
+	mouse_read();
 }
 
 void MouseDriver::handle() {
-	uint8_t data = MouseRead();
+	uint8_t data = mouse_read();
 
 	//kprintf("%d", mouse_cycle);
 	
@@ -100,54 +100,54 @@ void MouseDriver::handle() {
 		return;
 
 
-	bool xNegative, yNegative, xOverflow, yOverflow;
+	bool x_negative, y_negative, x_overflow, y_overflow;
 
 	if (mouse_packet[0] & PS2XSign){
-		xNegative = true;
+		x_negative = true;
 	} else {
-		xNegative = false;
+		x_negative = false;
 	}
 
 	if (mouse_packet[0] & PS2YSign){
-		yNegative = true;
+		y_negative = true;
 	} else {
-		yNegative = false;
+		y_negative = false;
 	}
 
 	if (mouse_packet[0] & PS2XOverflow){
-		xOverflow = true;
+		x_overflow = true;
 	} else {
-		xOverflow = false;
+		x_overflow = false;
 	}
 
 	if (mouse_packet[0] & PS2YOverflow){
-		yOverflow = true;
+		y_overflow = true;
 	} else {
-		yOverflow = false;
+		y_overflow = false;
 	}
 
-	if (!xNegative){
+	if (!x_negative){
 		x += mouse_packet[1];
-		if (xOverflow){
+		if (x_overflow){
 			x += 255;
 		}
 	} else {
 		mouse_packet[1] = 256 - mouse_packet[1];
 		x -= mouse_packet[1];
-		if (xOverflow){
+		if (x_overflow){
 			x -= 255;
 		}
 	}
 
-	if (!yNegative){
+	if (!y_negative){
 		y -= mouse_packet[2];
-		if (yOverflow){
+		if (y_overflow){
 			y -= 255;
 		}
 	} else {
 		mouse_packet[2] = 256 - mouse_packet[2];
 		y += mouse_packet[2];
-		if (yOverflow){
+		if (y_overflow){
 			y += 255;
 		}
 	}
@@ -171,18 +171,18 @@ void MouseDriver::handle() {
 	//kprintf("X: %d Y: %d\n", x, y);
 
 	if(handler != 0) {
-		handler->OnMouseMove(x, y);
+		handler->on_mouse_move(x, y);
 
 		if(mouse_packet[0] & 1) {
-			handler->OnMouseDown(LeftButton);
+			handler->on_mouse_down(LeftButton);
 		}
 		
 		if((mouse_packet[0] >> 1) & 1) {
-			handler->OnMouseDown(RightButton);
+			handler->on_mouse_down(RightButton);
 		}
 		
 		if((mouse_packet[0] >> 2) & 1) {
-			handler->OnMouseDown(MiddleButton);
+			handler->on_mouse_down(MiddleButton);
 		}
 
 	}
