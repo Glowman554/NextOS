@@ -13,18 +13,18 @@ class AdvancedTechnologyAttachment: public Driver {
 	private:
 		bool master;
 		Port16Bit dataPort;
-		Port8Bit errorPort;
-		Port8Bit sectorCountPort;
-		Port8Bit lbaLowPort;
-		Port8Bit lbaMidPort;
-		Port8Bit lbaHiPort;
-		Port8Bit devicePort;
-		Port8Bit commandPort;
-		Port8Bit controlPort;
+		Port8Bit error_port;
+		Port8Bit sector_count_port;
+		Port8Bit lba_low_port;
+		Port8Bit lba_mid_port;
+		Port8Bit lba_hi_port;
+		Port8Bit device_port;
+		Port8Bit command_port;
+		Port8Bit control_port;
 
 		char* name;
 
-		uint16_t bytesPerSector;
+		uint16_t bytes_per_sector;
 
 	public:
 		AdvancedTechnologyAttachment(bool master, uint16_t portBase, char* name);

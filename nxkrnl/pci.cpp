@@ -1,6 +1,6 @@
 #include <pci.h>
 
-PeripheralComponentInterconnectController::PeripheralComponentInterconnectController() : dataPort(0xcfc), commandPort(0xcf8){
+PeripheralComponentInterconnectController::PeripheralComponentInterconnectController() : data_port(0xcfc), command_port(0xcf8){
 	
 }
 
@@ -10,14 +10,14 @@ PeripheralComponentInterconnectController::~PeripheralComponentInterconnectContr
 
 uint32_t PeripheralComponentInterconnectController::read(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset){
 	uint32_t id = 0x1 << 31 | ((bus & 0xFF) << 16) | ((device & 0x1F) << 11) | ((function & 0x07) << 8) | (registeroffset & 0xFC);
-	commandPort.write(id);
-	uint32_t result = dataPort.read();
+	command_port.write(id);
+	uint32_t result = data_port.read();
 	return result >> (8 * (registeroffset % 4));
 }
 void PeripheralComponentInterconnectController::write(uint16_t bus, uint16_t device, uint16_t function, uint32_t registeroffset, uint32_t value){
 	uint32_t id = 0x1 << 31 | ((bus & 0xFF) << 16) | ((device & 0x1F) << 11) | ((function & 0x07) << 8) | (registeroffset & 0xFC);
-	commandPort.write(id);
-	dataPort.write(value);
+	command_port.write(id);
+	data_port.write(value);
 }
 bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bus, uint16_t device){
 	return read(bus, device, 0, 0x0e) & (1<<7);
