@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <io.h>
 #include <console.h>
-#include <panic.h>
 #include <driver/vga.h>
 
 #include <driver/serial.h>
@@ -40,5 +39,7 @@ struct cpu_state {
 void init_intr();
 void reset_timer_tick();
 uint32_t get_timer_tick();
+
+#include <panic.h>
 
 #endif

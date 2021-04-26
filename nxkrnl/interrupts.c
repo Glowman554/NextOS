@@ -143,37 +143,7 @@ uint32_t get_timer_tick(){
 struct cpu_state* handle_interrupt(struct cpu_state* cpu){
 	struct cpu_state* new_cpu = cpu;
 	if(cpu->intr <= 0x1f){
-		print_exception(cpu->intr);
-        //extern void dump_kernel_panic(struct cpu_state* cpu);
-        //dump_kernel_panic(cpu);
-		if(is_vga_active()){
-			
-			vga_kprintf("eax: 0x%x, ebx: 0x%x\necx: 0x%x, edx: 0x%x\n", cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);
-			vga_kprintf("esi: 0x%x, edi: 0x%x\nebp: 0x%x\n", cpu->esi, cpu->edi, cpu->ebp);
-			vga_kprintf("intr: 0x%x, error: 0x%x\n", cpu->intr, cpu->error);
-			vga_kprintf("eip: 0x%x, cs 0x%x\neflags: 0x%x\n", cpu->eip, cpu->cs, cpu->eflags);
-			vga_kprintf("esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
-			
-			set_vga_color(VGA_YELLOW, VGA_BLUE);
-			//vga_kprintf("\nAbboniert Vaspel auf YouTube\n");
-			//vga_kprintf("https://www.youtube.com/c/Vaspelderechte\n");
-		} else {
-						
-			kprintf("\neax: 0x%x, ebx: 0x%x, ecx: 0x%x, edx: 0x%x\n", cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);
-			kprintf("esi: 0x%x, edi: 0x%x, ebp: 0x%x\n", cpu->esi, cpu->edi, cpu->ebp);
-			kprintf("intr: 0x%x, error: 0x%x\n", cpu->intr, cpu->error);
-			kprintf("eip: 0x%x, cs 0x%x, eflags: 0x%x\n", cpu->eip, cpu->cs, cpu->eflags);
-			kprintf("esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
-			
-			setcolor(BACKGROUND_BLACK | FOREGROUND_YELLOW);
-			//kprintf("\nEin Abschliesender Tipp: Abboniert Vaspel auf YouTube\n");
-			//kprintf("https://www.youtube.com/c/Vaspelderechte\n");
-
-		}
-		
-		while(1){
-			asm volatile("cli; hlt");
-		}
+		kernel_yeet(cpu);
 	}
 	if (cpu->intr >= 0x20 && cpu->intr <= 0x2f) {
 

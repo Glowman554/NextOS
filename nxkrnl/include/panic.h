@@ -7,6 +7,6 @@
 #include <stdbool.h>
 
 char* get_exception_name(int exc);
-void print_exception(int intr);
+void kernel_yeet(struct cpu_state* cpu);
 
 #endif
