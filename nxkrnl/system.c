@@ -8,16 +8,6 @@ void reboot(){
 	asm volatile ("hlt");
 }
 
-char getchar(){
-	uint8_t in;
-	char inbuff = 0;
-	while(inbuff == 0){
-		in = inb(0x60);
-		inbuff = keymap_de(in, false);
-	}
-	return inbuff;
-}
-
 uint32_t get_module_by_name(char* file){
 	if (pmb_info->mbs_mods_count != 0){
 		struct multiboot_module* modules = pmb_info->mbs_mods_addr;

@@ -23,9 +23,9 @@ char* syscall_names[] = {
 	"set pixel",
 	"set color",
 	"load initrd",
-	"initrd readdir",
-	"initrd finddir",
-	"initrd read",
+	"fsroot readdir",
+	"fsroot finddir",
+	"fsroot read",
 	"get buffer",
 	"init driver",
 	"call driver",
@@ -96,9 +96,6 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_REBOOT:
 			reboot();
 			break;
-		case SYSCALL_GETCHAR:
-			cpu->ebx = getchar();
-			break;
 		case SYSCALL_GET_TICK:
 			cpu->ebx = get_timer_tick();
 			break;
@@ -120,13 +117,13 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_LOAD_INITRD:
 			fs_root = initialise_initrd(get_module_by_name((char*) cpu->ebx));
 			break;
-		case SYSCALL_INITRD_READDIR:
+		case SYSCALL_FSROOT_READDIR:
 			cpu->ecx = (uint32_t) readdir_fs(fs_root, cpu->ebx);
 			break;
-		case SYSCALL_INITRD_FINDDIR:
+		case SYSCALL_FSROOT_FINDDIR:
 			cpu->ecx = (uint32_t) finddir_fs(fs_root, (char*) cpu->ebx);
 			break;
-		case SYSCAlL_INITRD_READ:
+		case SYSCAlL_FSROOT_READ:
 			read_fs((fs_node_t*) cpu->edx, cpu->ebx, cpu->ecx, buf);
 			break;
 		case SYSCALL_GET_BUFFER:
