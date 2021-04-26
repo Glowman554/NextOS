@@ -44,7 +44,6 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_INIT_TASK | 8 | void* entry | - | - |
 | SYSCALL_TASK_EXIT | 9 | int errorcode | - | - |
 | SYSCALL_REBOOT | 10 | - | - | - |
-| SYSCALL_GETCHAR (Do not use) | 11 | char c (return) | - | - |
 | SYSCALL_GET_TICK | 12 | uint32_t tick (return) | - | - |
 | SYSCALL_RESET_TICK | 13 | - | - | - |
 | SYSCALL_MULTIBOOT | 14 | multiboot_info *mb_info | - | - |
@@ -52,9 +51,9 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_VGA_SETPIXEL | 16 | int x | int y | uint32_t color |
 | SYSCALL_VGA_SETCOLOR | 17 | uint32_t fgcolor | uint32_t bgcolor | - |
 | SYSCALL_LOAD_INITRD | 18 | char* file | - | - |
-| SYSCALL_INITRD_READDIR | 19 | int index | struct dirent *node (return) | - |
-| SYSCALL_INITRD_FINDDIR | 20 | char* dir | fs_node_t *fsnode (return) | - |
-| SYSCAlL_INITRD_READ | 21 | uint32_t offset | uint32_t size | fs_node_t *fsnode |
+| SYSCALL_FSROOT_READDIR | 19 | int index | struct dirent *node (return) | - |
+| SYSCALL_FSROOT_FINDDIR | 20 | char* dir | fs_node_t *fsnode (return) | - |
+| SYSCAlL_FSROOT_READ | 21 | uint32_t offset | uint32_t size | fs_node_t *fsnode |
 | SYSCALL_GET_BUFFER | 22 | uint8_t* buf (return) | - | - |
 | SYSCALL_INIT_DRIVER | 23 | char* name | driver_handler_ptr driver_handler | int id (return) |
 | SYSCALL_CALL_DRIVER | 24 | int id | void* data | int data (return) |
@@ -67,7 +66,6 @@ To create an ISO file you need to enter `make iso`.
 | SYSCALL_SET_KB_HANDLER | 31 | kb_handler handler | - | - |
 | SYSCALL_SET_MOUSE_HANDLER | 32 | mouse_move_handler h1 | mouse_button_handler h2 | - |
 | SYSCALL_GETPIXEL | 33 | int x | int y | char c (return) |
-| SYSCALL_RUN_FE | 34 | char* fe_code | - | - | 
 
 ## Copyright
 
