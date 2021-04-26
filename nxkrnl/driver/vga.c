@@ -417,7 +417,16 @@ void vga_kputc(char c){
 	}
 	
 	if(vga_y > 12){
-		clear_vga();
+		//clear_vga();
+		int i;
+		for (i = 0; i < 2 * 320 * 200; i++) {
+			VGA[i] = VGA[i + 320 * 16];
+		}
+
+		for (; i < 2 * 320 * 200; i++) {
+			VGA[i] = 0;
+		}
+		vga_y--;
 	}
 	
 	draw_char(c, 1 + (vga_x * 8), 1 + (vga_y * 14));
