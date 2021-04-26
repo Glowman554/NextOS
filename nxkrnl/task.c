@@ -5,13 +5,9 @@ void do_nothing(void){
 }
 
 
-static struct task task_states[512];
+static struct task task_states[MAX_TASKS];
 
 int current_task = 0;
-
-kb_handler kb_intr_handler = NULL;
-mouse_move_handler mouse_intr_move_handler = NULL;
-mouse_button_handler mouse_intr_button_handler = NULL;
 
 int proccount = 0;
 char nextpid = 1;
@@ -28,31 +24,47 @@ void task_exit(int code){
 }
 
 void set_kb_handler(kb_handler handler) {
-	kb_intr_handler = handler;
+	task_states[current_task].kb = handler;
 }
 
 void kb_handle(char key) {
-	if(kb_intr_handler != 0)
-		(*(kb_intr_handler))(key);
+	for (int i = 0; i < MAX_TASKS; i++) {
+		if(task_states[i].active) {
+			if(task_states[i].kb != 0) {
+				(*(task_states[i].kb))(key);
+			}
+		}
+	}
+	
 }
 
 void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2) {
-	mouse_intr_move_handler = h1;
-	mouse_intr_button_handler = h2;
+	task_states[current_task].mmh = h1;
+	task_states[current_task].mbh = h2;
 }
 
 void mouse_handle_move(long x, long y) {
-	if(mouse_intr_move_handler != 0)
-		(*(mouse_intr_move_handler))(x, y);
+	for (int i = 0; i < MAX_TASKS; i++) {
+		if(task_states[i].active) {
+			if(task_states[i].mmh != 0) {
+				(*(task_states[i].mmh))(x, y);
+			}
+		}
+	}
 }
 
 void mouse_handle_button(int button) {
-	if(mouse_intr_button_handler != 0)
-		(*(mouse_intr_button_handler))(button);
+	for (int i = 0; i < MAX_TASKS; i++) {
+		if(task_states[i].active) {
+			if(task_states[i].mbh != 0) {
+				(*(task_states[i].mbh))(button);
+			}
+		}
+	}
 }
 
 struct task* find_task() {
-	for (int i = 0; i < 512; i++) {
+	for (int i = 0; i < MAX_TASKS; i++) {
 		if(!task_states[i].active) {
 			debug_write("Found empty task ad idx %d!", i);
 			return &task_states[i];
@@ -90,6 +102,7 @@ struct task* init_task(void* entry){
 	*state = new_state;
 
 	struct task* task = find_task();
+	memset(task, 0, sizeof(struct task));
 	task->cpu_state = state;
 	task->pid = nextpid;
 	task->active = true;
@@ -134,7 +147,7 @@ void init_multitasking(struct multiboot_info* mb_info){
 
 
 struct cpu_state* schedule(struct cpu_state* cpu){
-	for (int i = current_task + 1; i < 512; i++) {
+	for (int i = current_task + 1; i < MAX_TASKS; i++) {
 		if(task_states[i].active) {
 			current_task = i;
 			return task_states[current_task].cpu_state;
@@ -144,7 +157,7 @@ struct cpu_state* schedule(struct cpu_state* cpu){
 	// we have no tasks left or we are at the end of the task list
 	// so we start searching from 0 again
 
-	for (int i = 0; i < 512; i++) {
+	for (int i = 0; i < MAX_TASKS; i++) {
 		if(task_states[i].active) {
 			current_task = i;
 			return task_states[current_task].cpu_state;

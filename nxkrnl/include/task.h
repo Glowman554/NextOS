@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <driver/serial.h>
 
+#define MAX_TASKS 32
+
 typedef void (*kb_handler)(char key);
 typedef void (*mouse_move_handler)(long x, long y);
 typedef void (*mouse_button_handler)(int button);
@@ -36,10 +38,10 @@ struct task* init_task(void* entry);
 int init_elf(void* image);
 void task_exit(int code);
 
-void kb_handle(char key);
 void set_kb_handler(kb_handler handler);
-
 void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2);
+
+void kb_handle(char key);
 void mouse_handle_move(long x, long y);
 void mouse_handle_button(int button);
 

@@ -38,5 +38,7 @@ void _start(void){
 	claim_mouse_handlers();
 	set_mouse_handler(&mouse_test_handler);
 	
+	while(1);
+
 	task_exit(0);
 }
