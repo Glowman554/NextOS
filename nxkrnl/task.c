@@ -4,67 +4,79 @@ void do_nothing(void){
 	while(1);
 }
 
-static struct task* first_task = NULL;
-static struct task* current_task = NULL;
 
-kb_handler kb_intr_handler = NULL;
-mouse_move_handler mouse_intr_move_handler = NULL;
-mouse_button_handler mouse_intr_button_handler = NULL;
+static struct task task_states[MAX_TASKS];
+
+int current_task = 0;
 
 int proccount = 0;
 char nextpid = 1;
 
 void task_exit(int code){
-	char buffer[100];
-	sprintf(buffer, "[%d] Exit Task with error code %d!", current_task->pid, code);
-	debug_write(buffer);
+	debug_write("[%d] Exit Task with error code %d!", task_states[current_task].pid, code);
 	if(code == 1){
-		asm("int $0x1");
+		kernel_yeet(task_states[current_task].cpu_state);
 	}
+	task_states[current_task].active = false;
+	pmm_free(task_states[current_task].stack);
+	pmm_free(task_states[current_task].user_stack);
 	proccount--;
-	struct task* temp = first_task;
-	if(current_task->pid == first_task->pid){
-		first_task = temp->next;
-		return;
-	}
-	
-	while(temp->next != NULL){
-		if(temp->next->pid == current_task->pid){
-			current_task = temp->next;
-		}
-		temp = temp->next;
-	}
-	
 }
 
 void set_kb_handler(kb_handler handler) {
-	kb_intr_handler = handler;
+	task_states[current_task].kb = handler;
 }
 
 void kb_handle(char key) {
-	if(kb_intr_handler != 0)
-		(*(kb_intr_handler))(key);
+	for (int i = 0; i < MAX_TASKS; i++) {
+		if(task_states[i].active) {
+			if(task_states[i].kb != 0) {
+				(*(task_states[i].kb))(key);
+			}
+		}
+	}
+	
 }
 
 void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2) {
-	mouse_intr_move_handler = h1;
-	mouse_intr_button_handler = h2;
+	task_states[current_task].mmh = h1;
+	task_states[current_task].mbh = h2;
 }
 
 void mouse_handle_move(long x, long y) {
-	if(mouse_intr_move_handler != 0)
-		(*(mouse_intr_move_handler))(x, y);
+	for (int i = 0; i < MAX_TASKS; i++) {
+		if(task_states[i].active) {
+			if(task_states[i].mmh != 0) {
+				(*(task_states[i].mmh))(x, y);
+			}
+		}
+	}
 }
 
 void mouse_handle_button(int button) {
-	if(mouse_intr_button_handler != 0)
-		(*(mouse_intr_button_handler))(button);
+	for (int i = 0; i < MAX_TASKS; i++) {
+		if(task_states[i].active) {
+			if(task_states[i].mbh != 0) {
+				(*(task_states[i].mbh))(button);
+			}
+		}
+	}
+}
+
+struct task* find_task() {
+	for (int i = 0; i < MAX_TASKS; i++) {
+		if(!task_states[i].active) {
+			debug_write("Found empty task ad idx %d!", i);
+			return &task_states[i];
+		}
+	}
+
+	// We have no more free task slots
+	return NULL;
 }
 
 struct task* init_task(void* entry){
-	char buffer[100];
-	sprintf(buffer, "Initializing task at 0x%x!", (uint32_t) entry);
-	debug_write(buffer);
+	debug_write("Initializing task at 0x%x!", (uint32_t) entry);
 	uint8_t* stack = pmm_alloc();
 	uint8_t* user_stack = pmm_alloc();
 
@@ -89,21 +101,21 @@ struct task* init_task(void* entry){
 	struct cpu_state* state = (void*) (stack + 4096 - sizeof(new_state));
 	*state = new_state;
 
-	struct task* task = pmm_alloc();
+	struct task* task = find_task();
+	memset(task, 0, sizeof(struct task));
 	task->cpu_state = state;
-	task->next = first_task;
 	task->pid = nextpid;
+	task->active = true;
+	task->stack = stack;
+	task->user_stack = user_stack;
 	nextpid++;
 	kprintf("Starting task with pid %d\n", task->pid);
 	proccount++;
-	first_task = task;
 	return task;
 }
 
 int init_elf(void* image){
-	char buffer[100];
-	sprintf(buffer, "Loading elf image at 0x%x!", (uint32_t) image);
-	debug_write(buffer);
+	debug_write("Loading elf image at 0x%x!", (uint32_t) image);
 	struct elf_header* header = image;
 	struct elf_program_header* ph;
 	int i;
@@ -133,20 +145,25 @@ void init_multitasking(struct multiboot_info* mb_info){
 	init_task(do_nothing);
 }
 
+
 struct cpu_state* schedule(struct cpu_state* cpu){
-	if (current_task != NULL) {
-		current_task->cpu_state = cpu;
-	}
-	if(current_task == NULL){
-		current_task = first_task;
-	} else {
-		current_task = current_task->next;
-		if(current_task == NULL){
-			current_task = first_task;
+	for (int i = current_task + 1; i < MAX_TASKS; i++) {
+		if(task_states[i].active) {
+			current_task = i;
+			return task_states[current_task].cpu_state;
 		}
 	}
-	
-	cpu = current_task->cpu_state;
+
+	// we have no tasks left or we are at the end of the task list
+	// so we start searching from 0 again
+
+	for (int i = 0; i < MAX_TASKS; i++) {
+		if(task_states[i].active) {
+			current_task = i;
+			return task_states[current_task].cpu_state;
+		}
+	}
+
 
 	return cpu;
 }

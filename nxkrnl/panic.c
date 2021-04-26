@@ -68,13 +68,35 @@ char* get_exception_name(int exc){
 	}
 }
 
-void print_exception(int intr){
-	setcolor(BACKGROUND_BLACK | FOREGROUND_RED);
+
+void kernel_yeet(struct cpu_state* cpu) {
 	if(is_vga_active()){
 		set_vga_color(VGA_WHITE, VGA_BLUE);
 		clear_vga();
-		vga_kprintf("Kernel PANIC:\nExcpetion 0x%x -> %s\n", intr, get_exception_name(intr));
+		vga_kprintf("Kernel PANIC:\nExcpetion 0x%x -> %s\n", cpu->intr, get_exception_name(cpu->intr));
+			
+		vga_kprintf("eax: 0x%x, ebx: 0x%x\necx: 0x%x, edx: 0x%x\n", cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);
+		vga_kprintf("esi: 0x%x, edi: 0x%x\nebp: 0x%x\n", cpu->esi, cpu->edi, cpu->ebp);
+		vga_kprintf("intr: 0x%x, error: 0x%x\n", cpu->intr, cpu->error);
+		vga_kprintf("eip: 0x%x, cs 0x%x\neflags: 0x%x\n", cpu->eip, cpu->cs, cpu->eflags);
+		vga_kprintf("esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
+			
+		set_vga_color(VGA_YELLOW, VGA_BLUE);
 	} else {
-		kprintf("Kernel PANIC: Excpetion 0x%x -> %s\n", intr, get_exception_name(intr));
-    }
+		setcolor(BACKGROUND_BLACK | FOREGROUND_RED);
+		kprintf("Kernel PANIC: Excpetion 0x%x -> %s\n", cpu->intr, get_exception_name(cpu->intr));
+						
+
+		kprintf("\neax: 0x%x, ebx: 0x%x, ecx: 0x%x, edx: 0x%x\n", cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);
+		kprintf("esi: 0x%x, edi: 0x%x, ebp: 0x%x\n", cpu->esi, cpu->edi, cpu->ebp);
+		kprintf("intr: 0x%x, error: 0x%x\n", cpu->intr, cpu->error);
+		kprintf("eip: 0x%x, cs 0x%x, eflags: 0x%x\n", cpu->eip, cpu->cs, cpu->eflags);
+		kprintf("esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
+			
+		setcolor(BACKGROUND_BLACK | FOREGROUND_YELLOW);
+	}
+		
+	while(1){
+		asm volatile("cli; hlt");
+	}
 }

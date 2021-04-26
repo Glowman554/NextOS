@@ -3,12 +3,8 @@
 
 #include <stdbool.h>
 
-#define VERSION 			32
+#define VERSION 			33
 #define VENDOR 				"Glowman554"
 #define AUTOEXEC 			"/progs/init.bin"
-
-#define VGA_OLD				false
-#define VGA_NEW				true
-#define VGA_MODE_METHOD		VGA_NEW
 
 #endif

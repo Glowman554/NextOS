@@ -23,7 +23,7 @@ class BaseAddressRegister{
 
 class PeripheralComponentInterconnectDeviceDescriptor{
 	public:
-		uint32_t portBase;
+		uint32_t port_base;
 		uint32_t interrupt;
 		uint16_t bus;
 		uint16_t device;
@@ -38,8 +38,8 @@ class PeripheralComponentInterconnectDeviceDescriptor{
 
 class PeripheralComponentInterconnectController{
 	private:
-		Port32Bit dataPort;
-		Port32Bit commandPort;
+		Port32Bit data_port;
+		Port32Bit command_port;
 	public:
 		PeripheralComponentInterconnectController();
 		~PeripheralComponentInterconnectController();

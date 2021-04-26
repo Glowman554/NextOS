@@ -1,7 +1,6 @@
 #ifndef VGA_H
 #define VGA_H
 
-#include <bios.h>
 #include <io.h>
 #include <mem.h>
 #include <config.h>

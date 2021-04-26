@@ -23,9 +23,9 @@ char* syscall_names[] = {
 	"set pixel",
 	"set color",
 	"load initrd",
-	"initrd readdir",
-	"initrd finddir",
-	"initrd read",
+	"fsroot readdir",
+	"fsroot finddir",
+	"fsroot read",
 	"get buffer",
 	"init driver",
 	"call driver",
@@ -38,16 +38,9 @@ char* syscall_names[] = {
 	"set kb handler",
 	"set mouse handler",
 	"get pixel",
-	"run fe"
 };
 
 struct cpu_state* syscall(struct cpu_state* cpu){
-	if(global_kernel_info.dump_syscall) {
-		char buffer[1000];
-		sprintf(buffer, "Syscall %s -> eax: 0x%x, ebx: 0x%x, ecx: 0x%x, edx: 0x%x", syscall_names[cpu->eax], cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);
-		debug_write(buffer);
-	}
-
 	bool mode = is_vga_active();
 	
 	switch (cpu->eax) {
@@ -103,9 +96,6 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_REBOOT:
 			reboot();
 			break;
-		case SYSCALL_GETCHAR:
-			cpu->ebx = getchar();
-			break;
 		case SYSCALL_GET_TICK:
 			cpu->ebx = get_timer_tick();
 			break;
@@ -127,13 +117,13 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 		case SYSCALL_LOAD_INITRD:
 			fs_root = initialise_initrd(get_module_by_name((char*) cpu->ebx));
 			break;
-		case SYSCALL_INITRD_READDIR:
+		case SYSCALL_FSROOT_READDIR:
 			cpu->ecx = (uint32_t) readdir_fs(fs_root, cpu->ebx);
 			break;
-		case SYSCALL_INITRD_FINDDIR:
+		case SYSCALL_FSROOT_FINDDIR:
 			cpu->ecx = (uint32_t) finddir_fs(fs_root, (char*) cpu->ebx);
 			break;
-		case SYSCAlL_INITRD_READ:
+		case SYSCAlL_FSROOT_READ:
 			read_fs((fs_node_t*) cpu->edx, cpu->ebx, cpu->ecx, buf);
 			break;
 		case SYSCALL_GET_BUFFER:
@@ -171,9 +161,6 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 			break;
 		case SYSCALL_GETPIXEL:
 			cpu->edx = getpixel(cpu->ebx, cpu->ecx);
-			break;
-		case SYSCALL_RUN_FE:
-			run_fe((char*) cpu->ebx);
 			break;
 	}
 

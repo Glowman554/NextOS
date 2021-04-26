@@ -8,12 +8,8 @@
 
 struct kernel_info {
 	bool debug;
-	bool fe;
 	bool force;
-	bool dump_syscall;
-	bool auto_format;
 	char* autoexec;
-	char* format_label;
 };
 
 extern char parser_buffer[100][100];

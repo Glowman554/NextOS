@@ -343,25 +343,14 @@ unsigned char* get_framebuffer() {
 
 void init_vga(){
 
-	if(VGA_MODE_METHOD == VGA_NEW) {
-		vga_write_registers(g_320x200x256);
-		VGA = get_framebuffer();
-	} else {
-
-		regs16_t regs;
-		//			x   y  color
-		// switch to 320x200x256 graphics mode
-		regs.ax = 0x0013;
-		int32(0x10, &regs);
-	}
+	vga_write_registers(g_320x200x256);
+	VGA = get_framebuffer();
 
 	clear_vga();
 
 	vga_active = true;
 
-	char buffer[500];
-	sprintf(buffer, "Initialized vga mode with method %s framebuffer located at 0x%x!", VGA_MODE_METHOD ? "new" : "old", (unsigned int) VGA);
-	debug_write(buffer);
+	debug_write("Initialized vga mode with framebuffer located at 0x%x!", (unsigned int) VGA);
 }
 
 void set_vga_color(uint32_t fgcolor, uint32_t bgcolor){
@@ -428,7 +417,16 @@ void vga_kputc(char c){
 	}
 	
 	if(vga_y > 12){
-		clear_vga();
+		//clear_vga();
+		int i;
+		for (i = 0; i < 2 * 320 * 200; i++) {
+			VGA[i] = VGA[i + 320 * 16];
+		}
+
+		for (; i < 2 * 320 * 200; i++) {
+			VGA[i] = 0;
+		}
+		vga_y--;
 	}
 	
 	draw_char(c, 1 + (vga_x * 8), 1 + (vga_y * 14));

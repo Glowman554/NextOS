@@ -18,7 +18,6 @@
 #define SYSCALL_INIT_TASK			8
 #define SYSCALL_TASK_EXIT			9
 #define SYSCALL_REBOOT				10
-#define SYSCALL_GETCHAR				11
 #define SYSCALL_GET_TICK			12
 #define SYSCALL_RESET_TICK			13
 #define SYSCALL_MULTIBOOT			14
@@ -26,9 +25,9 @@
 #define SYSCALL_VGA_SETPIXEL		16
 #define SYSCALL_VGA_SETCOLOR		17
 #define SYSCALL_LOAD_INITRD			18
-#define SYSCALL_INITRD_READDIR		19
-#define SYSCALL_INITRD_FINDDIR		20
-#define SYSCAlL_INITRD_READ			21
+#define SYSCALL_FSROOT_READDIR		19
+#define SYSCALL_FSROOT_FINDDIR		20
+#define SYSCAlL_FSROOT_READ			21
 #define SYSCALL_GET_BUFFER			22
 #define SYSCALL_INIT_DRIVER		 23
 #define SYSCALL_CALL_DRIVER		 24
@@ -41,8 +40,6 @@
 #define SYSCALL_SET_KB_HANDLER	  31
 #define SYSCALL_SET_MOUSE_HANDLER   32
 #define SYSCALL_GETPIXEL			33
-#define SYSCALL_RUN_FE				34
-
 
 #define FOREGROUND_BLACK 0x00
 #define FOREGROUND_BLUE 0x01
@@ -113,7 +110,6 @@ void kprintf(const char* fmt, ...);
 void init_task(void* entry);
 void task_exit(int code);
 void reboot();
-char getchar_old();
 void reset_timer_tick();
 uint32_t get_timer_tick();
 struct multiboot_info* get_mb_ptr();
@@ -122,9 +118,9 @@ void init_vga();
 void setpixel(int x, int y, uint32_t color);
 void set_vga_color(uint32_t fgcolor, uint32_t bgcolor);
 void load_initrd(char* file);
-struct dirent* initrd_readdir(int index);
-fs_node_t* initrd_finddir(char* file);
-void initrd_read(fs_node_t *fsnode, uint32_t offset, uint32_t size);
+struct dirent* fsroot_readdir(int index);
+fs_node_t* fsroot_finddir(char* file);
+void fsroot_read(fs_node_t *fsnode, uint32_t offset, uint32_t size);
 uint8_t* get_buffer();
 int init_driver(char* name, driver_handler_ptr driver_handler);
 int call_driver_handler(int id, void* data);
@@ -140,7 +136,6 @@ void set_mouse_handlers(mouse_move_handler h1, mouse_button_handler h2);
 char getpixel(int x, int y);
 int strlen(char *src);
 char getchar();
-void run_fe(char* code);
 void set_mouse_handler(mouse_handler h);
 void claim_kb_handler();
 void claim_mouse_handlers();

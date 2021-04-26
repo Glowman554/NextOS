@@ -46,11 +46,6 @@ void reboot(){
 	asm("int $0x30" :: "a" (SYSCALL_REBOOT));
 }
 
-char getchar_old(){
-	register uint32_t input asm("ebx");
-	asm("int $0x30" :: "a" (SYSCALL_GETCHAR));
-	return (char) input;
-}
 
 uint32_t get_timer_tick(){
 	register uint32_t input asm("ebx");
@@ -84,20 +79,20 @@ void load_initrd(char* file){
 	asm("int $0x30" :: "a" (SYSCALL_LOAD_INITRD), "b" (file));
 }
 
-struct dirent* initrd_readdir(int index){
+struct dirent* fsroot_readdir(int index){
 	register uint32_t input asm("ecx");
-	asm("int $0x30" :: "a" (SYSCALL_INITRD_READDIR), "b" (index));
+	asm("int $0x30" :: "a" (SYSCALL_FSROOT_READDIR), "b" (index));
 	return (struct dirent*) input;
 }
 
-fs_node_t* initrd_finddir(char* file){
+fs_node_t* fsroot_finddir(char* file){
 	register uint32_t input asm("ecx");
-	asm("int $0x30" :: "a" (SYSCALL_INITRD_FINDDIR), "b" (file));
+	asm("int $0x30" :: "a" (SYSCALL_FSROOT_FINDDIR), "b" (file));
 	return (fs_node_t*) input;
 }
 
-void initrd_read(fs_node_t *fsnode, uint32_t offset, uint32_t size){
-	asm("int $0x30" :: "a" (SYSCAlL_INITRD_READ), "b" (offset), "c" (size), "d" (fsnode));
+void fsroot_read(fs_node_t *fsnode, uint32_t offset, uint32_t size){
+	asm("int $0x30" :: "a" (SYSCAlL_FSROOT_READ), "b" (offset), "c" (size), "d" (fsnode));
 }
 
 uint8_t* get_buffer(){
@@ -160,10 +155,6 @@ char getpixel(int x, int y) {
 	register char c asm("edx");
 	asm("int $0x30" : : "a" (SYSCALL_GETPIXEL), "b" (x), "c" (y));
 	return c;
-}
-
-void run_fe(char* code) {
-	asm("int $0x30" : : "a" (SYSCALL_RUN_FE), "b" (code));
 }
 
 void kb_intr_handler(char key) {

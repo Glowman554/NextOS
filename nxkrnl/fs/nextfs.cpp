@@ -8,32 +8,28 @@ NextFS::NextFS(AdvancedTechnologyAttachment* ata) {
 	this->file_array = (nextfs_file_header*) pmm_alloc();
 	memset(this->file_array, 0, 4096);
 
-	this->ata->Read28(1, (uint8_t*) this->header, 512);
+	this->ata->read28(1, (uint8_t*) this->header, 512);
 	for(int i = 0; i < 8; i++) {
-		this->ata->Read28(2 + i, (uint8_t*) this->file_array + 512 * i, 512);
+		this->ata->read28(2 + i, (uint8_t*) this->file_array + 512 * i, 512);
 	}
 }
 
 NextFS::~NextFS() {
-	this->ata->Write28(1, (uint8_t*) this->header, 512);
-	this->ata->Flush();
+	this->ata->write28(1, (uint8_t*) this->header, 512);
+	this->ata->flush();
 	for(int i = 0; i < 8; i++) {
-		this->ata->Write28(2 + i, (uint8_t*) this->file_array + 512 * i, 512);
-		this->ata->Flush();
+		this->ata->write28(2 + i, (uint8_t*) this->file_array + 512 * i, 512);
+		this->ata->flush();
 	}
 	pmm_free(this->header);
 	pmm_free(this->file_array);
 }
 
 void NextFS::print_fs_info() {
-	char buffer[1000];
-	sprintf(buffer, "[%s][%s] current sector: %d, file header idx: %d!", this->header->origin, this->header->name, this->header->current_sector, this->header->file_header_index);
-	debug_write(buffer);
+	debug_write("[%s][%s] current sector: %d, file header idx: %d!", this->header->origin, this->header->name, this->header->current_sector, this->header->file_header_index);
 
 	for(int i = 1; i < this->header->file_header_index; i++) {
-		char buffer2[1000];
-		sprintf(buffer2, "[%s] length: %d, start sector: %d!", this->file_array[i].name, this->file_array[i].length, this->file_array[i].start_sector);
-		debug_write(buffer2);
+		debug_write("[%s] length: %d, start sector: %d!", this->file_array[i].name, this->file_array[i].length, this->file_array[i].start_sector);
 	}
 }
 
@@ -57,9 +53,9 @@ void NextFS::new_text_file(char* name, char* data) {
 	int sectors_needed = this->file_array[this->header->file_header_index].length / 512;
 
 	for(int i = 0; i < sectors_needed + 1; i++) {
-		this->ata->Write28(this->header->current_sector, (uint8_t*) data + 512 * i, 512);
+		this->ata->write28(this->header->current_sector, (uint8_t*) data + 512 * i, 512);
 		this->header->current_sector++;
-		this->ata->Flush();
+		this->ata->flush();
 	}
 
 	this->header->file_header_index++;
@@ -68,12 +64,12 @@ void NextFS::new_text_file(char* name, char* data) {
 void NextFS::read_text_file(char* name, char* data) {
 	for(int i = 1; i < this->header->file_header_index; i++) {
 		if(strcmp(this->file_array[i].name, name) == 0) {
-			debug_write("Found file in fs!");
+			debug_write_lame("Found file in fs!");
 
 			int sectors_needed = this->file_array[i].length / 512;
 
 			for(int j = 0; j < sectors_needed + 1; j++) {
-				this->ata->Read28(this->file_array[i].start_sector + j, (uint8_t*) data + 512 * j, 512);
+				this->ata->read28(this->file_array[i].start_sector + j, (uint8_t*) data + 512 * j, 512);
 			}
 		} 
 	}
