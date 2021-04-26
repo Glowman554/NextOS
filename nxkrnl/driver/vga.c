@@ -419,11 +419,11 @@ void vga_kputc(char c){
 	if(vga_y > 12){
 		//clear_vga();
 		int i;
-		for (i = 0; i < 2 * 320 * 200; i++) {
-			VGA[i] = VGA[i + 320 * 16];
+		for (i = 0; i < 320 * 200 - 320 * 14; i++) {
+			VGA[i] = VGA[i + 320 * 14];
 		}
 
-		for (; i < 2 * 320 * 200; i++) {
+		for (; i < 320 * 200; i++) {
 			VGA[i] = 0;
 		}
 		vga_y--;
