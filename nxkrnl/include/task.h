@@ -31,6 +31,9 @@ struct task {
 };
 
 extern int proccount;
+extern struct task task_states[MAX_TASKS];
+
+extern int current_task;
 
 struct cpu_state* schedule(struct cpu_state* cpu);
 void init_multitasking(struct multiboot_info* mb_info);

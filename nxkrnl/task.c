@@ -5,7 +5,7 @@ void do_nothing(void){
 }
 
 
-static struct task task_states[MAX_TASKS];
+struct task task_states[MAX_TASKS];
 
 int current_task = 0;
 

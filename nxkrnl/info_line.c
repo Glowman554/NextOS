@@ -8,7 +8,7 @@ void drawinfo() {
 
 	char buffer[75];
 
-	sprintf(buffer, "Running proceses: %d, Timer tick: %d, Kernel version: %d", proccount, get_timer_tick(), VERSION);
+	sprintf(buffer, "Running proceses: %d, Timer tick: 0x%x, Current pid: %d", proccount, get_timer_tick(), task_states[current_task].pid);
 
 	int old_x = getx();
 	int old_y = gety();
