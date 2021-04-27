@@ -14,10 +14,10 @@ iso: all
 
 	cp cdrom.iso docs/.
 	
-	qemu-img create test.img 1m
+	cd nextfs-loader; sh build.sh; cd ..
 
 run: iso
-	qemu-system-i386 -cdrom cdrom.iso -hda test.img -boot d -serial stdio
+	qemu-system-i386 -cdrom cdrom.iso -hda nextfs-loader/fs.nfs -boot d -serial stdio
 
 test: iso
 	node os-test/index.js
@@ -25,7 +25,6 @@ test: iso
 clean:
 	make -C nxkrnl clean
 	make -C user clean
-	rm test.img
 
 pack: clean
 	mkdir pack

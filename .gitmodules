@@ -1,0 +1,3 @@
+[submodule "nextfs-loader"]
+	path = nextfs-loader
+	url = https://github.com/Glowman554/nextfs-loader

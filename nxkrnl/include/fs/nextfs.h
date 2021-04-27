@@ -8,22 +8,21 @@ extern "C" {
 #include <stdint.h>
 #include <driver/ata.h>
 
-#define MAGIC 0xf00dbabe
+#define MAGIC 0xf0f0
 
 struct nextfs_header {
-	uint64_t magic;
-	char name[64];
-	char origin[16];
+	uint16_t magic;
+	char name[16];
 
 	uint16_t current_sector;
 	uint16_t file_header_index;
 } __attribute__((packed));
 
 struct nextfs_file_header {
-	char name[64];
+	char name[16];
 	uint16_t start_sector;
 	uint16_t length;
-};
+} __attribute__((packed));
 
 class NextFS {
 	private:
