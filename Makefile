@@ -10,7 +10,7 @@ iso: all
 	cp initrd/initrd.img cdrom/.
 	cp README.md cdrom/.
 	cp LICENSE cdrom/.
-	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o cdrom.iso cdrom/
+	mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o cdrom.iso cdrom/
 
 	cp cdrom.iso docs/.
 	

@@ -1,6 +1,6 @@
 FROM gitpod/workspace-full
 
-RUN brew install nasm
+RUN brew install nasm cdrtools
 
 # Install custom tools, runtimes, etc.
 # For example "bastet", a command-line tetris clone:
