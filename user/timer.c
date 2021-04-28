@@ -53,6 +53,9 @@ void _start(void){
 	data.function = DESKTOP_CREATE_WINDOW;
 
 	int window_id = call_driver_handler(desktop_id, &data);
+	
+	claim_mouse_handlers();
+	set_mouse_handler(&mouse_test_handler);
 
 	set_vga_color(VGA_BLACK, VGA_DARKGRAY);
 
