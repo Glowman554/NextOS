@@ -17,10 +17,15 @@ void task_exit(int code){
 	if(code == 1){
 		kernel_yeet(task_states[current_task].cpu_state);
 	}
+	if(code == 2) {
+			debug_write("[%d] Task killed!", task_states[current_task].pid);
+	}
 	task_states[current_task].active = false;
 	pmm_free(task_states[current_task].stack);
 	pmm_free(task_states[current_task].user_stack);
 	proccount--;
+
+	asm volatile("int $0x20"); // force next task
 }
 
 void set_kb_handler(kb_handler handler) {

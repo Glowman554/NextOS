@@ -95,8 +95,76 @@ void kernel_yeet(struct cpu_state* cpu) {
 			
 		setcolor(BACKGROUND_BLACK | FOREGROUND_YELLOW);
 	}
-		
+
+	kputs_serial(yeet0);
+	kputs_serial(yeet1);
+	kputs_serial(yeet2);
+	kputs_serial(yeet3);
+	kputs_serial(yeet4);
+	kputs_serial(yeet5);
+
+	kprintf_serial("\nKernel PANIC: Excpetion 0x%x -> %s\n", cpu->intr, get_exception_name(cpu->intr));
+						
+
+	kprintf_serial("\neax: 0x%x, ebx: 0x%x, ecx: 0x%x, edx: 0x%x\n", cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);
+	kprintf_serial("esi: 0x%x, edi: 0x%x, ebp: 0x%x\n", cpu->esi, cpu->edi, cpu->ebp);
+	kprintf_serial("intr: 0x%x, error: 0x%x\n", cpu->intr, cpu->error);
+	kprintf_serial("eip: 0x%x, cs 0x%x, eflags: 0x%x\n", cpu->eip, cpu->cs, cpu->eflags);
+	kprintf_serial("esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
+
+	kprintf_serial("Running kernel version %d\n", VERSION);
+
+	char buffer = 0;
+
+	while (1) {
+		kprintf_serial("KDB >> ");
+		buffer = read_serial();
+		kprintf_serial("%c\n", buffer);
+
+		switch (buffer) {
+			case 'h':
+				kprintf_serial("c -> continue execution!\n");
+				kprintf_serial("r -> reboot system!\n");
+				kprintf_serial("i -> show info about the running task!\n");
+				kprintf_serial("t -> clear current task!\n");
+				kprintf_serial("s -> stop kernel debugger!\n");
+				break;
+			case 'c':
+				goto _return;
+				break;
+			case 'r':
+				reboot();
+				break;
+			case 'i':
+				if(task_states[current_task].active) {
+					kprintf_serial("Task slot: %d\n", current_task);
+					kprintf_serial("PID: %d, stack: 0x%x, user stack: 0x%x\n", task_states[current_task].pid, task_states[current_task].stack, task_states[current_task].user_stack);
+					kprintf_serial("KB: 0x%x, MMH: 0x%x, MBH: 0x%x\n", task_states[current_task].kb, task_states[current_task].mmh, task_states[current_task].mbh);
+				} else {
+					kprintf_serial("Task in  task slot %d not active!\n", current_task);
+				}
+				break;
+			case 't':
+				if(task_states[current_task].active) {
+					task_exit(2);
+				} else {
+					kprintf_serial("Already dead!\n");
+				}
+				break;
+			case 's':
+				goto _stop;
+				break;
+			default:
+				kprintf_serial("Unknown command!\n");
+				break;
+		}
+	}
+	
+_stop:
 	while(1){
 		asm volatile("cli; hlt");
 	}
+
+_return:
+	return;
 }
