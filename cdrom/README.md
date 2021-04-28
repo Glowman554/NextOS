@@ -22,7 +22,7 @@ It's a more advanced and more stable kernel than my first kernel [GKernel](https
 - ATA Driver
 
 ## Building
-You need to install `genisoimage gcc g++ as ld nasm make`.  
+You need to install `mkisofs gcc g++ as ld nasm make`.  
 To create an ISO file you need to enter `make iso`.  
 
 ## Demo
