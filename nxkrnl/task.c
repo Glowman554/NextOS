@@ -66,7 +66,7 @@ void mouse_handle_button(int button) {
 struct task* find_task() {
 	for (int i = 0; i < MAX_TASKS; i++) {
 		if(!task_states[i].active) {
-			debug_write("Found empty task ad idx %d!", i);
+			debug_write("Found empty task at idx %d!", i);
 			return &task_states[i];
 		}
 	}
