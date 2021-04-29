@@ -12,6 +12,8 @@ int current_task = 0;
 int proccount = 0;
 char nextpid = 1;
 
+bool address_offset_store[MAX_TASKS];
+
 void task_exit(int code){
 	debug_write("[%d] Exit Task with error code %d!", task_states[current_task].pid, code);
 	if(code == 1){
@@ -21,6 +23,8 @@ void task_exit(int code){
 	if(code == 2) {
 			debug_write("[%d] Task killed!", task_states[current_task].pid);
 	}
+	address_offset_store[task_states[current_task].off /  0x100000 - 2] = false;
+
 	task_states[current_task].active = false;
 	pmm_free(task_states[current_task].stack);
 	pmm_free(task_states[current_task].user_stack);
@@ -81,7 +85,7 @@ struct task* find_task() {
 	return NULL;
 }
 
-struct task* init_task(void* entry){
+struct task* init_task(void* entry, uint32_t off){
 	debug_write("Initializing task at 0x%x!", (uint32_t) entry);
 	uint8_t* stack = pmm_alloc();
 	uint8_t* user_stack = pmm_alloc();
@@ -114,17 +118,28 @@ struct task* init_task(void* entry){
 	task->active = true;
 	task->stack = stack;
 	task->user_stack = user_stack;
+	task->off = off;
 	nextpid++;
 	kprintf("Starting task with pid %d\n", task->pid);
 	proccount++;
 	return task;
 }
 
-uint32_t current_address = 0x200000; // place 1mb after kernel
+uint32_t find_address() {
+	for (int i = 0; i < MAX_TASKS; i++) {
+		if(!address_offset_store[i]) {
+			return i * 0x100000 + 0x200000;
+		}
+	}
+	
+	return (uint32_t) NULL;
+}
 
 int init_elf(void* image){
 	debug_write("Loading elf image at 0x%x!", (uint32_t) image);
-	debug_write("Using memory location 0x%x!", current_address);
+	uint32_t addr = find_address();
+	debug_write("Using memory location 0x%x!", addr);
+	address_offset_store[addr / 0x100000 - 2] = true;
 	struct elf_header* header = image;
 	struct elf_program_header* ph;
 	int i;
@@ -136,7 +151,7 @@ int init_elf(void* image){
 
 	ph = (struct elf_program_header*) (((char*) image) + header->ph_offset);
 	for (i = 0; i < header->ph_entry_count; i++, ph++) {
-		void* dest = (void*) ph->virt_addr + current_address;
+		void* dest = (void*) ph->virt_addr + addr;
 		void* src = ((char*) image) + ph->offset;
 
 		if (ph->type != 1) {
@@ -146,13 +161,12 @@ int init_elf(void* image){
 		memset(dest, 0, ph->mem_size);
 		memcpy(dest, src, ph->file_size);
 	}
-	init_task((void*) header->entry + current_address);
-	current_address += 0x100000;
+	init_task((void*) header->entry + addr, addr);
 	return 0;
 }
 
 void init_multitasking(struct multiboot_info* mb_info){
-	init_task(do_nothing);
+	init_task(do_nothing, (int) NULL);
 }
 
 

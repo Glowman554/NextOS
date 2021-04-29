@@ -88,7 +88,7 @@ struct cpu_state* syscall(struct cpu_state* cpu){
 			exec_file((char*) cpu->ebx);
 			break;
 		case SYSCALL_INIT_TASK:
-			init_task((void*) cpu->ebx);
+			init_task((void*) cpu->ebx, (int) NULL);
 			break;
 		case SYSCALL_TASK_EXIT:
 			task_exit(cpu->ebx);

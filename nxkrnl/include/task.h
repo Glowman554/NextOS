@@ -28,6 +28,8 @@ struct task {
 	kb_handler				kb;
 	mouse_move_handler		mmh;
 	mouse_button_handler	mbh;
+
+	uint32_t				off;
 };
 
 extern int proccount;
@@ -37,7 +39,7 @@ extern int current_task;
 
 struct cpu_state* schedule(struct cpu_state* cpu);
 void init_multitasking(struct multiboot_info* mb_info);
-struct task* init_task(void* entry);
+struct task* init_task(void* entry, uint32_t off);
 int init_elf(void* image);
 void task_exit(int code);
 

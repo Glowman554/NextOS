@@ -105,5 +105,5 @@ void _start(void){
 
 	init_driver("desktop", (driver_handler_ptr) driver_handler);
 
-	task_exit(0);
+	while(1);
 }
