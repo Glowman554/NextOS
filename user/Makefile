@@ -7,34 +7,34 @@ TIMER = timer.o syslib.o
 BF = bf.o syslib.o
 REBOOT = reboot.o syslib.o
 
-CFLAGS = -m32 -Wall -g -fno-stack-protector -nostdinc -I include
-LDFLAGS = -melf_i386
+CFLAGS = -m32 -Wall -g -fno-stack-protector -nostdinc -I include -fpic
+LDFLAGS = -melf_i386 -pic
 
 all: init.bin terminal.bin desktop.bin cmos.drv dtest.bin timer.bin bf.drv reboot.bin
 	
 init.bin: $(INIT)
-	ld $(LDFLAGS) -Ttext=0x200000 -o $@ $^
+	ld $(LDFLAGS) -o $@ $^
 	
 terminal.bin: $(TERMINAL)
-	ld $(LDFLAGS) -Ttext=0x300000 -o $@ $^
+	ld $(LDFLAGS) -o $@ $^
 
 desktop.bin: $(DESKTOP)
-	ld $(LDFLAGS) -Ttext=0x400000 -o $@ $^
+	ld $(LDFLAGS) -o $@ $^
 
 cmos.drv: $(CMOS)
-	ld $(LDFLAGS) -Ttext=0x500000 -o $@ $^
+	ld $(LDFLAGS) -o $@ $^
 
 dtest.bin: $(DTEST)
-	ld $(LDFLAGS) -Ttext=0x600000 -o $@ $^
+	ld $(LDFLAGS) -o $@ $^
 
 timer.bin: $(TIMER)
-	ld $(LDFLAGS) -Ttext=0x700000 -o $@ $^
+	ld $(LDFLAGS) -o $@ $^
 
 bf.drv: $(BF)
-	ld $(LDFLAGS) -Ttext=0x800000 -o $@ $^
+	ld $(LDFLAGS) -o $@ $^
 
 reboot.bin: $(REBOOT)
-	ld $(LDFLAGS) -Ttext=0x900000 -o $@ $^
+	ld $(LDFLAGS) -o $@ $^
 
 %.o: %.c
 	@echo CC $^

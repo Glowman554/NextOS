@@ -120,8 +120,11 @@ struct task* init_task(void* entry){
 	return task;
 }
 
+uint32_t current_address = 0x200000; // place 1mb after kernel
+
 int init_elf(void* image){
 	debug_write("Loading elf image at 0x%x!", (uint32_t) image);
+	debug_write("Using memory location 0x%x!", current_address);
 	struct elf_header* header = image;
 	struct elf_program_header* ph;
 	int i;
@@ -133,7 +136,7 @@ int init_elf(void* image){
 
 	ph = (struct elf_program_header*) (((char*) image) + header->ph_offset);
 	for (i = 0; i < header->ph_entry_count; i++, ph++) {
-		void* dest = (void*) ph->virt_addr;
+		void* dest = (void*) ph->virt_addr + current_address;
 		void* src = ((char*) image) + ph->offset;
 
 		if (ph->type != 1) {
@@ -143,7 +146,8 @@ int init_elf(void* image){
 		memset(dest, 0, ph->mem_size);
 		memcpy(dest, src, ph->file_size);
 	}
-	init_task((void*) header->entry);
+	init_task((void*) header->entry + current_address);
+	current_address += 0x100000;
 	return 0;
 }
 
