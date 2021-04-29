@@ -27,7 +27,7 @@ nxkrnl: $(OBJS)
 	@$(CC) $(ASFLAGS) -c -o $@ $^
 
 run: nxkrnl
-	qemu-system-i386 -kernel nxkrnl -net user -net nic,model=pcnet -append "--debug" -serial stdio
+	screen -dmS qemu qemu-system-i386 -kernel nxkrnl -s -S -append "--debug" -serial stdio
 
 clean:
 	rm $(OBJS)

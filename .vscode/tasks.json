@@ -20,6 +20,11 @@
 				"isDefault": true
 			}
         },
+		{
+			"label": "debug",
+			"type": "shell",
+			"command": "cd nxkrnl; make run; make clean -i"
+		},
         {
             "label": "pack",
             "type": "shell",
