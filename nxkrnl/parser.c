@@ -9,6 +9,7 @@ struct kernel_info parse_arguments(char* args, char buffer[100][100]) {
 	
 	kinfo.debug = false;
 	kinfo.force = false;
+	kinfo.vga = false;
 	kinfo.autoexec = AUTOEXEC;
 	
 	int count = 0;
@@ -35,6 +36,8 @@ struct kernel_info parse_arguments(char* args, char buffer[100][100]) {
 			kinfo.debug = true;
 		} else if(strcmp(buffer[i], "--force") == 0) {
 			kinfo.force = true;
+		} else if(strcmp(buffer[i], "--vga") == 0) {
+			kinfo.vga = true;
 		} else if(strcmp(buffer[i], "--autoexec") == 0) {
 			i++;
 			kinfo.autoexec = buffer[i];

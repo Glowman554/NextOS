@@ -68,7 +68,6 @@ char* get_exception_name(int exc){
 	}
 }
 
-
 void kernel_yeet(struct cpu_state* cpu) {
 	if(is_vga_active()){
 		set_vga_color(VGA_WHITE, VGA_BLUE);
@@ -82,6 +81,7 @@ void kernel_yeet(struct cpu_state* cpu) {
 		vga_kprintf("esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
 			
 		set_vga_color(VGA_YELLOW, VGA_BLUE);
+		vga_kprintf("\nTo debug the problem please look in the serial console COM1!\n");
 	} else {
 		setcolor(BACKGROUND_BLACK | FOREGROUND_RED);
 		kprintf("Kernel PANIC: Excpetion 0x%x -> %s\n", cpu->intr, get_exception_name(cpu->intr));
@@ -94,6 +94,7 @@ void kernel_yeet(struct cpu_state* cpu) {
 		kprintf("esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
 			
 		setcolor(BACKGROUND_BLACK | FOREGROUND_YELLOW);
+		kprintf("\nTo debug the problem please look in the serial console COM1!\n");
 	}
 
 	kputs_serial(yeet0);
@@ -141,7 +142,7 @@ void kernel_yeet(struct cpu_state* cpu) {
 					kprintf_serial("PID: %d, stack: 0x%x, user stack: 0x%x\n", task_states[current_task].pid, task_states[current_task].stack, task_states[current_task].user_stack);
 					kprintf_serial("KB: 0x%x, MMH: 0x%x, MBH: 0x%x\n", task_states[current_task].kb, task_states[current_task].mmh, task_states[current_task].mbh);
 				} else {
-					kprintf_serial("Task in  task slot %d not active!\n", current_task);
+					kprintf_serial("Task in task slot %d not active!\n", current_task);
 				}
 				break;
 			case 't':

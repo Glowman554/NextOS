@@ -163,8 +163,11 @@ extern "C" void init(struct multiboot_info *mb_info){
 
 	debug_write_lame("Initializing multitasking!");
 	init_multitasking(mb_info);
-	
-	//asm volatile("int $0x1");
+
+	if(global_kernel_info.vga) {
+		debug_write_lame("Setting vga mode!");
+		init_vga();
+	}
 
 	debug_write_lame("Loading autoexec!");
 	exec_file(global_kernel_info.autoexec);

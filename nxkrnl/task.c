@@ -15,6 +15,7 @@ char nextpid = 1;
 void task_exit(int code){
 	debug_write("[%d] Exit Task with error code %d!", task_states[current_task].pid, code);
 	if(code == 1){
+		task_states[current_task].cpu_state->intr = 0x1;	
 		kernel_yeet(task_states[current_task].cpu_state);
 	}
 	if(code == 2) {

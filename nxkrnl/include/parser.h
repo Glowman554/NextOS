@@ -9,6 +9,7 @@
 struct kernel_info {
 	bool debug;
 	bool force;
+	bool vga;
 	char* autoexec;
 };
 

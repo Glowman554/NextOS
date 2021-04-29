@@ -23,3 +23,16 @@ module /driver/cmos.drv
 module /driver/bf.drv
 module /progs/reboot.bin
 boot
+
+title NextOS (VGA)
+kernel /nxkrnl --vga
+module /initrd.img
+module /progs/init.bin
+module /progs/terminal.bin
+module /progs/desktop.bin
+module /progs/dtest.bin
+module /progs/timer.bin
+module /driver/cmos.drv
+module /driver/bf.drv
+module /progs/reboot.bin
+boot

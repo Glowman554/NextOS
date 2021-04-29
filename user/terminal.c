@@ -93,7 +93,7 @@ void _start(){
 		in = get_input();
 		
 		if(strcmp(in, "reboot")==0) reboot();
-		if(strcmp(in, "debugerr")==0) asm volatile("int $0x1"); //yes this is going to cause a gp fault
+		if(strcmp(in, "debugerr")==0) task_exit(1);
 		if(strcmp(in, "uname")==0) kprintf("Currently running kernel version %d\n", kversion());
 		if(strcmp(in, "about")==0) print_copyright();
 		if(strcmp(in, "clear")==0) clrscr();
