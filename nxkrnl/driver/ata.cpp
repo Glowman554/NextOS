@@ -5,16 +5,27 @@ extern "C" bool write_file(char* driver_name, char* file_name, char* file_conten
 	AdvancedTechnologyAttachment* ata = (AdvancedTechnologyAttachment*) global_driver_manager->find_driver_by_name(driver_name);
 
 	if(ata->is_presend()) {
-		NextFS fs = NextFS(ata);
-		if(fs.is_next_fs()) {
+		if(is_nextfs(&ata->fs)) {
 			debug_write("Writing file %s to %s!", file_name, driver_name);
-			fs.new_text_file(file_name, file_content);
-			return true;
+			new_file_nextfs(&ata->fs, ata, file_name, (uint8_t*) file_content, strlen(file_content));
+			uninit_nextfs(&ata->fs, ata); // also acts like a flush for the file headers
 		}
 	}
 	return false;
 }
 
+void ata_reader(uint8_t* buffer, uint32_t start_sector, int count, void* data) {
+	AdvancedTechnologyAttachment* ata = (AdvancedTechnologyAttachment*) data;
+	debug_write("%s:%d -> 0x%x", ata->get_name(), start_sector, buffer);
+	ata->read28(start_sector, buffer, count);
+}
+
+void ata_writer(uint8_t* buffer, uint32_t start_sector, int count, void* data) {
+	AdvancedTechnologyAttachment* ata = (AdvancedTechnologyAttachment*) data;
+	debug_write("%s:%d <- 0x%x", ata->get_name(), start_sector, buffer);
+	ata->write28(start_sector, buffer, count);
+	ata->flush();
+}
 
 AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(bool master, uint16_t portBase, char* name): dataPort(portBase), error_port(portBase + 0x1), sector_count_port(portBase + 0x2), lba_low_port(portBase + 0x3), lba_mid_port(portBase + 0x4), lba_hi_port(portBase + 0x5), device_port(portBase + 0x6), command_port(portBase + 0x7), control_port(portBase + 0x206) {
 	this->name = name;
@@ -74,11 +85,14 @@ char* AdvancedTechnologyAttachment::get_name() {
 
 void AdvancedTechnologyAttachment::activate() {
 
-	NextFS fs = NextFS(this);
+	this->fs.reader = ata_reader;
+	this->fs.writer = ata_writer;
 
-	debug_write("Is nextfs: %s!", fs.is_next_fs() ? "true" : "false");
+	init_nextfs(&this->fs, this);
 
-	fs.print_fs_info();
+	debug_write("Is nextfs: %s!", is_nextfs(&this->fs) ? "true" : "false");
+
+	print_nextfs(&this->fs);
 }
 
 void AdvancedTechnologyAttachment::read28(uint32_t sector, uint8_t* data, int count) {

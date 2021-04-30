@@ -172,6 +172,8 @@ extern "C" void init(struct multiboot_info *mb_info){
 	debug_write_lame("Loading autoexec!");
 	exec_file(global_kernel_info.autoexec);
 
+	write_file("ata0m", "hello.txt", "hello world");
+
 	debug_write_lame("Setting is_init_done to true!");
 	is_init_done = true;
 
