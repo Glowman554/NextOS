@@ -159,8 +159,6 @@ char getpixel(int x, int y) {
 
 void kb_intr_handler(char key) {
 	buf = key;
-	if(key != '\n' && key != '\b')
-		kprintf("%c", key);
 }
 
 char pixbuf[15] = {0};
@@ -355,6 +353,7 @@ char* get_input() {
 			kputc(' ');
 			setx(x - 1);
 		} else {
+			kprintf("%c", in[len]);
 			len++;
 		}
 	}
