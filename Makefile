@@ -22,7 +22,7 @@ run: iso
 test: iso
 	node os-test/index.js
 
-clean:
+clean: iso
 	make -C nxkrnl clean
 	make -C user clean
 
@@ -31,6 +31,13 @@ pack: clean
 	zip -r pack/nxkrnl.zip nxkrnl/nxkrnl
 	zip -r pack/nxkrnl-src.zip nxkrnl/*
 	cp cdrom.iso pack/nextos.iso
+
+update: pack
+	git clone https://github.com/Glowman554/Glowman554.github.io
+	cp -v pack/* Glowman554.github.io/downloads/.
+	cd Glowman554.github.io/; git add *; git commit -m "autoupdate"; git push	
+	rm -rf Glowman554.github.io/
+	rm -rf pack
 
 push: clean
 	git add .
