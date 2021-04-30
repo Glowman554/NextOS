@@ -3,43 +3,6 @@
 // 64 kb
 uint8_t buf[65536];
 
-char* syscall_names[] = {
-	"putc",
-	"puts",
-	"putn",
-	"clrscr",
-	"setcolor",
-	"kversion",
-	"kvendor",
-	"exec",
-	"init task",
-	"task exit",
-	"reboot",
-	"getchar",
-	"get tick",
-	"reset tick",
-	"multiboot",
-	"vga mode",
-	"set pixel",
-	"set color",
-	"load initrd",
-	"fsroot readdir",
-	"fsroot finddir",
-	"fsroot read",
-	"get buffer",
-	"init driver",
-	"call driver",
-	"find driver",
-	"draw char",
-	"set x",
-	"set y",
-	"get x",
-	"get y",
-	"set kb handler",
-	"set mouse handler",
-	"get pixel",
-};
-
 struct cpu_state* syscall(struct cpu_state* cpu){
 	bool mode = is_vga_active();
 	
