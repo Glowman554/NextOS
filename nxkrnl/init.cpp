@@ -57,54 +57,6 @@ class InterruptMouseEventHandler : public MouseEventHandler {
 
 DriverManager* global_driver_manager;
 
-/*
-extern "C" void dump_kernel_panic(cpu_state* cpu) {
-	char buffer1[200];
-	char buffer2[4096];
-	char buffer3[64];
-	char buffer4[16];
-
-	sprintf(buffer2, "Kernel panic -> %s\n", get_exception_name(cpu->intr));
-	sprintf(buffer1, "eax: 0x%x, ebx: 0x%x, ecx: 0x%x, edx: 0x%x\n", cpu->eax, cpu->ebx, cpu->ecx, cpu->edx);
-	strcat(buffer2, buffer1);
-	sprintf(buffer1, "esi: 0x%x, edi: 0x%x, ebp: 0x%x\n", cpu->esi, cpu->edi, cpu->ebp);
-	strcat(buffer2, buffer1);
-	sprintf(buffer1, "intr: 0x%x, error: 0x%x\n", cpu->intr, cpu->error);
-	strcat(buffer2, buffer1);
-	sprintf(buffer1, "eip: 0x%x, cs 0x%x, eflags: 0x%x\n", cpu->eip, cpu->cs, cpu->eflags);
-	strcat(buffer2, buffer1);
-	sprintf(buffer1, "esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
-	strcat(buffer2, buffer1);
-
-	int id = find_driver_by_name("cmos");
-
-	if(id != -1) { 
-		struct cmos_data_t{
-			int function;
-		};
-
-		cmos_data_t data;
-		data.function = 0;
-		int h = call_driver_handler(id, &data);
-		data.function = 1;
-		int m = call_driver_handler(id, &data);
-		data.function = 2;
-		int s = call_driver_handler(id, &data);
-
-		sprintf(buffer4, "%d:%d:%d", h, m, s);
-	} else {
-		sprintf(buffer4, "null");
-	}
-
-	sprintf(buffer3, "%s.%d@%s.panic", VENDOR, VERSION, buffer4);
-
-	write_file("ata0m", buffer3, buffer2);
-	write_file("ata0s", buffer3, buffer2);
-	write_file("ata1m", buffer3, buffer2);
-	write_file("ata1s", buffer3, buffer2);
-}
-*/
-
 extern "C" void init(struct multiboot_info *mb_info){
 	
 	init_serial();
