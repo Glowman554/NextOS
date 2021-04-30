@@ -29,6 +29,9 @@ nxkrnl: $(OBJS)
 run: nxkrnl
 	screen -dmS qemu qemu-system-i386 -kernel nxkrnl -s -S -append "--debug" -serial stdio
 
+debug: run
+	screen -S gdb gdb -ex "target remote localhost:1234" -ex "break init" -ex "continue" ./nxkrnl
+
 clean:
 	rm $(OBJS)
 
