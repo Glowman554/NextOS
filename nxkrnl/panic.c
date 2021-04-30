@@ -68,7 +68,7 @@ char* get_exception_name(int exc){
 	}
 }
 
-void kernel_yeet(struct cpu_state* cpu) {
+void kernel_yeet_cpu(struct cpu_state* cpu) {
 	if(is_vga_active()){
 		set_vga_color(VGA_WHITE, VGA_BLUE);
 		clear_vga();
@@ -97,13 +97,6 @@ void kernel_yeet(struct cpu_state* cpu) {
 		kprintf("\nTo debug the problem please look in the serial console COM1!\n");
 	}
 
-	kputs_serial(yeet0);
-	kputs_serial(yeet1);
-	kputs_serial(yeet2);
-	kputs_serial(yeet3);
-	kputs_serial(yeet4);
-	kputs_serial(yeet5);
-
 	kprintf_serial("\nKernel PANIC: Excpetion 0x%x -> %s\n", cpu->intr, get_exception_name(cpu->intr));
 						
 
@@ -113,7 +106,42 @@ void kernel_yeet(struct cpu_state* cpu) {
 	kprintf_serial("eip: 0x%x, cs 0x%x, eflags: 0x%x\n", cpu->eip, cpu->cs, cpu->eflags);
 	kprintf_serial("esp: 0x%x, ss: 0x%x\n", cpu->esp, cpu->ss);
 
+	__kdb();
+}
+
+void kernel_yeet_str(char* why) {
+	if(is_vga_active()){
+		set_vga_color(VGA_WHITE, VGA_BLUE);
+		clear_vga();
+		vga_kprintf("Kernel PANIC: %s\n", why);
+			
+		set_vga_color(VGA_YELLOW, VGA_BLUE);
+		vga_kprintf("\nTo debug the problem please look in the serial console COM1!\n");
+	} else {
+		setcolor(BACKGROUND_BLACK | FOREGROUND_RED);
+		kprintf("Kernel PANIC: %s\n", why);
+			
+		setcolor(BACKGROUND_BLACK | FOREGROUND_YELLOW);
+		kprintf("\nTo debug the problem please look in the serial console COM1!\n");
+	}
+
+	kprintf_serial("Kernel PANIC: %s\n", why);
+
+	__kdb();
+
+}
+
+void __kdb() {
+
+	kputs_serial(yeet0);
+	kputs_serial(yeet1);
+	kputs_serial(yeet2);
+	kputs_serial(yeet3);
+	kputs_serial(yeet4);
+	kputs_serial(yeet5);
+
 	kprintf_serial("Running kernel version %d\n", VERSION);
+	kprintf_serial("Welcome to kernel yeet the debugger! Why are we here?\n");
 
 	char buffer = 0;
 

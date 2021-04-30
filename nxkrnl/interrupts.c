@@ -143,7 +143,7 @@ uint32_t get_timer_tick(){
 struct cpu_state* handle_interrupt(struct cpu_state* cpu){
 	struct cpu_state* new_cpu = cpu;
 	if(cpu->intr <= 0x1f){
-		kernel_yeet(cpu);
+		kernel_yeet_cpu(cpu);
 	}
 	if (cpu->intr >= 0x20 && cpu->intr <= 0x2f) {
 

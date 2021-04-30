@@ -10,7 +10,10 @@
 #include <task.h>
 
 char* get_exception_name(int exc);
-void kernel_yeet(struct cpu_state* cpu);
+void kernel_yeet_cpu(struct cpu_state* cpu);
+void kernel_yeet_str(char* why);
+
+void __kdb();
 
 #define yeet0 "  _  ________ _____  _   _ ______ _       __     ________ ______ _______ \n"
 #define yeet1 " | |/ /  ____|  __ \\| \\ | |  ____| |      \\ \\   / /  ____|  ____|__   __|\n"
