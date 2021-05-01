@@ -11,6 +11,7 @@ extern "C"{
 	#include <fs/initrd.h>
 	#include <parser.h>
 	#include <external_driver.h>
+	#include <acpi/rsdp.h>
 }
 
 #include <driver/keyboard.h>
@@ -76,6 +77,11 @@ extern "C" void init(struct multiboot_info *mb_info){
 	init_gdt();
 	debug_write_lame("Initializing interrupts!");
 	init_intr();
+
+	debug_write_lame("Initialising rsdp!");
+	rsdp_init();
+
+	kprintf("OEM id: %s\n", rsdp->OEMID);
 	 
 	DriverManager drv_manager;
 
