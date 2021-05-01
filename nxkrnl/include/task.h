@@ -21,7 +21,7 @@ struct task {
 	struct cpu_state*		cpu_state;
 	char					pid;
 	bool					active;
-	bool					destroy;
+	bool					no_free;
 	void*					stack;
 	void*					user_stack;
 

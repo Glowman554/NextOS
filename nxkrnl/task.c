@@ -22,7 +22,12 @@ void task_exit(int code){
 	if(code == 2) {
 			debug_write("[%d] Task killed!", task_states[current_task].pid);
 	}
-	address_offset_store[task_states[current_task].off /  0x100000 - 2] = false;
+
+	if(!task_states[current_task].no_free) {
+		address_offset_store[task_states[current_task].off /  0x100000 - 2] = false;
+	} else {
+		debug_write("Not freeing task at 0x%x!", task_states[current_task].off);
+	}
 
 	task_states[current_task].active = false;
 	pmm_free(task_states[current_task].stack);

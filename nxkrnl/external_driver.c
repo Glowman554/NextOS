@@ -1,11 +1,10 @@
 #include <external_driver.h>
-#include <string.h>
-#include <console.h>
+
 
 driver_info_t driver_infos[256];
 int driver_index = 0;
 
-int init_driver(char* name, driver_handler_ptr driver_handler) {
+int init_driver(char* name, driver_handler_ptr driver_handler, bool no_free) {
 	//kprintf("Registering driver handler %d at 0x%x\n", driver_index, driver_handler);
 
 	driver_info_t driver;
@@ -13,6 +12,10 @@ int init_driver(char* name, driver_handler_ptr driver_handler) {
 	driver.name = name;
 	driver_infos[driver_index] = driver;
 	driver_index++;
+
+	if(no_free) {
+		task_states[current_task].no_free = true;
+	}
 
 	debug_write("Registering driver handler at 0x%x with id %d and name %s!", (unsigned int) driver_handler, driver_index - 1, name);
 

@@ -45,6 +45,5 @@ int driver_handler(cmos_data_t* data){
 
 void _start(void){
 	init_driver("cmos", (driver_handler_ptr) driver_handler);
-	
-	while(1);
+	task_exit(0);
 }

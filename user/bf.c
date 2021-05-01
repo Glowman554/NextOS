@@ -44,5 +44,5 @@ void interpret(char* input) {
 void _start(){
 	init_driver("bf", (driver_handler_ptr) interpret);
 
-	while(1);
+	task_exit(0);
 }
