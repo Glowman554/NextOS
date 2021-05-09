@@ -15,6 +15,8 @@ jobs:
     - uses: actions/checkout@v2
       with: 
         submodules: recursive
+    - name: Apt update
+      run: sudo apt update
     - name: setup
       run: sudo apt install genisoimage qemu-utils nasm -y
     - name: make
