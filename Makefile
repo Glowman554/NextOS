@@ -14,7 +14,7 @@ iso: all
 
 	cp cdrom.iso docs/.
 	
-	cd nextfs-loader; sh build.sh; cd ..
+	cd nextfs-loader; echo "no-boot" | sh build.sh; cd ..
 
 run: iso
 	qemu-system-i386 -cdrom cdrom.iso -hda nextfs-loader/fs.nfs -boot d -serial stdio
