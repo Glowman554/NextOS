@@ -5,25 +5,31 @@
     "version": "0.0.1",
     "tasks": {
         "c_comp": {
-            "commands": [
+			"commands": [],
+            "commands_async": [
                 "gcc ${file} -o ${file}.o ${cflags} -c"
             ],
             "allow_fail": false,
-            "run_for": "c"
+            "run_for": "c",
+			"run_js": "/usr/gm/async.js"
         },
         "cpp_comp": {
-            "commands": [
+			"commands": [],
+            "commands_async": [
                 "gcc ${file} -o ${file}.o ${cppflags} -c"
             ],
             "allow_fail": false,
-            "run_for": "cpp"
+            "run_for": "cpp",
+			"run_js": "/usr/gm/async.js"
         },
         "as_comp": {
-            "commands": [
+			"commands": [],
+            "commands_async": [
                 "gcc ${file} -o ${file}.o ${asflags} -c"
             ],
             "allow_fail": false,
-            "run_for": "S"
+            "run_for": "S",
+			"run_js": "/usr/gm/async.js"
         },
         "clean": {
             "commands": [
@@ -45,7 +51,8 @@
                 "ld ${ldflags} -o nxkrnl ${findall o}"
             ],
             "depend": [
-                "compile"
+                "compile",
+				"await_async"
             ],
             "allow_fail": false
         },
@@ -66,6 +73,11 @@
                 "link"
             ],
             "allow_fail": false
+        },
+        "await_async": {
+            "commands": [],
+            "allow_fail": false,
+            "run_js": "/usr/gm/async.js"
         }
     },
     "variables": {
