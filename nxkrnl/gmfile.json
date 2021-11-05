@@ -1,0 +1,78 @@
+{
+    "name": "NextOS",
+    "description": "simple os",
+    "author": "glowman554",
+    "version": "0.0.1",
+    "tasks": {
+        "c_comp": {
+            "commands": [
+                "gcc ${file} -o ${file}.o ${cflags} -c"
+            ],
+            "allow_fail": false,
+            "run_for": "c"
+        },
+        "cpp_comp": {
+            "commands": [
+                "gcc ${file} -o ${file}.o ${cppflags} -c"
+            ],
+            "allow_fail": false,
+            "run_for": "cpp"
+        },
+        "as_comp": {
+            "commands": [
+                "gcc ${file} -o ${file}.o ${asflags} -c"
+            ],
+            "allow_fail": false,
+            "run_for": "S"
+        },
+        "clean": {
+            "commands": [
+                "rm ${findall o}"
+            ],
+            "allow_fail": true
+        },
+        "compile": {
+            "commands": [],
+            "depend": [
+                "c_comp",
+                "cpp_comp",
+                "as_comp"
+            ],
+            "allow_fail": false
+        },
+        "link": {
+            "commands": [
+                "ld ${ldflags} -o nxkrnl ${findall o}"
+            ],
+            "depend": [
+                "compile"
+            ],
+            "allow_fail": false
+        },
+        "run": {
+            "commands": [
+                "qemu-system-i386 ${qemu_flags}"
+            ],
+            "depend": [
+                "link"
+            ],
+            "allow_fail": false
+        },
+        "debug": {
+            "commands": [
+                "qemu-system-i386 ${qemu_flags} -s -S"
+            ],
+            "depend": [
+                "link"
+            ],
+            "allow_fail": false
+        }
+    },
+    "variables": {
+        "cflags": "-m32 -Wall -g -fno-stack-protector -nostdinc -Iinclude -Wno-nonnull-compare",
+        "cppflags": "-m32 -Wall -g -fno-stack-protector -nostdinc -Iinclude -fno-use-cxa-atexit -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings",
+        "asflags": "-m32",
+        "ldflags": "-melf_i386 -Tlink.ld",
+        "qemu_flags": "-kernel nxkrnl -append --debug -serial stdio"
+    }
+}
