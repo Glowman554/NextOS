@@ -27,7 +27,7 @@ To create an ISO file you need to enter `make iso`.
 
 ## Demo
 
-<a href="https://glowman554.github.io/NextOS/?profile=custom&cdrom.url=https://glowman554.github.io/NextOS/cdrom.iso">Click here to run demo!</a>  
+<a href="https://glowman554.gq/NextOS/?profile=custom&cdrom.url=https://glowman554.gq/NextOS/cdrom.iso">Click here to run demo!</a>  
 
 ## Syscalls
 
